@@ -134,7 +134,7 @@ end
 
 for _,PLY in pairs(player.GetAll()) do
 
-if PLY:IsPlayer() and PLY:GetPos():Distance(ply:GetPos()) < 250 then
+if PLY:IsPlayer() and PLY:GetPos():Distance(ply:GetPos()) < 250 and PLY:GetNWString("Tier 3 Perk") != "Ninja" and PLY:Visible(ply) then
 
 if IsValid(PLY) and PLY:Team() != ply:Team() and PLY:Visible(ply) then
 	PLYVec = (PLY:GetPos() - ply:GetPos()):GetNormalized():Angle().y
