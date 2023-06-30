@@ -22,6 +22,9 @@ end
 if JumpHeight == nil then
 JumpHeight = Ply:GetJumpPower()
 end
+if LadderSpeed == nil then
+LadderSpeed = Ply:GetLadderClimbSpeed()
+end
 
 if Ply:GetNWString("Tier 3 Perk") == "Stalker" and Ply:Crouching() then
 Ply:SetCrouchedWalkSpeed(math.Clamp(CrouchSpeed * 1.5, 0, 1))
@@ -50,9 +53,11 @@ end
 if Ply:GetNWString("Tier 2 Perk") == "Mobility" then
 Ply:SetWalkSpeed(WalkSpeed * 1.1)
 Ply:SetJumpPower(JumpHeight * 1.15)
+Ply:SetLadderClimbSpeed(LadderSpeed * 1.15)
 else
 Ply:SetWalkSpeed(WalkSpeed)
 Ply:SetJumpPower(JumpHeight)
+Ply:SetLadderClimbSpeed(LadderSpeed)
 end
 
 end)
