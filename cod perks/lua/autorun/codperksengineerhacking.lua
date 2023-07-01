@@ -56,11 +56,11 @@ hook.Add("Think", "EngineerHackingHud", function()
 
 Target = LocalPlayer():GetEyeTrace().Entity
 
-if Target:GetClass() != "npc_turret_floor" or LocalPlayer():GetNWString("Tier 2 Perk") != "Engineer" or !input.IsButtonDown(BindButton) or Target:GetPos():Distance(LocalPlayer():GetPos()) > 60 then
+if LocalPlayer():GetNWString("Tier 2 Perk") != "Engineer" or !IsValid(Target) or Target:GetClass() != "npc_turret_floor" or !input.IsButtonDown(BindButton) or Target:GetPos():Distance(LocalPlayer():GetPos()) > 60 then
 	Hacking = 0
 end
 
-if Target:GetClass() == "npc_turret_floor" and LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" then
+if LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" and IsValid(Target) and Target:GetClass() == "npc_turret_floor" then
 if input.IsButtonDown(BindButton) and Target:GetPos():Distance(LocalPlayer():GetPos()) <= 60 then
 	Hacking = math.Clamp(Hacking + 0.2, 0, 100)
 end
@@ -90,7 +90,7 @@ end
 	ColorVal = Color(RedVal, YellowVal, 0, 125)
 	Box = Color(0, 0, 0, 125)
 
-if LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" and Target:GetClass() == "npc_turret_floor" and Target:GetNWInt("HackedTeam", -1) != LocalPlayer():Team() and Target:GetPos():Distance(LocalPlayer():GetPos()) <= 60 then
+if LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" and IsValid(Target) and Target:GetClass() == "npc_turret_floor" and Target:GetNWInt("HackedTeam", -1) != LocalPlayer():Team() and Target:GetPos():Distance(LocalPlayer():GetPos()) <= 60 then
 if Hacking == 0 then
 draw.DrawText("Hold " .. string.upper(GetConVar("CODPerksInteract"):GetString()) .. " To Hack The Turret", Text, ScrW() * 0.43, ScrH() * 0.53)
 else
@@ -99,7 +99,7 @@ draw.DrawText(math.Round(Hacking, 0) .. "%", Text, ScrW() * 0.494, ScrH() * 0.5)
 end
 end
 
-if Target:GetClass() == "npc_turret_floor" and Target:GetNWInt("HackedTeam", -1) == LocalPlayer():Team() and Target:GetPos():Distance(LocalPlayer():GetPos()) <= 60 then
+if IsValid(Target) and Target:GetClass() == "npc_turret_floor" and Target:GetNWInt("HackedTeam", -1) == LocalPlayer():Team() and Target:GetPos():Distance(LocalPlayer():GetPos()) <= 60 then
 if Target:GetOwner() == LocalPlayer() then
 draw.DrawText("Turret Has Been Hacked", Text, ScrW() * 0.43, ScrH() * 0.53)
 elseif Target:GetOwner() != LocalPlayer() and Target:GetOwner():IsPlayer() then

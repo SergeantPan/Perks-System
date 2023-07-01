@@ -41,8 +41,9 @@ end
 end)
 
 hook.Add("PlayerSpawn", "ArmorSpawn", function(ply)
-if ply:Alive() and ply:GetNWString("Tier 1 Perk") == "Armorer" and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 2) then
-	timer.Simple(0.5, function() if IsValid(ply) then ply:SetArmor(math.Clamp(ply:Armor() + 50, 0, ply:GetMaxArmor())) end end)
+if IsValid(ply) and ply:Alive() then
+timer.Simple(1, function() if ply:GetNWString("Tier 1 Perk") == "Armorer" and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 2) then
+	ply:SetArmor(math.Clamp(ply:Armor() + 50, 0, ply:GetMaxArmor())) end end)
 end
 
 end)

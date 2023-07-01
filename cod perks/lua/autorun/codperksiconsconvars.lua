@@ -12,7 +12,10 @@ CreateConVar("CODPerksT2X", 0, 128, "Adjust the horizontal position of the T2 Pe
 CreateConVar("CODPerksT2Y", 0, 128, "Adjust the vertical position of the T2 Perk (Red)")
 CreateConVar("CODPerksT3X", 0, 128, "Adjust the horizontal position of the T3 Perk (Yellow)")
 CreateConVar("CODPerksT3Y", 0, 128, "Adjust the vertical position of the T3 Perk (Yellow)")
-CreateConVar("CODPerksInteract", "C", 128, "The key used to hack turrets. Use the settings menu preferrably")
+CreateConVar("CODPerksInteract", "H", 128, "The key used to hack turrets. Use the settings menu preferrably")
+CreateConVar("CoDPerksDefaultT1", "None", 128, "The default T1 perk you want to spawn with")
+CreateConVar("CoDPerksDefaultT2", "None", 128, "The default T2 perk you want to spawn with")
+CreateConVar("CoDPerksDefaultT3", "None", 128, "The default T3 perk you want to spawn with")
 
 local BlindEye = Material("materials/blindeye.png")
 local Recon = Material("materials/recon.png")

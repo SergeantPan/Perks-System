@@ -1,0 +1,20 @@
+hook.Add("InitPostEntity", "CODPerksFirstSpawn", function()
+
+DefaultT1 = GetConVar("CODPerksDefaultT1"):GetString()
+DefaultT2 = GetConVar("CODPerksDefaultT2"):GetString()
+DefaultT3 = GetConVar("CODPerksDefaultT3"):GetString()
+
+net.Start("Tier1Perk")
+	net.WriteEntity(LocalPlayer())
+	net.WriteString(DefaultT1)
+net.SendToServer()
+net.Start("Tier2Perk")
+	net.WriteEntity(LocalPlayer())
+	net.WriteString(DefaultT2)
+net.SendToServer()
+net.Start("Tier3Perk")
+	net.WriteEntity(LocalPlayer())
+	net.WriteString(DefaultT3)
+net.SendToServer()
+
+end)

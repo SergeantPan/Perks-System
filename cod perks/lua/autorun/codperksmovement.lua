@@ -43,7 +43,7 @@ Ply:SetSuitPower(Ply:GetSuitPower() * 2)
 Ply.SprintStarted = true
 end
 
-if (Ply:GetNWString("Tier 1 Perk") != "Marathon" or !Ply:IsSprinting() or Ply:GetVelocity():LengthSqr() <= 0) and Ply.SprintStarted == true then
+if (Ply:GetNWString("Tier 1 Perk") != "Marathon" or !Ply:IsSprinting() or Ply:GetVelocity():LengthSqr() <= 0 or Ply:WaterLevel() == 3) and Ply.SprintStarted == true then
 Ply.SprintStarted = false
 Ply:SetSuitPower(Ply:GetSuitPower() / 2)
 end
