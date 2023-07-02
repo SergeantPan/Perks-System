@@ -114,17 +114,6 @@ end
 
 end
 
-if QFPly:IsPlayer() then
-if !QFPly:Alive() or (QFPly:GetNWBool("PerkSpotted", false) == true and QFPly:GetNWInt("Timer", math.huge) < CurTime()) or QFPly:GetNWString("Tier 2 Perk") == "Ninja" then
-	QFPly:SetNWBool("PerkSpotted", false)
-	QFPly:SetNWInt("Timer", math.huge)
-end
-end
-
-if QFPly:GetNWInt("QFHealth", 0) > 0 and QFPly:GetNWInt("QFTimer", 0) < CurTime() and QFPly:Alive() then
-	QFPly:SetHealth(QFPly:Health() - QFPly:GetNWInt("QFHealth", 0))
-	QFPly:SetNWInt("QFHealth", 0)
-end
 end
 
 end)
@@ -132,6 +121,28 @@ end)
 hook.Add("EntityTakeDamage", "CodPerksDMGHooks", function( target, dmginfo )
 
 local Atk = dmginfo:GetAttacker()
+
+if target:IsPlayer() then
+if !target:Alive() or (target:GetNWBool("PerkSpotted", false) == true and target:GetNWInt("Timer", math.huge) < CurTime()) or target:GetNWString("Tier 2 Perk") == "Ninja" then
+	target:SetNWBool("PerkSpotted", false)
+	target:SetNWInt("Timer", math.huge)
+end
+if target:Alive() and target:GetNWString("Tier 3 Perk") == "Stalker" and target:Crouching() and target:GetNWInt("StalkerHits", 0) < 5 and dmginfo:IsBulletDamage() then
+	target:SetNWInt("StalkerHits", target:GetNWInt("StalkerHits", 0) + 1)
+end
+if target:Alive() and target:GetNWString("Tier 3 Perk") == "Stalker" and target:Crouching() and target:GetNWInt("StalkerHits", 0) == 5 and dmginfo:IsBulletDamage() then
+	dmginfo:SetDamage(dmginfo:GetDamage() * 0.25)
+	target:SetNWInt("StalkerHits", 0)
+	print("Damage reduced")
+end
+if !target:Alive() or target:GetNWString("Tier 3 Perk") != "Stalker" or !target:Crouching() then
+	target:SetNWInt("StalkerHits", 0)
+end
+if target:GetNWInt("QFHealth", 0) > 0 and target:GetNWInt("QFTimer", 0) < CurTime() and target:Alive() then
+	target:SetHealth(target:Health() - target:GetNWInt("QFHealth", 0))
+	target:SetNWInt("QFHealth", 0)
+end
+end
 
 if Atk:IsPlayer() and Atk:GetNWInt("Tier 2 Perk") == "Assassin" and ((target:IsNPC() and target:Disposition(Atk) == D_HT) or (target:IsPlayer() and target:Alive() and target:Team() != Atk:Team())) and target:GetPos():Distance(Atk:GetPos()) < 350 then
 
@@ -228,7 +239,10 @@ end
 if Atk:IsPlayer() and Atk:GetNWString("Tier 3 Perk") == "Commando" then
 local MeleeTypes = {"melee", "fist", "melee2", "knife"}
 if table.HasValue(MeleeTypes, Atk:GetActiveWeapon():GetHoldType()) then
-	dmginfo:SetDamage(dmginfo:GetDamage() * 1.25)
+	dmginfo:SetDamage(dmginfo:GetDamage() * 1.5)
+end
+if !table.HasValue(MeleeTypes, Atk:GetActiveWeapon():GetHoldType()) and dmginfo:IsDamageType(DMG_SLASH + DMG_CLUB) and target:GetPos():Distance(Atk:GetPos()) < 64 then
+	dmginfo:SetDamage(dmginfo:GetDamage() * 1.5)
 end
 end
 

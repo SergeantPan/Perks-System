@@ -64,7 +64,7 @@ if data.Entity:GetClass() == "prop_door_rotating" and data.Entity:GetNWBool("Mut
 end
 end)
 
-hook.Add("Think", "BlindEyeThink", function()
+hook.Add("Think", "CODPerksGenericThink", function()
 
 for _,HackedNPC in pairs(ents.FindByClass("npc_*")) do
 if HackedNPC:GetNWBool("HackerSpotted", false) == true and HackedNPC:GetNWInt("HackerTimer", 0) < CurTime() then

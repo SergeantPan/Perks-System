@@ -9,7 +9,6 @@ end)
 local SprintStarted = false
 local MobilitySet = false
 local MarathonSet = false
-local StalkerSet = false
 
 hook.Add( "Move", "CodMovementPerks", function( Ply, mv )
 
@@ -27,14 +26,6 @@ JumpHeight = Ply:GetJumpPower()
 end
 if LadderSpeed == nil then
 LadderSpeed = Ply:GetLadderClimbSpeed()
-end
-
-if Ply:GetNWString("Tier 3 Perk") == "Stalker" and StalkerSet == false then
-Ply:SetCrouchedWalkSpeed(math.Clamp(CrouchSpeed * 1.5, 0, 1))
-StalkerSet = true
-elseif Ply:GetNWString("Tier 3 Perk") != "Stalker" and StalkerSet != false then
-Ply:SetCrouchedWalkSpeed(CrouchSpeed)
-StalkerSet = false
 end
 
 if Ply:IsSuitEquipped() and GetConVar("gmod_suit"):GetBool() then
