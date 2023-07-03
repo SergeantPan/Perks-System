@@ -64,6 +64,20 @@ if data.Entity:GetClass() == "prop_door_rotating" and data.Entity:GetNWBool("Mut
 end
 end)
 
+hook.Add("Think", "ColdBloodedSrv", function()
+
+if ArcticMedShots_ApplyEffect == nil then return end
+
+for _,ply in pairs(player.GetAll()) do
+
+if ply:GetNWInt("Tier 2 Perk") == "Cold Blooded" then
+	ArcticMedShots_ApplyEffect(ply, "coldblooded", 1)
+end
+// Dont sue me for this Arctic, I just think it's a cool feature
+end
+
+end)
+
 hook.Add("Think", "CODPerksGenericThink", function()
 
 for _,HackedNPC in pairs(ents.FindByClass("npc_*")) do

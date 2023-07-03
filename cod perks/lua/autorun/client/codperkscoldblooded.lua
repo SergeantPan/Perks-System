@@ -1,16 +1,3 @@
-hook.Add("Think", "ColdBlooded", function()
-
-if ArcticMedShots_ApplyEffect == nil then return end
-
-if LocalPlayer():GetNWInt("Tier 2 Perk") == "Cold Blooded" and LocalPlayer().ArcticMedShots_ActiveEffects["coldblooded"] != math.huge then
-	ArcticMedShots_ApplyEffect(LocalPlayer(), "coldblooded", math.huge)
-elseif LocalPlayer():GetNWInt("Tier 2 Perk") != "Cold Blooded" then
-	ArcticMedShots_ApplyEffect(LocalPlayer(), "coldblooded", 0)
-end
-// Dont sue me for this Arctic, I just think it's a cool feature
-
-end)
-
 hook.Add( "PopulateToolMenu", "ExternalPerks", function()
 
 	spawnmenu.AddToolMenuOption( "Options", "Player Perks", "PerksMenuExt", "External Perks", "", "", function( panel )
