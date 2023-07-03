@@ -12,10 +12,15 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "PerksSettings", "Settin
 	panel:Help("Change the horizontal position of the perk icons. Default is 0.1")
 	panel:NumSlider("Perk Icons Y Pos", "CODPerksYPos", 0, 1, 2)
 	panel:Help("Change the vertical position of the perk icons. Default is 0.8")
+
 	panel:CheckBox("Vertical/Horizontal Icons", "CODPerksVerticalHorizontal")
 	panel:Help("Change the orientation of the perk icons. Off = Vertical, On = Horizontal")
 	panel:CheckBox("Tier 1 Perk at top/bottom", "CODPerksTierPosition")
 	panel:Help("Change the order in which perks are listed. Off = Tier 1 at top, On = Tier 3 at top")
+
+	panel:CheckBox("Hide Perks after spawning", "CODPerksHideIcons")
+	panel:Help("Fade out perk icons shortly after spawning in")
+
 	panel:NumSlider("Perk Icons Gap", "CODPerksGap", 0, 100, 0)
 	panel:Help("Increase the gap between the perk icons. For use with bigger perk icons. Default is 0")
 	panel:NumSlider("Perk Icons Size", "CODPerksIconSize", 0, 120, 0)
@@ -41,7 +46,13 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "Misc", "Miscellaneous",
 	local binder = vgui.Create( "DBinder", frame )
 	panel:AddItem(binder)
 	function binder:OnChange( num )
-		RunConsoleCommand("CODPerksInteract", input.GetKeyName(num))
+		RunConsoleCommand("CODPerksInteract", string.upper(input.GetKeyName(num)))
+	end
+	panel:Help("Toggle Perk Icons")
+	local binder = vgui.Create( "DBinder", frame )
+	panel:AddItem(binder)
+	function binder:OnChange( num )
+		RunConsoleCommand("CODPerksToggleIcons", string.upper(input.GetKeyName(num)))
 	end
 
 	local ArmorerChoice = panel:ComboBox("Armorer Mechanics", "CODPerksArmorerAltMechanic")
@@ -78,6 +89,7 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "Misc", "Miscellaneous",
 	T2Choice:AddChoice("Engineer")
 	T2Choice:AddChoice("High Alert")
 	T2Choice:AddChoice("Tactical Mask")
+	T2Choice:AddChoice("Cold Blooded")
 	panel:Help("Default T2 Perk to select on spawn")
 	local T3Choice = panel:ComboBox("Default T3 Perk", "CODPerksDefaultT3")
 	T3Choice:SetSortItems(false)

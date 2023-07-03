@@ -133,7 +133,6 @@ end
 if target:Alive() and target:GetNWString("Tier 3 Perk") == "Stalker" and target:Crouching() and target:GetNWInt("StalkerHits", 0) == 5 and dmginfo:IsBulletDamage() then
 	dmginfo:SetDamage(dmginfo:GetDamage() * 0.25)
 	target:SetNWInt("StalkerHits", 0)
-	print("Damage reduced")
 end
 if !target:Alive() or target:GetNWString("Tier 3 Perk") != "Stalker" or !target:Crouching() then
 	target:SetNWInt("StalkerHits", 0)
