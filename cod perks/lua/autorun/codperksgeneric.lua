@@ -298,7 +298,7 @@ end
 
 end
 
-if Looter:IsPlayer() and IsValid(Looter) and Looter:Alive() and Looter:GetNWString("Tier 1 Perk") == "Armorer" and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1) then
+if Looter:IsPlayer() and IsValid(Looter) and Looter:Alive() and Looter:GetNWString("Tier 1 Perk") == "Armorer" and Looter:Armor() < Looter:GetMaxArmor() and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1) then
 Looter:EmitSound(RndSnd)
 
 Looter:SetArmor(math.Clamp(Looter:Armor() + 5, 0, Looter:GetMaxArmor()))

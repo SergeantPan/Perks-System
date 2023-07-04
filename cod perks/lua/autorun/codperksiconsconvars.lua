@@ -19,6 +19,16 @@ CreateConVar("CODPerksDefaultT3", "None", 128, "The default T3 perk you want to 
 CreateConVar("CODPerksHideIcons", 0, 128, "Perk icons hide themselves automatically.")
 CreateConVar("CODPerksToggleIcons", "y", 128, "Key that will toggle icon visibility.")
 
+CreateConVar("CODPerkColaJG", 0, 128, "Spawn in with the Juggernog Perk-A-Cola.")
+CreateConVar("CODPerkColaDT", 0, 128, "Spawn in with the Double Tap Perk-A-Cola.")
+CreateConVar("CODPerkColaDD", 0, 128, "Spawn in with the Deadshot Daquiri Perk-A-Cola.")
+CreateConVar("CODPerkColaSU", 0, 128, "Spawn in with the Stamin-Up Perk-A-Cola.")
+CreateConVar("CODPerkColaPHD", 0, 128, "Spawn in with the PhD Flopper Perk-A-Cola.")
+CreateConVar("CODPerkColaEC", 0, 128, "Spawn in with the Electric Cherry Perk-A-Cola.")
+CreateConVar("CODPerkColaVA", 0, 128, "Spawn in with the Vulture Aid Perk-A-Cola.")
+CreateConVar("CODPerkColaDP", 0, 128, "Spawn in with the Death Perception Perk-A-Cola.")
+CreateConVar("CODPerkColaEP", 0, 128, "Spawn in with the Elemental Pop Perk-A-Cola.")
+
 local BlindEye = Material("materials/blindeye.png")
 local Recon = Material("materials/recon.png")
 local Scavenger = Material("materials/scavenger.png")

@@ -106,4 +106,20 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "Misc", "Miscellaneous",
 	panel:Help("Default T3 Perk to select on spawn")
 	
 end)
+
+spawnmenu.AddToolMenuOption( "Options", "Player Perks", "ColaSpawnDefaults", "Perk-A-Cola Defaults", "", "", function( panel )
+	panel:ClearControls()
+
+	panel:CheckBox("Spawn with Juggernog", "CODPerkColaJG")
+	panel:CheckBox("Spawn with Double Tap", "CODPerkColaDT")
+	panel:CheckBox("Spawn with Deadshot Daquiri", "CODPerkColaDD")
+	panel:CheckBox("Spawn with Stamin-Up", "CODPerkColaSU")
+	panel:CheckBox("Spawn with PhD Flopper", "CODPerkColaPHD")
+	panel:CheckBox("Spawn with Electric Cherry", "CODPerkColaEC")
+	panel:CheckBox("Spawn with Vulture Aid", "CODPerkColaVA")
+	panel:CheckBox("Spawn with Death Perception", "CODPerkColaDP")
+	panel:CheckBox("Spawn with Elemental Pop", "CODPerkColaEP")
+
+end)
+
 end)
