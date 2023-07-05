@@ -1,0 +1,46 @@
+hook.Add( "PopulateToolMenu", "DivisionTalentsSettings", function()
+
+	spawnmenu.AddToolMenuOption( "Options", "Player Perks", "DivisionSettings", "Division Settings", "", "", function( panel )
+	panel:ClearControls()
+
+	panel:NumSlider("Slot 1 Talent X Pos", "TalentsSlot1X", 0, 1, 3)
+	panel:Help("Change the horizontal position of the slot 1 talent icon. Default is 0.1")
+	panel:NumSlider("Slot 1 Talent Y Pos", "TalentsSlot1Y", 0, 1, 3)
+	panel:Help("Change the vertical position of the slot 1 talent icon. Default is 0.6")
+	panel:NumSlider("Slot 1 Talent X Pos", "TalentsSlot2X", 0, 1, 3)
+	panel:Help("Change the horizontal position of the slot 2 talent icon. Default is 0.133")
+	panel:NumSlider("Slot 1 Talent Y Pos", "TalentsSlot2Y", 0, 1, 3)
+	panel:Help("Change the vertical position of the slot 2 talent icon. Default is 0.6")
+	panel:NumSlider("Slot 1 Talent X Pos", "TalentsSlot3X", 0, 1, 3)
+	panel:Help("Change the horizontal position of the slot 3 talent icon. Default is 0.166")
+	panel:NumSlider("Slot 1 Talent Y Pos", "TalentsSlot3Y", 0, 1, 3)
+	panel:Help("Change the vertical position of the slot 3 talent icon. Default is 0.6")
+	panel:NumSlider("Slot 1 Talent X Pos", "TalentsSlot4X", 0, 1, 3)
+	panel:Help("Change the horizontal position of the slot 4 talent icon. Default is 0.199")
+	panel:NumSlider("Slot 1 Talent Y Pos", "TalentsSlot4Y", 0, 1, 3)
+	panel:Help("Change the vertical position of the slot 4 talent icon. Default is 0.6")
+	
+
+	panel:NumSlider("Talent Icons Gap", "TalentsGap", 0, 100, 0)
+	panel:Help("Change the vertical gap between all perks. Default is 0.")
+	panel:NumSlider("Talent Icons Size", "TalentsSize", 0, 100, 0)
+	panel:Help("Change the size of the talent icons. Default is 60")
+
+	panel:Button("Reset To Default", "TalentsResetSettings")
+end)
+end)
+
+concommand.Add("TalentsResetSettings", function(ply)
+
+	GetConVar("TalentsSlot1X"):Revert()
+	GetConVar("TalentsSlot2X"):Revert()
+	GetConVar("TalentsSlot3X"):Revert()
+	GetConVar("TalentsSlot4X"):Revert()
+	GetConVar("TalentsSlot1Y"):Revert()
+	GetConVar("TalentsSlot2Y"):Revert()
+	GetConVar("TalentsSlot3Y"):Revert()
+	GetConVar("TalentsSlot4Y"):Revert()
+	GetConVar("TalentsGap"):Revert()
+	GetConVar("TalentsSize"):Revert()
+
+end)
