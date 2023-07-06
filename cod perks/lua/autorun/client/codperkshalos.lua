@@ -11,7 +11,7 @@ if Attacker:GetNWString("Tier 1 Perk") == "Recon" and Attacker:Team() == LocalPl
 	Target:SetNWBool("PerkSpotted", true)
 	Target:SetNWInt("Timer", CurTime() + 8)
 end
-if Attacker:GetNWString("Tier 1 Perk") == "Recon" and Attacker:Team() == LocalPlayer():Team() and Target:IsPlayer() and Target:Team() != LocalPlayer():Team() then
+if Attacker:GetNWString("Tier 1 Perk") == "Recon" and Attacker:Team() == LocalPlayer():Team() and Target:IsPlayer() and Enemy then
 	Target:SetNWBool("PerkSpotted", true)
 	Target:SetNWInt("Timer", CurTime() + 8)
 end

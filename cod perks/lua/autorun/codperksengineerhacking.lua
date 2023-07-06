@@ -46,13 +46,13 @@ if CLIENT then
 
 local Hacking = 0
 
+hook.Add("Think", "EngineerHackingHud", function()
+
 if !ConVarExists("CODPerksInteract") then
 	BindButton = 18
 else
 	BindButton = input.GetKeyCode(GetConVar("CODPerksInteract"):GetString())
 end
-
-hook.Add("Think", "EngineerHackingHud", function()
 
 Target = LocalPlayer():GetEyeTrace().Entity
 

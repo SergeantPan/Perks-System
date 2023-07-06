@@ -4,10 +4,14 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "PerksSettings", "Settin
 
 	panel:NumSlider("Armorer Mechanic", "CODPerksArmorerAltMechanic", 0, 2, 0)
 	panel:Help("Change how the Armorer perk functions:\n 0 = Loot bodies for +5 armor. +25 max armor.\n 1 = Loot bodies for +5 armor. Spawn with 50 armor.\n 2 = +25 max armor. Spawn with 50 armor.")
+
 	panel:NumSlider("Popup Icon X Pos", "CODPerksIconXPos", 0, 1, 2)
 	panel:Help("Change the horizontal position of the Perk icon that pops up with Juggernaut/Blast Shield/Scavenger/Armorer. Default is 0.45")
 	panel:NumSlider("Popup Icon Y Pos", "CODPerksIconYPos", 0, 1, 2)
 	panel:Help("Change the vertical position of the Perk icon that pops up with Juggernaut/Blast Shield/Scavenger/Armorer. Default is 0.5")
+	panel:NumSlider("Popup Icon Size", "CODPerksPopupIconSize", 0, 100, 0)
+	panel:Help("Change the size of the Perk icon that pops up with Juggernaut/Blast Shield/Scavenger/Armorer. Default is 64")
+
 	panel:NumSlider("Perk Icons X Pos", "CODPerksXPos", 0, 1, 2)
 	panel:Help("Change the horizontal position of the perk icons. Default is 0.1")
 	panel:NumSlider("Perk Icons Y Pos", "CODPerksYPos", 0, 1, 2)
@@ -61,6 +65,11 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "Misc", "Miscellaneous",
 	ArmorerChoice:AddChoice("Loot + Spawn Armor", "1")
 	ArmorerChoice:AddChoice("Spawn + Max Armor", "2")
 	panel:Help("Change the mechanics of the Armorer perk:\n Loot + Max Armor = Loot bodies for +5 armor. +25 max armor.\n Loot + Spawn Armor = Loot bodies for +5 armor. Spawn with 50 armor.\n Spawn + Max Armor = +25 max armor. Spawn with 50 armor.")
+
+	panel:CheckBox( "Enable Gunship balance mechanic", "CODPerksGunshipBalance" )
+	panel:Help( "By default, Gunships have only 100 HP. This makes the Hardened perk extremely OP vs Gunships. Enabling the balance mechanic allows for the addon to automatically increase the HP of any Gunships that spawn into the game.")
+	panel:NumSlider( "Gunship Health", "CODPerksGunshipBalanceHP", 0, 1000, 0 )
+	panel:Help( "The HP the Gunship should spawn in with." )
 
 	local T1Choice = panel:ComboBox("Default T1 Perk", "CODPerksDefaultT1")
 	T1Choice:SetSortItems(false)

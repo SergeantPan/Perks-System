@@ -293,7 +293,7 @@ local PerkImage = vgui.Create("DImageButton", panel)
 PerkImage:SetPos(100, 250)
 PerkImage:SetSize(80,80)
 PerkImage:SetImage("penetration.png")
-PerkImage:SetToolTip("Hardened\n- Weapons deal 25% of their base damage to armored enemies (Striders, turrets, rollermines.)\n- Enemies with suit armor take 25% more damage, ignores Juggernaut.")
+PerkImage:SetToolTip("Hardened\n- Weapons deal 25% of their base damage to armored enemies (Striders, Turrets, Hunter-Choppers.)\n- Enemies with suit armor take 25% more damage, ignores Juggernaut.\n- Only applies to ballistic damage.")
 PerkImage.DoClick = function()
 net.Start("Tier2Perk")
 if LocalPlayer():GetNWString("Tier 2 Perk") != "Hardened" then

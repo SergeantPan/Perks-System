@@ -29,6 +29,14 @@ net.Send(atk)
 
 end
 
+hook.Add("OnEntityCreated", "SetHP", function(ent)
+
+if IsValid(ent) and ent:GetClass() == "npc_combinegunship" and GetConVar("CODPerksGunshipBalance"):GetBool() then
+	timer.Simple(0.25, function() if IsValid(ent) then ent:SetHealth(GetConVar("CODPerksGunshipBalanceHP"):GetInt()) end end)
+end
+
+end)
+
 hook.Add("ScalePlayerDamage", "MarksmanBonusPly", function(ply,hitgroup,dmginfo)
 if dmginfo:GetAttacker():GetNWString("Tier 3 Perk") == "Marksman" and hitgroup == HITGROUP_HEAD then
 	dmginfo:SetDamage(dmginfo:GetDamage() * 1.25)
@@ -118,9 +126,28 @@ end
 
 end)
 
+hook.Add("EntityFireBullets", "Test", function(entity, data)
+if entity:IsPlayer() and entity:GetNWString("Tier 2 Perk") == "Hardened" then
+function data.Callback(attacker, tr, dmginfo)
+	if tr.Entity:GetClass() == "npc_helicopter" or tr.Entity:GetClass() == "npc_combinegunship" then
+	if !dmginfo:IsDamageType(DMG_BLAST + DMG_AIRBOAT) and dmginfo:IsDamageType(DMG_BULLET) then
+		dmginfo:SetDamageType(DMG_BLAST + DMG_AIRBOAT)
+		dmginfo:SetDamage(dmginfo:GetDamage() * 0.25)
+	end
+	end
+end
+return true
+end
+end)
+
 hook.Add("EntityTakeDamage", "CodPerksDMGHooks", function( target, dmginfo )
 
 local Atk = dmginfo:GetAttacker()
+local AllowDMG = {1, 3, 4, 5, 6, 7, 13, 14}
+
+if target:GetClass() == "npc_combinegunship" and Atk:GetNWString("Tier 2 Perk") == "Hardened" and Atk:GetActiveWeapon():IsWeapon() and table.HasValue(AllowDMG, Atk:GetActiveWeapon():GetPrimaryAmmoType()) then
+target:SetHealth(target:Health() - dmginfo:GetDamage())
+end
 
 if target:IsPlayer() then
 if !target:Alive() or (target:GetNWBool("PerkSpotted", false) == true and target:GetNWInt("Timer", math.huge) < CurTime()) or target:GetNWString("Tier 2 Perk") == "Ninja" then
@@ -287,17 +314,6 @@ end
 
 end)
 
-if ConVarExists("CODPerksIconXPos") then
-	IconXPos = GetConVar("CODPerksIconXPos"):GetFloat()
-else
-	IconXPos = 0.45
-end
-if ConVarExists("CODPerksIconYPos") then
-	IconYPos = GetConVar("CODPerksIconYPos"):GetFloat()
-else
-	IconYPos = 0.5
-end
-
 if CLIENT then
 
 local p = LocalPlayer()
@@ -319,6 +335,19 @@ end)
 
 hook.Add("HUDPaint", "ResIcons", function()
 
+if ConVarExists("CODPerksIconXPos") then
+	IconXPos = GetConVar("CODPerksIconXPos"):GetFloat()
+else
+	IconXPos = 0.45
+end
+if ConVarExists("CODPerksIconYPos") then
+	IconYPos = GetConVar("CODPerksIconYPos"):GetFloat()
+else
+	IconYPos = 0.5
+end
+
+local PopupSize = GetConVar("CODPerksPopupIconSize"):GetInt()
+
 if JugResTimer > CurTime() and p:GetNWInt("LootTimer", 0) < CurTime() and BlstResTimer < CurTime() then
 	JugAlpha = 255
 elseif JugResTimer < CurTime() then
@@ -328,7 +357,7 @@ end
 if JugAlpha > 0 then
 	surface.SetMaterial(JugRes)
 	surface.SetDrawColor( 255, 255, 255, JugAlpha)
-	surface.DrawTexturedRect( ScrW() * IconXPos, ScrH() * IconYPos, 64, 48 )
+	surface.DrawTexturedRect( ScrW() * IconXPos, ScrH() * IconYPos, PopupSize, PopupSize - 16 )
 end
 
 if BlstResTimer > CurTime() and p:GetNWInt("LootTimer", 0) < CurTime() and JugResTimer < CurTime() then
@@ -339,7 +368,7 @@ end
 if BlstShldAlpha > 0 then
 	surface.SetMaterial(BlstShld)
 	surface.SetDrawColor( 255, 255, 255, BlstShldAlpha)
-	surface.DrawTexturedRect( ScrW() * IconXPos, ScrH() * IconYPos, 64, 64 )
+	surface.DrawTexturedRect( ScrW() * IconXPos, ScrH() * IconYPos, PopupSize, PopupSize )
 end
 end)
 

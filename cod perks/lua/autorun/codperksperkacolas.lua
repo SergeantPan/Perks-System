@@ -22,7 +22,7 @@ if dmginfo:GetAttacker():GetNWString("Perk4") == "Deadshot Daquiri" and hitgroup
 end
 end)
 
-hook.Add("DoAnimationEvent","TFAVOX_ReloadAnimEvent",function( ply, event, data )
+hook.Add("DoAnimationEvent","CODPerksAnimationEvent",function( ply, event, data )
 	
 if IsValid(ply) and ply:Alive() then
 

@@ -1,23 +1,35 @@
 CreateConVar("CODPerksArmorerAltMechanic", 0, 128, "Change the mechanics of the Armorer perk:\n 0 = Loot bodies for +5 armor. +25 max armor.\n 1 = Loot bodies for +5 armor. Spawn with 50 armor.\n 2 = +25 max armor. Spawn with 50 armor.")
+
 CreateConVar("CODPerksIconXPos", 0.45, 128, "Change the horizontal position of the Scavenger/Blast Shield/Juggernaut icon. Default is 0.45")
 CreateConVar("CODPerksIconYPos", 0.5, 128, "Change the vertical position of the Scavenger/Blast Shield/Juggernaut icon. Default is 0.5")
+CreateConVar("CODPerksPopupIconSize", 64, 128, "Change the size of the Scavenger/Blast Shield/Juggernaut icon. Default is 60")
+
 CreateConVar("CODPerksXPos", 0.1, 128, "Change the horizontal position of the perk icons. Default is 0.1")
 CreateConVar("CODPerksYPos", 0.8, 128, "Change the vertical position of the perk icons. Default is 0.8")
+
 CreateConVar("CODPerksVerticalHorizontal", 0, 128, "Change the orientation of the perk icons. 0 = Vertical, 1 = Horizontal")
 CreateConVar("CODPerksTierPosition", 0, 128, "Change the order of the perks from top to bottom. 0 = Tier 1, Tier 2, Tier 3, 1 = Tier 3, Tier 2, Tier 1")
+
 CreateConVar("CODPerksGap", 0, 128, "Increase the gap between the perk icons. For use with bigger perk icons. Default is 0")
-CreateConVar("CODPerksIconSize", 60, 128, "Change the size of the perk icons. Default is 60")CreateConVar("CODPerksT1X", 0, 128, "Adjust the horizontal position of the T1 Perk (Blue)")
+CreateConVar("CODPerksIconSize", 60, 128, "Change the size of the perk icons. Default is 60")
+
+CreateConVar("CODPerksT1X", 0, 128, "Adjust the horizontal position of the T1 Perk (Blue)")
 CreateConVar("CODPerksT1Y", 0, 128, "Adjust the vertical position of the T1 Perk (Blue)")
 CreateConVar("CODPerksT2X", 0, 128, "Adjust the horizontal position of the T2 Perk (Red)")
 CreateConVar("CODPerksT2Y", 0, 128, "Adjust the vertical position of the T2 Perk (Red)")
 CreateConVar("CODPerksT3X", 0, 128, "Adjust the horizontal position of the T3 Perk (Yellow)")
 CreateConVar("CODPerksT3Y", 0, 128, "Adjust the vertical position of the T3 Perk (Yellow)")
+
 CreateConVar("CODPerksInteract", "H", 128, "The key used to hack turrets. Use the settings menu preferrably")
+
 CreateConVar("CODPerksDefaultT1", "None", 128, "The default T1 perk you want to spawn with")
 CreateConVar("CODPerksDefaultT2", "None", 128, "The default T2 perk you want to spawn with")
 CreateConVar("CODPerksDefaultT3", "None", 128, "The default T3 perk you want to spawn with")
 CreateConVar("CODPerksHideIcons", 0, 128, "Perk icons hide themselves automatically.")
 CreateConVar("CODPerksToggleIcons", "y", 128, "Key that will toggle icon visibility.")
+
+CreateConVar("CODPerksGunshipBalance", 1, 128, "Enable the Combine Gunship balance mechanic")
+CreateConVar("CODPerksGunshipBalanceHP", 300, 128, "How much HP the Combine Gunship receive. By default it has 100 HP")
 
 CreateConVar("CODPerkColaJG", 0, 128, "Spawn in with the Juggernog Perk-A-Cola.")
 CreateConVar("CODPerkColaDT", 0, 128, "Spawn in with the Double Tap Perk-A-Cola.")
@@ -110,16 +122,16 @@ else
 end
 
 if !ConVarExists("CODPerksToggleIcons") then
-	BindButton = 35
+	ToggleButton = 35
 else
-	BindButton = input.GetKeyCode(GetConVar("CODPerksToggleIcons"):GetString())
+	ToggleButton = input.GetKeyCode(GetConVar("CODPerksToggleIcons"):GetString())
 end
 
-if input.IsButtonDown(BindButton) and ShowIcons == false and Alpha == 0 then
+if input.IsButtonDown(ToggleButton) and ShowIcons == false and Alpha == 0 then
 	ShowIcons = true
 	IconDelay = math.huge
 end
-if input.IsButtonDown(BindButton) and ShowIcons == true and Alpha == 255 then
+if input.IsButtonDown(ToggleButton) and ShowIcons == true and Alpha == 255 then
 	ShowIcons = false
 end
 
