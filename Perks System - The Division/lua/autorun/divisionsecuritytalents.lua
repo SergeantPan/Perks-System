@@ -49,7 +49,7 @@ end
 
 end
 
-if ply:IsPlayer() and ply:Team() != Atk:Team() and ply:GetNWInt("SPDmgBuff", 0) > CurTime() and hitgroup == HITGROUP_HEAD then
+if ply:IsPlayer() and (Atk:IsPlayer() and ply:Team() != Atk:Team()) or (Atk:IsNPC() and Atk:Disposition(ply) == D_HT) and ply:GetNWInt("SPDmgBuff", 0) > CurTime() and hitgroup == HITGROUP_HEAD then
 	dmginfo:SetDamage(dmginfo:GetDamage() * 1.25)
 end
 
