@@ -1,5 +1,5 @@
-local KillableArmorClass = {"npc_strider"}
 local UnkillableArmorClass = {"npc_turret_floor", "npc_rollermine"}
+local Targets = {"npc_helicopter", "npc_combinegunship", "npc_combinedropship", "prop_vehicle_apc"}
 
 function PerkFuncNPC(ent, atk)
 
@@ -29,13 +29,17 @@ net.Send(atk)
 
 end
 
+if SERVER then
+
 hook.Add("OnEntityCreated", "SetHP", function(ent)
 
 if IsValid(ent) and ent:GetClass() == "npc_combinegunship" and GetConVar("CODPerksGunshipBalance"):GetBool() then
-	timer.Simple(0.25, function() if IsValid(ent) then ent:SetHealth(GetConVar("CODPerksGunshipBalanceHP"):GetInt()) end end)
+	timer.Simple(0.25, function() if IsValid(ent) then ent:SetHealth(GetConVar("CODPerksGunshipBalanceHP"):GetInt()) ent:SetMaxHealth(GetConVar("CODPerksGunshipBalanceHP"):GetInt()) end end)
 end
 
 end)
+
+end
 
 hook.Add("ScalePlayerDamage", "MarksmanBonusPly", function(ply,hitgroup,dmginfo)
 if dmginfo:GetAttacker():GetNWString("Tier 3 Perk") == "Marksman" and hitgroup == HITGROUP_HEAD then
@@ -126,27 +130,49 @@ end
 
 end)
 
-hook.Add("EntityFireBullets", "Test", function(entity, data)
-if entity:IsPlayer() and entity:GetNWString("Tier 2 Perk") == "Hardened" then
+local HL2WorkAround = {"weapon_pistol", "weapon_357", "weapon_smg1", "weapon_ar2", "weapon_shotgun", "weapon_crossbow"}
+
+hook.Add("EntityFireBullets", "HardenedAntiArmor", function(entity, data) // This allows HL2 weapons to damage armored targets
+
+if entity:IsPlayer() and entity:GetNWString("Tier 2 Perk") == "Hardened" and entity:GetActiveWeapon():IsWeapon() and table.HasValue(HL2WorkAround, entity:GetActiveWeapon():GetClass()) then
+
 function data.Callback(attacker, tr, dmginfo)
-	if tr.Entity:GetClass() == "npc_helicopter" or tr.Entity:GetClass() == "npc_combinegunship" then
+
+	if table.HasValue(Targets, tr.Entity:GetClass()) then
 	if !dmginfo:IsDamageType(DMG_BLAST + DMG_AIRBOAT) and dmginfo:IsDamageType(DMG_BULLET) then
-		dmginfo:SetDamageType(DMG_BLAST + DMG_AIRBOAT)
+		dmginfo:SetDamageType(DMG_AIRBOAT)
 		dmginfo:SetDamage(dmginfo:GetDamage() * 0.25)
 	end
 	end
-end
+
+	if tr.Entity:GetClass() == "npc_strider" then
+	if !dmginfo:IsDamageType(DMG_BLAST) and dmginfo:IsDamageType(DMG_BULLET) then
+		dmginfo:SetDamageType(DMG_BLAST)
+		dmginfo:SetDamage(dmginfo:GetDamage() * 0.25)
+	end
+	end
+
 return true
+
 end
+
+end
+
 end)
 
 hook.Add("EntityTakeDamage", "CodPerksDMGHooks", function( target, dmginfo )
 
 local Atk = dmginfo:GetAttacker()
 local AllowDMG = {1, 3, 4, 5, 6, 7, 13, 14}
+local HardenedTargets = {"npc_strider", "npc_combinegunship", "npc_combinedropship", "npc_helicopter", "prop_vehicle_apc"}
+local LightTargets = {"npc_combine_camera", "npc_turret_ceiling", "npc_cscanner", "npc_hunter", "npc_manhack", "npc_clawscanner", "npc_antlionguard", "npc_antlionguardian"}
 
-if target:GetClass() == "npc_combinegunship" and Atk:GetNWString("Tier 2 Perk") == "Hardened" and Atk:GetActiveWeapon():IsWeapon() and table.HasValue(AllowDMG, Atk:GetActiveWeapon():GetPrimaryAmmoType()) then
-target:SetHealth(target:Health() - dmginfo:GetDamage())
+if table.HasValue(HardenedTargets, target:GetClass()) and Atk:GetNWString("Tier 2 Perk") == "Hardened" and Atk:GetActiveWeapon():IsWeapon() and !table.HasValue(HL2WorkAround, Atk:GetActiveWeapon():GetClass()) and dmginfo:IsBulletDamage() then
+	dmginfo:SetDamage(dmginfo:GetDamage() * 0.25)
+	target:SetHealth(target:Health() - dmginfo:GetDamage())
+end
+if table.HasValue(LightTargets, target:GetClass()) and Atk:GetNWString("Tier 2 Perk") == "Hardened" and Atk:GetActiveWeapon():IsWeapon() and dmginfo:IsBulletDamage() then
+	dmginfo:SetDamage(dmginfo:GetDamage() * 1.25)
 end
 
 if target:IsPlayer() then
@@ -247,9 +273,6 @@ end
 if Atk:IsPlayer() and Atk:GetNWString("Tier 2 Perk") == "Hardened" then
 if target:IsNPC() and table.HasValue(UnkillableArmorClass, target:GetClass()) and dmginfo:IsBulletDamage() then
 	target:SetHealth(math.Clamp(target:Health() - (dmginfo:GetDamage() * 0.25), 1, target:GetMaxHealth()))
-end
-if target:IsNPC() and table.HasValue(KillableArmorClass, target:GetClass()) and dmginfo:IsBulletDamage() then
-	target:SetHealth(target:Health() - (dmginfo:GetDamage() * 0.25))
 end
 if target:GetClass() == "npc_turret_floor" and target:Health() == 1 then
 	target:Fire("selfdestruct","",0.1)
