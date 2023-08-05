@@ -222,8 +222,8 @@ net.SendToServer()
 end
 
 local PerkImage = vgui.Create("DImageButton", panel)
-PerkImage:SetPos(15, 150)
-PerkImage:SetSize(80,80)
+PerkImage:SetPos(10, 148)
+PerkImage:SetSize(85,85)
 PerkImage:SetImage("mobility.png")
 PerkImage:SetToolTip("Mobility\n- Walk 10% faster.\n- Jump 15% higher.\n- Climb ladders 15% faster.")
 PerkImage.DoClick = function()
@@ -256,8 +256,8 @@ net.SendToServer()
 end
 
 local PerkImage = vgui.Create("DImageButton", panel)
-PerkImage:SetPos(185, 150)
-PerkImage:SetSize(80,80)
+PerkImage:SetPos(185, 148)
+PerkImage:SetSize(85,85)
 PerkImage:SetImage("dangerclose.png")
 PerkImage:SetToolTip("Danger Close\n- Explosives deal 25% more damage. Negates Blast Shield.")
 PerkImage.DoClick = function()
@@ -273,7 +273,24 @@ net.SendToServer()
 end
 
 local PerkImage = vgui.Create("DImageButton", panel)
-PerkImage:SetPos(15, 260)
+PerkImage:SetPos(10, 248)
+PerkImage:SetSize(85,85)
+PerkImage:SetImage("coldblooded.png")
+PerkImage:SetToolTip("Cold Blooded\n- Enemy players targeting you cannot see your name or health\n- Immune to ArcCW Thermal Scopes. Requires Arctic's Combat Stims to work")
+PerkImage.DoClick = function()
+net.Start("Tier2Perk")
+if LocalPlayer():GetNWString("Tier 2 Perk") != "Cold Blooded" then
+net.WriteEntity(LocalPlayer())
+net.WriteString("Cold Blooded")
+else
+net.WriteEntity(LocalPlayer())
+net.WriteString("None")
+end
+net.SendToServer()
+end
+
+local PerkImage = vgui.Create("DImageButton", panel)
+PerkImage:SetPos(100, 260)
 PerkImage:SetSize(80,60)
 PerkImage:SetImage("juggernaut.png")
 PerkImage:SetToolTip("Juggernaut\n- 25% bullet damage resistance. Negates Stopping Power.")
@@ -290,10 +307,10 @@ net.SendToServer()
 end
 
 local PerkImage = vgui.Create("DImageButton", panel)
-PerkImage:SetPos(100, 250)
+PerkImage:SetPos(185, 250)
 PerkImage:SetSize(80,80)
 PerkImage:SetImage("penetration.png")
-PerkImage:SetToolTip("Hardened\n- Weapons deal 25% of their base damage to armored enemies (Striders, Turrets, Hunter-Choppers.)\n- Enemies with suit armor take 25% more damage, ignores Juggernaut.\n- Only applies to ballistic damage.")
+PerkImage:SetToolTip("Hardened\n- Weapons deal 25% of their base damage to highly armored enemies (Striders, Turrets, Hunter-Choppers.)\n- Weapons deal 25% more damage to lightly armored enemies (Hunters, Antlion Guards, Manhacks.)\n- Enemies with suit armor take 25% more damage, ignores Juggernaut.\n- Only applies to ballistic damage.")
 PerkImage.DoClick = function()
 net.Start("Tier2Perk")
 if LocalPlayer():GetNWString("Tier 2 Perk") != "Hardened" then
@@ -307,7 +324,7 @@ net.SendToServer()
 end
 
 local PerkImage = vgui.Create("DImageButton", panel)
-PerkImage:SetPos(185, 250)
+PerkImage:SetPos(15, 350)
 PerkImage:SetSize(80,80)
 PerkImage:SetImage("Engineer.png")
 PerkImage:SetToolTip("Engineer\n- Detect mechanical enemy units through walls.\n- Gain the ability to hack enemy turrets.\n- Hacked turrets target hostile NPCs and players not on your team.")
@@ -324,7 +341,7 @@ net.SendToServer()
 end
 
 local PerkImage = vgui.Create("DImageButton", panel)
-PerkImage:SetPos(15, 350)
+PerkImage:SetPos(100, 350)
 PerkImage:SetSize(80,80)
 PerkImage:SetImage("awareness.png")
 PerkImage:SetToolTip("High Alert\n- Your vision pulses when enemies outside of your view see you.")
@@ -341,7 +358,7 @@ net.SendToServer()
 end
 
 local PerkImage = vgui.Create("DImageButton", panel)
-PerkImage:SetPos(100, 350)
+PerkImage:SetPos(185, 350)
 PerkImage:SetSize(80,80)
 PerkImage:SetImage("tacticalmask.png")
 PerkImage:SetToolTip("Tactical Mask\n- Reduce damage taken from poison, acid and other gas-based damage by 90%\n- Radiation damage is reduced by 50%")
