@@ -3,6 +3,7 @@ CreateConVar("CODPerksArmorerAltMechanic", 0, 128, "Change the mechanics of the 
 CreateConVar("CODPerksIconXPos", 0.45, 128, "Change the horizontal position of the Scavenger/Blast Shield/Juggernaut icon. Default is 0.45")
 CreateConVar("CODPerksIconYPos", 0.5, 128, "Change the vertical position of the Scavenger/Blast Shield/Juggernaut icon. Default is 0.5")
 CreateConVar("CODPerksPopupIconSize", 64, 128, "Change the size of the Scavenger/Blast Shield/Juggernaut icon. Default is 60")
+CreateConVar("CODPerksEnableScavIcons", 1, 128, "Enable/Disable the icons for Scavenger Packs/Armorer Boosts.")
 
 CreateConVar("CODPerksXPos", 0.1, 128, "Change the horizontal position of the perk icons. Default is 0.1")
 CreateConVar("CODPerksYPos", 0.8, 128, "Change the vertical position of the perk icons. Default is 0.8")
@@ -167,7 +168,7 @@ elseif LocalPlayer():GetNWString("Tier 1 Perk") == "Recon" then
 elseif LocalPlayer():GetNWString("Tier 1 Perk") == "Scavenger" then
 	surface.SetMaterial(Scavenger)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT1 - 12, HorT1 - 7, PerkSize + 15, PerkSize + 15 )
+	surface.DrawTexturedRect( VertT1, HorT1, PerkSize, PerkSize )
 elseif LocalPlayer():GetNWString("Tier 1 Perk") == "Lightweight" then
 	surface.SetMaterial(Lightweight)
 	surface.SetDrawColor( 255, 255, 255, Alpha )

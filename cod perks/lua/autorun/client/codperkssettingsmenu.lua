@@ -66,6 +66,9 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "Misc", "Miscellaneous",
 	ArmorerChoice:AddChoice("Spawn + Max Armor", "2")
 	panel:Help("Change the mechanics of the Armorer perk:\n Loot + Max Armor = Loot bodies for +5 armor. +25 max armor.\n Loot + Spawn Armor = Loot bodies for +5 armor. Spawn with 50 armor.\n Spawn + Max Armor = +25 max armor. Spawn with 50 armor.")
 
+	panel:CheckBox("Scavenger/Armorer Pickup Icon", "CODPerksEnableScavIcons" )
+	panel:Help( "Enable/Disable the icons for Scavenger Pack/Armorer Boost pickups." )
+
 	panel:CheckBox( "Enable Gunship balance mechanic", "CODPerksGunshipBalance" )
 	panel:Help( "By default, Gunships have only 100 HP. This makes the Hardened perk extremely OP vs Gunships. Enabling the balance mechanic allows for the addon to automatically increase the HP of any Gunships that spawn into the game.")
 	panel:NumSlider( "Gunship Health", "CODPerksGunshipBalanceHP", 0, 1000, 0 )

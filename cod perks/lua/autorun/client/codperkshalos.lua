@@ -76,6 +76,29 @@ end
 	surface.SetDrawColor( 255, 255, 255, LeftDrain)
 	surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
 
+if (LocalPlayer():GetNWString("Tier 1 Perk") == "Scavenger" or LocalPlayer():GetNWString("Tier 1 Perk") == "Armorer") and GetConVar("CODPerksEnableScavIcons"):GetBool() then
+for _,ScavItem in pairs(ents.FindByClass("prop_physics")) do
+
+	ScavPos = ScavItem:WorldSpaceCenter() + Vector(0,0,15)
+	ArmorPos = ScavItem:WorldSpaceCenter() + Vector(0,0,9)
+
+if LocalPlayer():GetNWString("Tier 1 Perk") == "Scavenger" and ScavItem:GetNWBool("ScavBox", false) == true and LocalPlayer():GetPos():Distance(ScavItem:WorldSpaceCenter()) < 312 then
+cam.Start3D()
+	render.SetMaterial(ScavMat)
+	render.DrawSprite(ScavPos, 8, 8, color_white)
+cam.End3D()
+end
+
+if LocalPlayer():GetNWString("Tier 1 Perk") == "Armorer" and ScavItem:GetNWBool("ArmorBoost", false) == true and LocalPlayer():GetPos():Distance(ScavItem:WorldSpaceCenter()) < 312 then
+cam.Start3D()
+	render.SetMaterial(ArmorMat)
+	render.DrawSprite(ArmorPos, 12, 12, color_white)
+cam.End3D()
+end
+
+end
+end
+
 if LocalPlayer():GetNWInt("LootTimer", 0) > CurTime() and LocalPlayer():GetNWInt("JugResTimer", 0) < CurTime() and LocalPlayer():GetNWInt("BlstTimer", 0) < CurTime() then
 	ScavAlpha = 255
 if LocalPlayer():GetNWString("Tier 1 Perk") == "Scavenger" then

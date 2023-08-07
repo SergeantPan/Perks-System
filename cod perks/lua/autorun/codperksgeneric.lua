@@ -253,63 +253,53 @@ end)
 
 hook.Add("Think", "ScavengerThink", function()
 
-for _,Ply in pairs(player.GetAll()) do
+AllowedAmmo = {1, 3, 4, 5, 6, 7, 13, 14, 23, 24, 25, 26}
 
-TargetedPly = Ply
+for _,Ply in pairs(player.GetAll()) do
 
 if MaxArmor == nil then
 MaxArmor = Ply:GetMaxArmor()
 end
 
-if Ply:GetNWString("Tier 1 Perk") == "Armorer" and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 2) then
-	Ply:SetMaxArmor(MaxArmor + 25)
-else
-	Ply:SetMaxArmor(MaxArmor)
-end
-
-end
-
 local Snds = {"zipper1.wav", "zipper2.wav", "zipper3.wav", "zipper4.wav"}
 local RndSnd = Snds[ math.random( #Snds ) ]
 
-for _,Rag in pairs(ents.FindByClass("prop_ragdoll")) do // Scavenger
+for _,ScavItem in pairs(ents.FindByClass("prop_physics")) do
+if ScavItem:GetName() == "Scavenger Box" and Ply:GetNWString("Tier 1 Perk") != "Scavenger" then
+	ScavItem:SetNoDraw(true)
+elseif ScavItem:GetName() == "Scavenger Box" and Ply:GetNWString("Tier 1 Perk") == "Scavenger" then
+	ScavItem:SetNoDraw(false)
+if Ply:GetPos():Distance(ScavItem:GetPos()) < 64 then
+	ScavItem:Remove()
+	Ply:EmitSound(RndSnd)
 
-if IsValid(Rag) and Rag.Looted != true then
-
-for _,Looter in pairs(ents.FindInSphere(Rag:GetPos(), 64)) do
-
-AllowedAmmo = {1, 3, 4, 5, 6, 7, 13, 14, 23, 24, 25, 26}
-
-if Looter:IsPlayer() and IsValid(Looter) and Looter:Alive() and Looter:GetNWString("Tier 1 Perk") == "Scavenger" then
-Looter:EmitSound(RndSnd)
-
-for _,Weps in pairs(Looter:GetWeapons()) do
+for _,Weps in pairs(Ply:GetWeapons()) do
 
 if Weps:GetMaxClip1() > 0 and table.HasValue(AllowedAmmo, Weps:GetPrimaryAmmoType()) then
-Looter:GiveAmmo(math.Round(Weps:GetMaxClip1() * 0.5, 0), Weps:GetPrimaryAmmoType())
+Ply:GiveAmmo(math.Round(Weps:GetMaxClip1() * 0.5, 0), Weps:GetPrimaryAmmoType())
 elseif Weps:GetMaxClip1() <= 0 and table.HasValue(AllowedAmmo, Weps:GetPrimaryAmmoType()) then
-Looter:GiveAmmo(math.Round(game.GetAmmoMax(Weps:GetPrimaryAmmoType()) * 0.1, 0), Weps:GetPrimaryAmmoType())
+Ply:GiveAmmo(math.Round(game.GetAmmoMax(Weps:GetPrimaryAmmoType()) * 0.1, 0), Weps:GetPrimaryAmmoType())
 end
 
-Looter:SetNWInt("LootTimer", CurTime() + 3)
-Rag.Looted = true
+Ply:SetNWInt("LootTimer", CurTime() + 3)
 
 end
+end
+end
+if ScavItem:GetName() == "Armorer Boost" and Ply:GetNWString("Tier 1 Perk") != "Armorer" then
+	ScavItem:SetNoDraw(true)
+elseif ScavItem:GetName() == "Armorer Boost" and Ply:GetNWString("Tier 1 Perk") == "Armorer" and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1) then
+	ScavItem:SetNoDraw(false)
+if Ply:GetPos():Distance(ScavItem:GetPos()) < 64 then
+	ScavItem:Remove()
+	Ply:EmitSound(RndSnd)
+
+Ply:SetArmor(math.Clamp(Ply:Armor() + 5, 0, Ply:GetMaxArmor()))
+
+Ply:SetNWInt("LootTimer", CurTime() + 3)
 
 end
-
-if Looter:IsPlayer() and IsValid(Looter) and Looter:Alive() and Looter:GetNWString("Tier 1 Perk") == "Armorer" and Looter:Armor() < Looter:GetMaxArmor() and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1) then
-Looter:EmitSound(RndSnd)
-
-Looter:SetArmor(math.Clamp(Looter:Armor() + 5, 0, Looter:GetMaxArmor()))
-
-Looter:SetNWInt("LootTimer", CurTime() + 3)
-Rag.Looted = true
-
 end
-
-end
-
 end
 
 end
@@ -317,6 +307,26 @@ end
 end)
 
 hook.Add("OnNPCKilled", "HackerNPCKill", function(npc, attacker)
+
+ScavItem = ents.Create("prop_physics")
+ArmorerItem = ents.Create("prop_physics")
+if (game.SinglePlayer() and Entity(1):IsPlayer() and Entity(1):GetNWString("Tier 1 Perk") == "Scavenger") or !game.SinglePlayer() then
+	ScavItem:SetPos(npc:WorldSpaceCenter())
+	ScavItem:SetModel("models/items/boxmrounds.mdl")
+	ScavItem:SetName("Scavenger Box")
+	ScavItem:Spawn()
+	ScavItem:SetCollisionGroup(2)
+	ScavItem:SetNWBool("ScavBox", true)
+end
+
+if (game.SinglePlayer() and Entity(1):IsPlayer() and Entity(1):GetNWString("Tier 1 Perk") == "Armorer" and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1)) or !game.SinglePlayer() then
+	ArmorerItem:SetPos(npc:WorldSpaceCenter())
+	ArmorerItem:SetModel("models/items/battery.mdl")
+	ArmorerItem:SetName("Armorer Boost")
+	ArmorerItem:Spawn()
+	ArmorerItem:SetCollisionGroup(2)
+	ArmorerItem:SetNWBool("ArmorBoost", true)
+end
 
 if attacker:IsPlayer() and attacker:GetNWString("Tier 1 Perk") == "Hacker" and attacker:GetNWInt("HackerDelay", 0) < CurTime() and npc:Disposition(attacker) == D_HT then
 attacker:SetNWInt("HackerDelay", CurTime() + 5)

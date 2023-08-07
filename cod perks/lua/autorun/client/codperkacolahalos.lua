@@ -1,18 +1,14 @@
 local NoHalo = {"weapon_physgun", "gmod_toolgun", "gmod_camera"}
 local color_orange = Color( 255, 128, 0 )
 
-net.Receive("VultAidDrop", function()
-	VultureDrop = net.ReadEntity()
-end)
-
 hook.Add("HUDPaint", "VultureIcon", function()
 
 local VultureIcon = Material("Vulureaid.png")
 
 for _,Aid in pairs(ents.FindByClass("prop_physics")) do
+	VulturePosition = Aid:WorldSpaceCenter() + Vector(0,0,15)
 
-if Aid == VultureDrop then
-	VulturePosition = VultureDrop:WorldSpaceCenter() + Vector(0,0,15)
+if Aid:GetNWBool("VultureAid", false) == true then
 cam.Start3D()
 	render.SetMaterial(VultureIcon)
 	render.DrawSprite(VulturePosition, 16, 16, color_white)

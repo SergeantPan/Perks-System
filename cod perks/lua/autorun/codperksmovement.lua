@@ -30,7 +30,7 @@ LadderSpeed = Ply:GetLadderClimbSpeed()
 end
 
 if Ply:GetNWString("Tier 3 Perk") == "Stalker" and StalkerSet == false then
-Ply:SetCrouchedWalkSpeed(math.Clamp(CrouchSpeed * 1.5, 0, 1))
+Ply:SetCrouchedWalkSpeed(CrouchSpeed * 1.5)
 StalkerSet = true
 elseif Ply:GetNWString("Tier 3 Perk") != "Stalker" and StalkerSet == true then
 Ply:SetCrouchedWalkSpeed(CrouchSpeed)

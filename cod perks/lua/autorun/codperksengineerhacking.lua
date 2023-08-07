@@ -74,21 +74,10 @@ end
 
 end)
 
-local RedVal = 255
-
 hook.Add("HUDPaint", "HackingText", function()
 
 local Text = "InteractFont"
 Target = LocalPlayer():GetEyeTrace().Entity
-
-	YellowVal = math.Clamp(0 + (255 * Hacking / 50), 0, 255)
-if YellowVal == 255 then
-	RedVal = math.Clamp(RedVal - 1, 0, 255)
-else
-	RedVal = 255
-end
-	ColorVal = Color(RedVal, YellowVal, 0, 125)
-	Box = Color(0, 0, 0, 125)
 
 if LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" and IsValid(Target) and Target:GetClass() == "npc_turret_floor" and Target:GetNWInt("HackedTeam", -1) != LocalPlayer():Team() and Target:GetPos():Distance(LocalPlayer():GetPos()) <= 60 then
 if Hacking == 0 then

@@ -126,7 +126,7 @@ for _,VultAid in pairs(ents.FindByClass("prop_physics*")) do
 if VultAid:GetName() == "Vulture's Aid" and ply:GetPos():Distance(VultAid:GetPos()) < 64 then
 if IsValid(wep) and table.HasValue(AcceptedAmmo, wep:GetPrimaryAmmoType()) then
 	VultAid:Remove()
-	ply:GiveAmmo(wep:GetMaxClip1() * 0.1, wep:GetPrimaryAmmoType())
+	ply:GiveAmmo(math.Clamp(wep:GetMaxClip1() * 0.1, 1, math.huge), wep:GetPrimaryAmmoType())
 end
 end
 end
@@ -318,10 +318,8 @@ VultureAidDrop:SetName("Vulture's Aid")
 VultureAidDrop:SetModel("models/Items/BoxMRounds.mdl")
 VultureAidDrop:Spawn()
 VultureAidDrop:GetPhysicsObject():SetVelocity(Vector(math.Rand(-250,250),math.Rand(-250,250),25))
-constraint.Keepupright(VultureAidDrop, VultureAidDrop:GetAngles(), 0, 15)
-net.Start("VultAidDrop")
-net.WriteEntity(Entity(VultureAidDrop:EntIndex()))
-net.Broadcast()
+VultureAidDrop:SetNWBool("VultureAid", true)
+constraint.Keepupright(VultureAidDrop, VultureAidDrop:GetAngles(), 0, 100)
 end
 
 end)
