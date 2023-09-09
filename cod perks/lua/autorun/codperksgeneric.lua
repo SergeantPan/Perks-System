@@ -3,13 +3,21 @@ local EmitSound = false
 
 if SERVER then
 
+hook.Add("AllowPlayerPickup", "PreventScavpickup", function(ply, ent)
+
+if ent:GetName() == "Armorer Boost" or ent:GetName() == "Scavenger Box" then
+	return false
+end
+
+end)
+
 function HackerFunc(ent, atk)
 
 Hated = false
 
 if ent:IsNPC() then
 Hated = ent:Disposition(atk) == D_HT
-elseif ent:IsNPC() then
+elseif ent:IsPlayer() then
 Hated = ent:Team() != atk:Team()
 end
 
