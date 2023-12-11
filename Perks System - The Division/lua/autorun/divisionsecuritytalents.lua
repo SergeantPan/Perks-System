@@ -216,12 +216,4 @@ end
 
 end
 
-if P:IsPlayer() and P:GetNWString("Slot 1 Talent", "None") == "Demolition Expert" or P:GetNWString("Slot 2 Talent", "None") == "Demolition Expert" or P:GetNWString("Slot 3 Talent", "None") == "Demolition Expert" or P:GetNWString("Slot 4 Talent", "None") == "Demolition Expert" then
-
-if dmginfo:IsExplosionDamage() and P:GetNWInt("DEDmgBns", 0) > CurTime() and (target:IsNPC() and target:Disposition(P) == D_HT) or (target:IsPlayer() and target:Team() != P:Team()) then
-dmginfo:SetDamage(dmginfo:GetDamage() * 1.2)
-end
-
-end
-
 end)
