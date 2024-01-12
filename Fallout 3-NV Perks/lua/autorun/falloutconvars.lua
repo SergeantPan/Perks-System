@@ -1,0 +1,7 @@
+CreateConVar("FalloutCharacterGender", 1, 128, "Select the gender of your character. For use with the Lady Killer/Black Widow and Confirmed Bachelor/Cherchez La Femme perks. 1 = Male 2 = Female.")
+CreateConVar("FalloutStrangerHPLimit", 60, 128, "The maximum HP an NPC can have before Mysterious Stranger can trigger.")
+CreateConVar("FalloutCannibalReactChance", 60, 128, "Chance for friendly NPCs to react when witnessing cannibalism.")
+CreateConVar("FalloutPromptX", 0.46, 128, "Adjust the horizontal position of the Interact prompt for the Cannibal and Robotics Expert perks.")
+CreateConVar("FalloutPromptY", 0.53, 128, "Adjust the vertical position of the Interact prompt for the Cannibal and Robotics Expert perks.")
+CreateConVar("FalloutHealthX", 0.48, 128, "Adjust the horizontal position of the Health text for the Living Anatomy perk.")
+CreateConVar("FalloutHealthY", 0.8, 128, "Adjust the vertical position of the Health text for the Living Anatomy perk.")
