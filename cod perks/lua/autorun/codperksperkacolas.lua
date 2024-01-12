@@ -309,7 +309,7 @@ end)
 
 hook.Add( "OnNPCKilled", "VultureAidAmmo", function( npc, attacker )
 
-if attacker:GetNWString("Perk7") == "Vulture Aid" and npc:IsNPC() and npc:Disposition(attacker) == D_HT then
+if attacker:IsPlayer() and attacker:GetNWString("Perk7") == "Vulture Aid" and npc:IsNPC() and npc:Disposition(attacker) == D_HT then
 local VultureAidDrop = ents.Create("prop_physics")
 VultureAidDrop:SetPos(npc:WorldSpaceCenter())
 VultureAidDrop:SetCollisionGroup(2)

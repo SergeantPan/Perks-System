@@ -1,5 +1,5 @@
 hook.Add( "PopulateToolMenu", "MenuForSettings", function()
-spawnmenu.AddToolMenuOption( "Options", "Player Perks", "PerksSettings", "Settings", "", "", function( panel )
+spawnmenu.AddToolMenuOption( "Options", "Player Perks", "PerksSettings", "CoD Settings", "", "", function( panel )
 	panel:ClearControls()
 
 	panel:NumSlider("Armorer Mechanic", "CODPerksArmorerAltMechanic", 0, 2, 0)
@@ -44,7 +44,7 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "PerksSettings", "Settin
 	panel:Help("Adjust the vertical position of the T3 Perk (Yellow)")
 end)
 
-spawnmenu.AddToolMenuOption( "Options", "Player Perks", "Misc", "Miscellaneous", "", "", function( panel )
+spawnmenu.AddToolMenuOption( "Options", "Player Perks", "Misc", "CoD Misc", "", "", function( panel )
 	panel:ClearControls()
 	panel:Help("Turret Hacking keybind")
 	local binder = vgui.Create( "DBinder", frame )

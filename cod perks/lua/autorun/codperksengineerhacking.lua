@@ -2,14 +2,15 @@ if SERVER then
 
 hook.Add("Think", "EngineerHacking", function()
 
+net.Receive("TurretHacking", function()
+	Hacker = net.ReadEntity()
+	Hacked = net.ReadEntity()
+	Hacked:SetNWInt("HackedTeam", Hacker:Team())
+end)
+
 for _,EngiPly in pairs(player.GetAll()) do
 
 for _,HackedTurret in pairs(ents.FindByClass("npc_turret_floor")) do
-
-net.Receive("TurretHacking", function()
-	Hacker = net.ReadEntity()
-	HackedTurret:SetNWInt("HackedTeam", Hacker:Team())
-end)
 
 if HackedTurret:GetNWInt("HackedTeam") == EngiPly:Team() then
 
@@ -56,18 +57,17 @@ end
 
 Target = LocalPlayer():GetEyeTrace().Entity
 
-if LocalPlayer():GetNWString("Tier 2 Perk") != "Engineer" or !IsValid(Target) or Target:GetClass() != "npc_turret_floor" or !input.IsButtonDown(BindButton) or Target:GetPos():Distance(LocalPlayer():GetPos()) > 60 then
+if LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" then
+if IsValid(Target) and Target:GetClass() == "npc_turret_floor" and input.IsButtonDown(BindButton) and Target:GetPos():Distance(LocalPlayer():GetPos()) <= 60 then
+	Hacking = math.Clamp(Hacking + 0.3, 0, 100)
+else
 	Hacking = 0
-end
-
-if LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" and IsValid(Target) and Target:GetClass() == "npc_turret_floor" then
-if input.IsButtonDown(BindButton) and Target:GetPos():Distance(LocalPlayer():GetPos()) <= 60 then
-	Hacking = math.Clamp(Hacking + 0.2, 0, 100)
 end
 if Hacking == 100 then
 	Target:SetOwner(LocalPlayer())
 net.Start("TurretHacking")
 	net.WriteEntity(LocalPlayer())
+	net.WriteEntity(Target)
 net.SendToServer()
 end
 end
