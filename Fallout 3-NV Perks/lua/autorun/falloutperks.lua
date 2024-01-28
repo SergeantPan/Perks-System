@@ -448,14 +448,16 @@ end
 end
 
 for _,Antlion in pairs(ents.FindByClass("npc_antlion*")) do
-if Antlion.DP == nil then
+if Antlion:GetSequenceName(Antlion:GetSequence()) != "" and Antlion.DP == nil then
 	Antlion.DP = Antlion:Disposition(ply)
 end
 
+if Antlion:GetSequenceName(Antlion:GetSequence()) != "" then
 if (Antlion:GetClass() == "npc_antlion" or Antlion:GetClass() == "npc_antlion_worker") and ply:Alive() and PlyHasPerk(ply, "09 ") == true and (Antlion:Disposition(ply) != D_NU or Antlion:Disposition(ply) != D_LI) then
 	Antlion:AddEntityRelationship(ply, D_NU, 0)
-elseif PlyHasPerk(ply, "09 ") == false and Antlion:Disposition(ply) != Antlion.DP then
+elseif (Antlion:GetClass() == "npc_antlion" or Antlion:GetClass() == "npc_antlion_worker") and PlyHasPerk(ply, "09 ") == false and Antlion:Disposition(ply) != Antlion.DP then
 	Antlion:AddEntityRelationship(ply, Antlion.DP, 0)
+end
 end
 end
 end
