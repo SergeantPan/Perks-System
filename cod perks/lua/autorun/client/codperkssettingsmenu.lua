@@ -5,6 +5,9 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "PerksSettings", "CoD Se
 	panel:NumSlider("Armorer Mechanic", "CODPerksArmorerAltMechanic", 0, 2, 0)
 	panel:Help("Change how the Armorer perk functions:\n 0 = Loot bodies for +5 armor. +25 max armor.\n 1 = Loot bodies for +5 armor. Spawn with 50 armor.\n 2 = +25 max armor. Spawn with 50 armor.")
 
+	panel:NumSlider("Halo/Overlay System", "CODPerksHaloSystem", 0, 3, 0)
+	panel:Help("Change how the overlays of spotting-based perks work:\n 0 = Disabled\n 1 = Halo only\n 2 = Overlay only\n 3 = Halo + Overlay")
+
 	panel:NumSlider("Popup Icon X Pos", "CODPerksIconXPos", 0, 1, 2)
 	panel:Help("Change the horizontal position of the Perk icon that pops up with Juggernaut/Blast Shield/Scavenger/Armorer. Default is 0.45")
 	panel:NumSlider("Popup Icon Y Pos", "CODPerksIconYPos", 0, 1, 2)
@@ -12,18 +15,17 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "PerksSettings", "CoD Se
 	panel:NumSlider("Popup Icon Size", "CODPerksPopupIconSize", 0, 100, 0)
 	panel:Help("Change the size of the Perk icon that pops up with Juggernaut/Blast Shield/Scavenger/Armorer. Default is 64")
 
+	panel:CheckBox("Alternate Turret Position", "CODPerksEngineerTurretPos")
+	panel:Help("If the turret is not on the back, enable/disable this to change the position.")
+	panel:NumSlider("Turret Forward Offset", "CODPerksEngineerTurretPosY", -5, 5, 2)
+	panel:Help("Move the turret on the playermodels back forward/backward.")
+	panel:NumSlider("Turret Sideways Offset", "CODPerksEngineerTurretPosZ", -5, 5, 2)
+	panel:Help("Move the turret on the playermodels back left/right.")
+
 	panel:NumSlider("Perk Icons X Pos", "CODPerksXPos", 0, 1, 2)
 	panel:Help("Change the horizontal position of the perk icons. Default is 0.1")
 	panel:NumSlider("Perk Icons Y Pos", "CODPerksYPos", 0, 1, 2)
 	panel:Help("Change the vertical position of the perk icons. Default is 0.8")
-
-	panel:CheckBox("Vertical/Horizontal Icons", "CODPerksVerticalHorizontal")
-	panel:Help("Change the orientation of the perk icons. Off = Vertical, On = Horizontal")
-	panel:CheckBox("Tier 1 Perk at top/bottom", "CODPerksTierPosition")
-	panel:Help("Change the order in which perks are listed. Off = Tier 1 at top, On = Tier 3 at top")
-
-	panel:CheckBox("Hide Perks after spawning", "CODPerksHideIcons")
-	panel:Help("Fade out perk icons shortly after spawning in")
 
 	panel:NumSlider("Perk Icons Gap", "CODPerksGap", 0, 100, 0)
 	panel:Help("Increase the gap between the perk icons. For use with bigger perk icons. Default is 0")
@@ -49,12 +51,14 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "Misc", "CoD Misc", "", 
 	panel:Help("Turret Hacking keybind")
 	local binder = vgui.Create( "DBinder", frame )
 	panel:AddItem(binder)
+	binder:SetValue(input.GetKeyCode(GetConVar("CODPerksInteract"):GetString()))
 	function binder:OnChange( num )
 		RunConsoleCommand("CODPerksInteract", string.upper(input.GetKeyName(num)))
 	end
 	panel:Help("Toggle Perk Icons")
 	local binder = vgui.Create( "DBinder", frame )
 	panel:AddItem(binder)
+	binder:SetValue(input.GetKeyCode(GetConVar("CODPerksToggleIcons"):GetString()))
 	function binder:OnChange( num )
 		RunConsoleCommand("CODPerksToggleIcons", string.upper(input.GetKeyName(num)))
 	end
@@ -73,6 +77,14 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "Misc", "CoD Misc", "", 
 	panel:Help( "By default, Gunships have only 100 HP. This makes the Hardened perk extremely OP vs Gunships. Enabling the balance mechanic allows for the addon to automatically increase the HP of any Gunships that spawn into the game.")
 	panel:NumSlider( "Gunship Health", "CODPerksGunshipBalanceHP", 0, 1000, 0 )
 	panel:Help( "The HP the Gunship should spawn in with." )
+
+	panel:CheckBox("Hide Perks after spawning", "CODPerksHideIcons")
+	panel:Help("Fade out perk icons shortly after spawning in")
+
+	panel:CheckBox("Vertical/Horizontal Icons", "CODPerksVerticalHorizontal")
+	panel:Help("Change the orientation of the perk icons. Off = Vertical, On = Horizontal")
+	panel:CheckBox("Tier 1 Perk at top/bottom", "CODPerksTierPosition")
+	panel:Help("Change the order in which perks are listed. Off = Tier 1 at top, On = Tier 3 at top")
 
 	local T1Choice = panel:ComboBox("Default T1 Perk", "CODPerksDefaultT1")
 	T1Choice:SetSortItems(false)

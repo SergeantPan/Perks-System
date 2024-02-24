@@ -1,26 +1,6 @@
 local UnkillableArmorClass = {"npc_turret_floor", "npc_rollermine"}
 local Targets = {"npc_helicopter", "npc_combinegunship", "npc_combinedropship", "prop_vehicle_apc"}
 
-function PerkFuncNPC(ent, atk)
-
-net.Start("PerkSpot")
-	net.WriteEntity(ent)
-	net.WriteBool(ent:Disposition(atk) == D_HT)
-	net.WriteEntity(atk)
-net.Broadcast()
-
-end
-
-function PerkFuncPly(ent, atk)
-
-net.Start("PerkSpot")
-	net.WriteEntity(ent)
-	net.WriteBool(ent:Team() != atk:Team())
-	net.WriteEntity(atk)
-net.Broadcast()
-
-end
-
 function ResTimers(atk, type)
 
 net.Start("ResTimers")
@@ -72,9 +52,14 @@ MartyrNade:Fire("SetTimer", 3, 0)
 end
 
 if attacker:IsPlayer() and attacker:GetNWString("Tier 1 Perk") == "Quick-Fix" and attacker:Alive() then
-attacker:SetNWInt(attacker:GetNWInt("QFHealth", 0) + 20)
-attacker:SetNWInt("QFHealth", "QFTimer", CurTime() + 5)
-attacker:SetHealth( math.Clamp(attacker:Health() + 20, 0, attacker:GetMaxHealth() + 20) )
+if attacker:Health() <= attacker:GetMaxHealth() + 10 then
+attacker:SetNWInt("QFHealth", math.Clamp(attacker:GetNWInt("QFHealth", 0) + 10, 0, attacker:GetMaxHealth() + 20))
+attacker:SetHealth(math.Clamp(attacker:Health() + 10, 0, attacker:GetMaxHealth() + 20))
+elseif attacker:Health() >= attacker:GetMaxHealth() + 11 and attacker:Health() < attacker:GetMaxHealth() + 20 then
+attacker:SetNWInt("QFHealth", math.Clamp(attacker:GetNWInt("QFHealth", 0) + (10 - ((attacker:GetMaxHealth() + 20) - attacker:Health())), 0, attacker:GetMaxHealth() + 20))
+attacker:SetHealth(math.Clamp(attacker:Health() + 10, 0, attacker:GetMaxHealth() + 20))
+end
+attacker:SetNWInt("QFTimer", CurTime() + 5)
 end
 
 end)
@@ -82,29 +67,25 @@ end)
 hook.Add("OnNPCKilled", "QFKilledNPC", function(npc, attacker)
 
 if attacker:IsPlayer() and attacker:GetNWString("Tier 1 Perk") == "Quick-Fix" and attacker:Alive() then
-if attacker:Health() < attacker:GetMaxHealth() + 20 then
-attacker:SetNWInt("QFHealth", math.Clamp(attacker:GetNWInt("QFHealth", 0) + 20, 0, attacker:GetMaxHealth() + 20))
-attacker:SetHealth( math.Clamp(attacker:Health() + 20, 0, attacker:GetMaxHealth() + 20) )
+if attacker:Health() <= attacker:GetMaxHealth() + 10 then
+attacker:SetNWInt("QFHealth", math.Clamp(attacker:GetNWInt("QFHealth", 0) + 10, 0, attacker:GetMaxHealth() + 20))
+attacker:SetHealth(math.Clamp(attacker:Health() + 10, 0, attacker:GetMaxHealth() + 20))
+elseif attacker:Health() >= attacker:GetMaxHealth() + 11 and attacker:Health() < attacker:GetMaxHealth() + 20 then
+attacker:SetNWInt("QFHealth", math.Clamp(attacker:GetNWInt("QFHealth", 0) + (10 - ((attacker:GetMaxHealth() + 20) - attacker:Health())), 0, attacker:GetMaxHealth() + 20))
+attacker:SetHealth(math.Clamp(attacker:Health() + 10, 0, attacker:GetMaxHealth() + 20))
 end
 attacker:SetNWInt("QFTimer", CurTime() + 5)
 end
 
 end)
 
-hook.Add("Think", "QFTempHPThink", function()
-
-for _,AllNPC in pairs(ents.FindByClass("npc_*")) do
-if AllNPC:IsNPC() then
-if AllNPC:GetNWBool("PerkSpotted", false) == true and AllNPC:GetNWInt("Timer", math.huge) < CurTime() then
-	AllNPC:SetNWBool("PerkSpotted", false)
-	AllNPC:SetNWInt("Timer", math.huge)
-end
-end
-end
+hook.Add("Think", "SurvThink", function()
 
 for _,QFPly in pairs(player.GetAll()) do
 
-if QFPly:IsPlayer() and QFPly:Alive() and QFPly:GetNWString("Tier 2 Perk") == "Survivalist" then
+if QFPly:IsPlayer() and QFPly:Alive() then
+
+if QFPly:GetNWString("Tier 2 Perk", "None") == "Survivalist" then
 HealthSeg1 = QFPly:Health() < 80 and QFPly:Health() > 60
 HealthSeg2 = QFPly:Health() < 60 and QFPly:Health() > 40
 HealthSeg3 = QFPly:Health() < 40 and QFPly:Health() > 20
@@ -122,6 +103,14 @@ elseif HealthSeg3 and LastHit then
 elseif HealthSeg4 and LastHit then
 	QFPly:SetHealth(math.Clamp(QFPly:Health() + 1, 0, QFPly:GetMaxHealth() * 0.2))
 	QFPly:SetNWInt("SurvRegen", CurTime() + 3)
+end
+end
+
+if QFPly:GetNWString("Tier 1 Perk", "None") == "Quick-Fix" and QFPly:GetNWInt("QFTimer", 0) < CurTime() then
+if QFPly:GetNWInt("QFHealth", 0) > 0 then
+	QFPly:SetNWInt("QFHealth", math.Clamp(QFPly:GetNWInt("QFHealth", 0) - 1, 0, QFPly:GetMaxHealth() + 20))
+	QFPly:SetHealth(math.Clamp(QFPly:Health() - 1, 1, QFPly:GetMaxHealth() + 20))
+end
 end
 
 end
@@ -176,10 +165,6 @@ if table.HasValue(LightTargets, target:GetClass()) and Atk:GetNWString("Tier 2 P
 end
 
 if target:IsPlayer() then
-if !target:Alive() or (target:GetNWBool("PerkSpotted", false) == true and target:GetNWInt("Timer", math.huge) < CurTime()) or target:GetNWString("Tier 2 Perk") == "Ninja" then
-	target:SetNWBool("PerkSpotted", false)
-	target:SetNWInt("Timer", math.huge)
-end
 if target:Alive() and target:GetNWString("Tier 3 Perk") == "Stalker" and target:Crouching() and target:GetNWInt("StalkerHits", 0) < 5 and dmginfo:IsBulletDamage() then
 	target:SetNWInt("StalkerHits", target:GetNWInt("StalkerHits", 0) + 1)
 end
@@ -190,9 +175,8 @@ end
 if !target:Alive() or target:GetNWString("Tier 3 Perk") != "Stalker" or !target:Crouching() then
 	target:SetNWInt("StalkerHits", 0)
 end
-if target:GetNWInt("QFHealth", 0) > 0 and target:GetNWInt("QFTimer", 0) < CurTime() and target:Alive() then
-	target:SetHealth(target:Health() - target:GetNWInt("QFHealth", 0))
-	target:SetNWInt("QFHealth", 0)
+if target:GetNWInt("QFHealth", 0) > 0 and target:Alive() then
+	target:SetNWInt("QFHealth", math.Clamp(target:GetNWInt("QFHealth") - dmginfo:GetDamage(), 0, target:GetMaxHealth() + 20))
 end
 end
 
@@ -239,15 +223,10 @@ elseif target:Health() <= target:GetMaxHealth() * 0.25 then
 end
 end
 
-if Atk:IsPlayer() and Atk:GetNWString("Tier 1 Perk") == "Recon" then
-if (target:IsNPC() and target:Disposition(Atk) == D_HT and IsValid(target)) or (target:IsPlayer() and target:Team() != Atk:Team() and target:Alive()) then
-if (target:IsNPC() and target:Disposition(Atk) == D_HT and IsValid(target)) then
-	PerkFuncNPC(target, Atk)
-elseif (target:IsPlayer() and target:Team() != Atk:Team() and target:Alive()) then
-	PerkFuncPly(target, Atk)
-end
-	target:SetNWBool("PerkSpotted", true)
-	target:SetNWInt("Timer", CurTime() + 8)
+if Atk:IsPlayer() and Atk:Alive() and Atk:GetNWString("Tier 1 Perk") == "Recon" and IsValid(target) then
+if (target:IsNPC() and target:Disposition(Atk) == D_HT) or (target:IsPlayer() and target:Team() != Atk:Team() and target:Alive() and target:GetNWString("Tier 3 Perk") != "Ninja") then
+	target:SetNWInt("ReconTimer", CurTime() + 8)
+	target:SetNWInt("ReconTeam", Atk:Team())
 end
 end
 
@@ -263,7 +242,7 @@ elseif Result < 0 then
 	Result = Result + 360
 end
 
-if Result > 90 and Result <= 260 then
+if Result >= 100 and Result <= 260 then
 	dmginfo:SetDamage(dmginfo:GetDamage() * 1.2)
 end
 
@@ -308,13 +287,26 @@ if dmginfo:IsBulletDamage() and target:GetNWString("Tier 2 Perk") == "Juggernaut
 if Atk != target and Atk:IsPlayer() and Atk:Alive()  then
 	ResTimers(dmginfo:GetAttacker(), true)
 end
-if Atk:GetNWString("Tier 2 Perk") != "Stopping Power" then
+if Atk:GetNWString("Tier 2 Perk") != "Stopping Power" or Atk:GetNWString("Tier 2 Perk") != "Assassin" or (Atk:GetNWString("Tier 2 Perk") == "Hardened" and target:Armor() == 0) then
+	dmginfo:SetDamage(dmginfo:GetDamage() * 0.75)
+end
+if Atk:GetNWString("Tier 2 Perk") == "Assassin" and target:GetPos():Distance(Atk:GetPos()) < 350 then
+
+if IsValid(target) then
+	PlyVec = (target:GetPos() - Atk:GetPos()):GetNormalized():Angle().y
+	PlyAng = target:EyeAngles().y
+	Result = PlyVec - PlyAng
+if Result > 360 then
+	Result = Result - 360
+elseif Result < 0 then
+	Result = Result + 360
+end
+
+if Result > 100 and Result < 260 then
 	dmginfo:SetDamage(dmginfo:GetDamage() * 0.75)
 end
 end
-
-if target:GetNWInt("QFHealth", 0) > 0 then
-	target:SetNWInt("QFHealth", math.Clamp(target:GetNWInt("QFHealth", 0) - dmginfo:GetDamage(), 0, target:GetMaxHealth() + 20))
+end
 end
 
 if Atk:IsPlayer() and Atk:GetNWString("Tier 2 Perk") == "Stopping Power" then
@@ -357,6 +349,8 @@ end
 end)
 
 hook.Add("HUDPaint", "ResIcons", function()
+
+local p = LocalPlayer()
 
 if ConVarExists("CODPerksIconXPos") then
 	IconXPos = GetConVar("CODPerksIconXPos"):GetFloat()

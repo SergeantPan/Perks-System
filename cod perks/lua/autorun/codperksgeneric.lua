@@ -1,5 +1,4 @@
 local MechClass = {"npc_manhack", "npc_turret_floor", "npc_cscanner", "npc_combine_camera", "npc_turret_ceiling", "npc_rollermine"}
-local EmitSound = false
 
 if SERVER then
 
@@ -10,39 +9,6 @@ if ent:GetName() == "Armorer Boost" or ent:GetName() == "Scavenger Box" then
 end
 
 end)
-
-function HackerFunc(ent, atk)
-
-Hated = false
-
-if ent:IsNPC() then
-Hated = ent:Disposition(atk) == D_HT
-elseif ent:IsPlayer() then
-Hated = ent:Team() != atk:Team()
-end
-
-net.Start("HackerSpot")
-	net.WriteTable(ents.FindInSphere(ent:GetPos(), 256))
-	net.WriteBool(Hated)
-	net.WriteEntity(atk)
-net.Broadcast()
-
-end
-
-function PulsarFuncTest(ent)
-
-local PulseTable = {}
-table.Add(PulseTable, ent)
-
-net.Start("PulsarSpot")
-	net.WriteTable(PulseTable)
-	net.WriteBool(false)
-	net.WriteEntity(TargetedPly)
-net.Broadcast()
-
-table.Empty(PulseTable)
-
-end
 
 local AcceptedModels = {"models/props_c17/door01_left.mdl", "models/props_c17/door02_double.mdl", "models/props_c17/gate_door01a.mdl", "models/props_doors/door03_slotted_left.mdl", "models/props_interiors/ElevatorShaft_Door01a.mdl", "models/props_wasteland/interior_fence001g.mdl" }
 
@@ -81,34 +47,11 @@ for _,ply in pairs(player.GetAll()) do
 if ply:GetNWInt("Tier 2 Perk") == "Cold Blooded" then
 	ArcticMedShots_ApplyEffect(ply, "coldblooded", 1)
 end
-// Dont sue me for this Arctic, I just think it's a cool feature
 end
 
 end)
 
 hook.Add("Think", "CODPerksGenericThink", function()
-
-for _,HackedNPC in pairs(ents.FindByClass("npc_*")) do
-if HackedNPC:GetNWBool("HackerSpotted", false) == true and HackedNPC:GetNWInt("HackerTimer", 0) < CurTime() then
-	HackedNPC:SetNWBool("HackerSpotted", false)
-	HackedNPC:SetNWInt("HackerTimer", math.huge)
-end
-end
-
-for _,HackedPly in pairs(player.GetAll()) do
-if (HackedPly:GetNWBool("HackerSpotted", false) == true and HackedPly:GetNWInt("HackerTimer", 0) < CurTime()) or HackedPly:GetNWString("Tier 3 Perk") == "Ninja" then
-	HackedPly:SetNWBool("HackerSpotted", false)
-	HackedPly:SetNWInt("HackerTimer", math.huge)
-end
-if (HackedPly:GetNWBool("PerkSpotted", false) == true and HackedPly:GetNWInt("Timer", 0) < CurTime()) or HackedPly:GetNWString("Tier 3 Perk") == "Ninja" then
-	HackedPly:SetNWBool("PerkSpotted", false)
-	HackedPly:SetNWInt("Timer", math.huge)
-end
-if (HackedPly:GetNWBool("PulsarSpotted", false) == true and HackedPly:GetNWInt("Timer", 0) < CurTime()) or HackedPly:GetNWString("Tier 3 Perk") == "Ninja" then
-	HackedPly:SetNWBool("PulsarSpotted", false)
-	HackedPly:SetNWInt("PulsarTimer", math.huge)
-end
-end
 
 for _,npc in pairs(ents.FindByClass("npc_*")) do // Blind Eye
 
@@ -133,36 +76,7 @@ end
 
 for _,ply in pairs(player.GetAll()) do
 
-if IsValid(ply) and ply:GetNWString("Tier 3 Perk") == "Pulsar" and ply:GetNWInt("PulsarDelay", 0) < CurTime() then
-	ply:SetNWInt("PulsarDelay", CurTime() + 4)
-	EmitSound = false
-for _,Pulse in pairs(ents.FindInSphere(ply:GetPos(), 256)) do
-if Pulse:GetNWBool("PulsarSpotted", false) == true and Pulse:GetNWInt("PulsarTimer", 0) < CurTime() then
-	Pulse:SetNWBool("PulsarSpotted", false)
-	Pulse:SetNWInt("PulsarTimer", math.huge)
-end
-if Pulse:IsNPC() and Pulse:Disposition(ply) == D_HT then
-	Pulse:SetNWBool("PulsarSpotted", true)
-	Pulse:SetNWInt("PulsarTimer", CurTime() + 3)
-	PulsarFuncTest(Pulse)
-if EmitSound == false then
-	ply:EmitSound("blip1.wav", 40)
-	EmitSound = true
-end
-end
-if Pulse:IsPlayer() and Pulse:Alive() and Pulse:Team() != ply:Team() then
-	Pulse:SetNWBool("PulsarSpotted", true)
-	Pulse:SetNWInt("PulsarTimer", CurTime() + 3)
-	PulsarFuncTest(Pulse)
-if EmitSound == false then
-	ply:EmitSound("blip1.wav", 40)
-	EmitSound = true
-end
-end
-end
-end
-
-if IsValid(ply) and ply:GetNWString("Tier 2 Perk") != "High Alert" then
+if IsValid(ply) and (ply:GetNWString("Tier 2 Perk") != "High Alert" or !ply:Alive()) then
 	ply:SetNWInt("LeftAlpha", 0)
 	ply:SetNWInt("BackAlpha", 0)
 	ply:SetNWInt("RightAlpha", 0)
@@ -180,10 +94,11 @@ if ply:GetNWInt("RightAlpha") > 0 then
 	ply:SetNWInt("RightAlpha", ply:GetNWInt("RightAlpha") - 5)
 end
 
-if ply:IsPlayer() and ply:GetPos():Distance(ply:GetPos()) < 250 and ply:GetNWString("Tier 3 Perk") != "Ninja" and ply:Visible(ply) then
+for _,Target in pairs(ents.FindInSphere(ply:GetPos(), 256)) do
+if Target != ply and Target:IsPlayer() and Target:Alive() and Target:GetNWString("Tier 2 Perk") != "Cold Blooded" and Target:Visible(ply) then
 
-if IsValid(ply) and ply:Team() != ply:Team() and ply:Visible(ply) then
-	PLYVec = (ply:GetPos() - ply:GetPos()):GetNormalized():Angle().y
+if IsValid(Target) and Target:Team() != ply:Team() then
+	PLYVec = (Target:GetPos() - ply:GetPos()):GetNormalized():Angle().y
 	PlyAng = ply:EyeAngles().y
 	Result = PLYVec - PlyAng
 if Result > 360 then
@@ -203,18 +118,12 @@ if Result >= 225 and Result <= 315 then
 end
 
 end
-
 end
-
 end
 
 for _,NPC in pairs(ents.FindByClass("npc_*")) do
 
-if NPC:IsNPC() and IsValid(NPC) then
-TargetedNPC = NPC
-end
-
-if NPC:IsNPC() and NPC:GetPos():Distance(ply:GetPos()) < 250 and NPC:Visible(ply) then
+if NPC:IsNPC() and NPC:GetPos():Distance(ply:GetPos()) < 256 and NPC:Visible(ply) then
 
 if IsValid(NPC) and NPC:Disposition(ply) == D_HT then
 	NPCVec = (NPC:GetPos() - ply:GetPos()):GetNormalized():Angle().y
@@ -237,9 +146,33 @@ if Result >= 225 and Result <= 300 then
 end
 
 end
-
+end
+end
 end
 
+if ply:GetNWString("Tier 3 Perk") != "Pulsar" then
+	ply:SetNWInt("PulsarDelay", CurTime() + 0.25)
+end
+
+if IsValid(ply) and ply:Alive() and ply:GetNWString("Tier 3 Perk") == "Pulsar" and ply:GetNWInt("PulsarDelay", math.huge) < CurTime() then
+	ply:SetNWInt("PulsarDelay", CurTime() + 4)
+	CanPulse = false
+
+for _,Pulse in pairs(ents.FindInSphere(ply:GetPos(), 256)) do
+
+if (Pulse:IsNPC() and Pulse:Disposition(ply) == D_HT) or (Pulse:IsPlayer() and Pulse:Alive() and Pulse:Team() != ply:Team()) then
+
+if Pulse:GetNWString("Tier 3 Perk") != "Ninja" then
+	Pulse:SetNWBool("PulseCanSpot", true)
+end
+
+if CanPulse == false then
+	ply:EmitSound("blip1.wav", 75)
+	CanPulse = true
+end
+
+end
+end
 end
 
 end
@@ -339,10 +272,9 @@ end
 if attacker:IsPlayer() and attacker:GetNWString("Tier 1 Perk") == "Hacker" and attacker:GetNWInt("HackerDelay", 0) < CurTime() and npc:Disposition(attacker) == D_HT then
 attacker:SetNWInt("HackerDelay", CurTime() + 5)
 for _,NPC in pairs(ents.FindInSphere(npc:GetPos(), 256)) do
-HackerFunc(NPC, attacker)
-if (IsValid(NPC) and NPC:IsNPC() and NPC:Disposition(attacker) == D_HT) or (NPC:IsPlayer() and NPC:Alive() and NPC:Team() != attacker:Team() and NPC:GetNWString("Tier 2 Perk") != "Ninja") then
-	NPC:SetNWBool("HackerSpotted", true)
-	NPC:SetNWInt("HackerTimer", CurTime() + 3)
+if (NPC:IsNPC() and NPC:Disposition(attacker) == D_HT) or (NPC:IsPlayer() and NPC:Alive() and NPC:Team() != attacker:Team()) then
+NPC:SetNWBool("HackerTimer", CurTime() + 3)
+NPC:SetNWInt("HackerTeam", attacker:Team())
 end
 end
 end
@@ -351,17 +283,50 @@ end)
 
 hook.Add("PlayerDeath", "HackerPlyKill", function(victim, attacker)
 
-if attacker:IsPlayer() and attacker:GetNWString("Tier 1 Perk") == "Quick-Fix" then
-attacker:SetNWInt("QFHealth", 20)
-attacker:SetNWInt("QFTimer", CurTime() + 5)
+ScavItem = ents.Create("prop_physics")
+ArmorerItem = ents.Create("prop_physics")
+if (game.SinglePlayer() and Entity(1):IsPlayer() and Entity(1):GetNWString("Tier 1 Perk") == "Scavenger") or !game.SinglePlayer() then
+	ScavItem:SetPos(victim:WorldSpaceCenter())
+	ScavItem:SetModel("models/items/boxmrounds.mdl")
+	ScavItem:SetName("Scavenger Box")
+	ScavItem:Spawn()
+	ScavItem:SetCollisionGroup(2)
+	ScavItem:SetNWBool("ScavBox", true)
+end
+
+if (game.SinglePlayer() and Entity(1):IsPlayer() and Entity(1):GetNWString("Tier 1 Perk") == "Armorer" and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1)) or !game.SinglePlayer() then
+	ArmorerItem:SetPos(victim:WorldSpaceCenter())
+	ArmorerItem:SetModel("models/items/battery.mdl")
+	ArmorerItem:SetName("Armorer Boost")
+	ArmorerItem:Spawn()
+	ArmorerItem:SetCollisionGroup(2)
+	ArmorerItem:SetNWBool("ArmorBoost", true)
 end
 
 if attacker:IsPlayer() and attacker:GetNWString("Tier 1 Perk") == "Hacker" and attacker:GetNWInt("HackerDelay", 0) < CurTime() and victim:Team() != attacker:Team() then
 attacker:SetNWInt("HackerDelay", CurTime() + 5)
 for _,PLY in pairs(ents.FindInSphere(victim:GetPos(), 256)) do
-if (IsValid(PLY) and PLY:IsNPC() and PLY:Disposition(attacker) == D_HT) or (PLY:IsPlayer() and PLY:Alive() and PLY:Team() != attacker:Team() and NPC:GetNWString("Tier 2 Perk") != "Ninja") then
-	PLY:SetNWBool("HackerSpotted", true)
-	PLY:SetNWInt("HackerTimer", CurTime() + 3)
+if (PLY:IsNPC() and PLY:Disposition(attacker) == D_HT) or (PLY:IsPlayer() and PLY:Alive() and PLY:Team() != attacker:Team() and PLY:GetNWString("Tier 2 Perk") != "Ninja") then
+	PLY:SetNWBool("HackerTimer", CurTime() + 3)
+	PLY:SetNWInt("HackerTeam", attacker:Team())
+end
+end
+end
+
+end)
+
+end
+
+if CLIENT then
+
+hook.Add("Think", "PulsarClientThink", function()
+
+local ply = LocalPlayer()
+
+if IsValid(ply) and ply:Alive() and ply:GetNWString("Tier 3 Perk") == "Pulsar" and ply:GetNWInt("PulsarDelay", math.huge) < CurTime() then
+for _,Pulse in pairs(ents.FindInSphere(ply:GetPos(), 256)) do
+if Pulse:IsNPC() or (Pulse:IsPlayer() and Pulse:Alive() and Pulse:Team() != ply:Team()) then
+	Pulse:SetNWInt("PulsarTimer", CurTime() + 3)
 end
 end
 end

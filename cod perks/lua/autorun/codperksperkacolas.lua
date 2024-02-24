@@ -72,7 +72,6 @@ end
 
 end)
 
-
 hook.Add("Think", "Perk-A-Colas", function()
 
 for _,ply in pairs(player.GetAll()) do
@@ -180,11 +179,11 @@ ply:SetMaxHealth(100)
 JugSet = false
 end
 
-if ply:GetNWString("Perk8") == "Death Perception" then
 for _,BoolNPC in pairs(ents.FindByClass("npc_*")) do
-if BoolNPC:IsNPC() and BoolNPC:Disposition(ply) == D_HT and BoolNPC:GetNWBool("DeathPerception", false) != true then
-	BoolNPC:SetNWBool("DeathPerception", true)
-end
+if BoolNPC:IsNPC() and BoolNPC:Disposition(ply) == D_HT then
+	BoolNPC:SetNWBool("DeathPer", true)
+else
+	BoolNPC:SetNWBool("DeathPer", false)
 end
 end
 
@@ -227,6 +226,7 @@ if target:IsNPC() and !table.HasValue(BrainRotImmune, target:GetClass()) and tar
 	target:SetNWInt("BrainRotTeam", dmginfo:GetAttacker():Team())
 	target:SetColor(Color(76, 153, 0))
 	target:SetSquad("BrainRot")
+	target:SetHealth(target:GetMaxHealth())
 end
 elseif RandomElement == 4 and !dmginfo:IsDamageType(64) then
 	dmginfo:SetDamageType(dmginfo:GetDamageType() + 64)
@@ -318,8 +318,24 @@ VultureAidDrop:SetName("Vulture's Aid")
 VultureAidDrop:SetModel("models/Items/BoxMRounds.mdl")
 VultureAidDrop:Spawn()
 VultureAidDrop:GetPhysicsObject():SetVelocity(Vector(math.Rand(-250,250),math.Rand(-250,250),25))
-VultureAidDrop:SetNWBool("VultureAid", true)
+VultureAidDrop:SetNWBool("VultureDrop", true)
 constraint.Keepupright(VultureAidDrop, VultureAidDrop:GetAngles(), 0, 100)
+end
+
+end)
+
+end
+
+if CLIENT then
+
+hook.Add("Think", "DeathPerceptionClient", function()
+
+for _,DP in pairs(ents.FindByClass("npc*")) do
+if LocalPlayer():GetNWString("Perk8") == "Death Perception" and DP:IsNPC() and DP:GetNWBool("DeathPer", false) == true and DP:GetPos():Distance(LocalPlayer():GetPos()) <= 256 then
+	DP:SetNWBool("DeathPerception", true)
+elseif LocalPlayer():GetNWString("Perk8") != "Death Perception" or DP:GetNWBool("DeathPer", false) == false or DP:GetPos():Distance(LocalPlayer():GetPos()) > 256 then
+	DP:SetNWBool("DeathPerception", false)
+end
 end
 
 end)

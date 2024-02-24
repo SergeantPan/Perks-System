@@ -8,8 +8,8 @@ CreateConVar("CODPerksEnableScavIcons", 1, 128, "Enable/Disable the icons for Sc
 CreateConVar("CODPerksXPos", 0.1, 128, "Change the horizontal position of the perk icons. Default is 0.1")
 CreateConVar("CODPerksYPos", 0.8, 128, "Change the vertical position of the perk icons. Default is 0.8")
 
-CreateConVar("CODPerksVerticalHorizontal", 0, 128, "Change the orientation of the perk icons. 0 = Vertical, 1 = Horizontal")
-CreateConVar("CODPerksTierPosition", 0, 128, "Change the order of the perks from top to bottom. 0 = Tier 1, Tier 2, Tier 3, 1 = Tier 3, Tier 2, Tier 1")
+CreateConVar("CODPerksVerticalHorizontal", 0, 128, "Change the orientation of the perk icons.\n0 = Vertical\n1 = Horizontal")
+CreateConVar("CODPerksTierPosition", 0, 128, "Change the order of the perks from top to bottom.\n0 = Tier 1, Tier 2, Tier 3\n1 = Tier 3, Tier 2, Tier 1")
 
 CreateConVar("CODPerksGap", 0, 128, "Increase the gap between the perk icons. For use with bigger perk icons. Default is 0")
 CreateConVar("CODPerksIconSize", 60, 128, "Change the size of the perk icons. Default is 60")
@@ -28,6 +28,11 @@ CreateConVar("CODPerksDefaultT2", "None", 128, "The default T2 perk you want to 
 CreateConVar("CODPerksDefaultT3", "None", 128, "The default T3 perk you want to spawn with")
 CreateConVar("CODPerksHideIcons", 0, 128, "Perk icons hide themselves automatically.")
 CreateConVar("CODPerksToggleIcons", "y", 128, "Key that will toggle icon visibility.")
+CreateConVar("CODPerksHaloSystem", 3, 128, "Determine which functions Spotting Perks use for highlighting enemies\n0 = Disabled\n1 = Halo Only\n2 = Overlay only\n3 = Both")
+
+CreateConVar("CODPerksEngineerTurretPos", 0, 128, "If the turret on a players back is not in the proper position, set this to 1 to use an alternate position.")
+CreateConVar("CODPerksEngineerTurretPosY", 0, 128, "If the turret on a players back is not in the proper position, use this to adjust the vertical position.")
+CreateConVar("CODPerksEngineerTurretPosZ", 0, 128, "If the turret on a players back is not in the proper position, use this to adjust the horizontal position.")
 
 CreateConVar("CODPerksGunshipBalance", 1, 128, "Enable the Combine Gunship balance mechanic")
 CreateConVar("CODPerksGunshipBalanceHP", 300, 128, "How much HP the Combine Gunship receive. By default it has 100 HP")
@@ -93,6 +98,7 @@ local T2X = GetConVar("CODPerksT2X"):GetFloat()
 local T2Y = GetConVar("CODPerksT2Y"):GetFloat()
 local T3X = GetConVar("CODPerksT3X"):GetFloat()
 local T3Y = GetConVar("CODPerksT3Y"):GetFloat()
+local Text = "InteractFont"
 
 if TopBottom then
 T1BonusX = ExtraSize * 3 + 130
@@ -220,6 +226,13 @@ elseif LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" then
 	surface.SetMaterial(Engineer)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
 	surface.DrawTexturedRect( VertT2 - 6, HorT2 - 6, PerkSize + 12, PerkSize + 12 )
+if LocalPlayer():GetNWBool("HasTurret", false) == true then
+if !Orientation then
+	draw.DrawText(string.upper(input.GetKeyName(input.GetKeyCode(GetConVar("CODPerksInteract"):GetString()))), Text, VertT2 + 75, HorT2 + 15, Color(255, 255, 255, Alpha))
+else
+	draw.DrawText(string.upper(input.GetKeyName(input.GetKeyCode(GetConVar("CODPerksInteract"):GetString()))), Text, VertT2 + 19, HorT2 - 35, Color(255, 255, 255, Alpha))
+end
+end
 elseif LocalPlayer():GetNWString("Tier 2 Perk") == "Hardened" then
 	surface.SetMaterial(Hardened)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
