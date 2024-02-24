@@ -20,7 +20,7 @@ if Doors:GetOwner() == ent and table.HasValue(AcceptedModels, ent:GetModel()) th
 	Doors:SetNWBool("Muted", true)
 end
 end
-if ent:GetOwner() != nil then
+if IsValid(ent:GetOwner()) and ent:GetOwner() != nil then
 	ent:GetOwner():SetNWBool("Muted", true)
 end
 end
