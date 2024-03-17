@@ -1,5 +1,6 @@
 local MenuSet = 0
 local FalloutStrangerHP = GetConVar("FalloutStrangerHPLimit"):GetInt()
+local PerkLimit = 0
 
 function PlyHasPerk(p, perk)
 local FindPerk = string.find(p:GetNWString("Fallout Perk"), perk)
@@ -27,6 +28,10 @@ elseif GetConVar("FalloutCharacterGender"):GetInt() == 2 and MenuSet != 2 then
 	Perk2Text = "Black Widow"
 end
 
+if IsValid(LocalPlayer()) then
+	PerkLimit = LocalPlayer():GetNWInt("FalloutPerks", 0) < GetConVar("FalloutMaxPerks"):GetInt()
+end
+
 end)
 
 hook.Add( "PopulateToolMenu", "FalloutPerks", function()
@@ -52,7 +57,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("01 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "01 ") == true then
+if PlyHasPerk(LocalPlayer(), "01 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark1:SetSize(0, 0)
 else
 	Checkmark1:SetSize(90, 90)
@@ -77,7 +82,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("02 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "02 ") == true then
+if PlyHasPerk(LocalPlayer(), "02 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark2:SetSize(0, 0)
 else
 	Checkmark2:SetSize(90, 90)
@@ -102,7 +107,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("03 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "03 ") == true then
+if PlyHasPerk(LocalPlayer(), "03 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark3:SetSize(0, 0)
 else
 	Checkmark3:SetSize(90, 90)
@@ -127,7 +132,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("04 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "04 ") == true then
+if PlyHasPerk(LocalPlayer(), "04 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark4:SetSize(0, 0)
 else
 	Checkmark4:SetSize(90, 90)
@@ -152,7 +157,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("05 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "05 ") == true then
+if PlyHasPerk(LocalPlayer(), "05 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark5:SetSize(0, 0)
 else
 	Checkmark5:SetSize(90, 90)
@@ -177,7 +182,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("06 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "06 ") == true then
+if PlyHasPerk(LocalPlayer(), "06 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark6:SetSize(0, 0)
 else
 	Checkmark6:SetSize(90, 90)
@@ -202,7 +207,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("07 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "07 ") == true then
+if PlyHasPerk(LocalPlayer(), "07 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark7:SetSize(0, 0)
 else
 	Checkmark7:SetSize(90, 90)
@@ -227,7 +232,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("08 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "08 ") == true then
+if PlyHasPerk(LocalPlayer(), "08 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark8:SetSize(0, 0)
 else
 	Checkmark8:SetSize(90, 90)
@@ -252,7 +257,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("09 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "09 ") == true then
+if PlyHasPerk(LocalPlayer(), "09 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark9:SetSize(0, 0)
 else
 	Checkmark9:SetSize(90, 90)
@@ -277,7 +282,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("10 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "10 ") == true then
+if PlyHasPerk(LocalPlayer(), "10 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark10:SetSize(0, 0)
 else
 	Checkmark10:SetSize(90, 90)
@@ -314,7 +319,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("11 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "11 ") == true then
+if PlyHasPerk(LocalPlayer(), "11 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark11:SetSize(0, 0)
 else
 	Checkmark11:SetSize(90, 90)
@@ -339,7 +344,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("12 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "12 ") == true then
+if PlyHasPerk(LocalPlayer(), "12 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark12:SetSize(0, 0)
 else
 	Checkmark12:SetSize(90, 90)
@@ -364,7 +369,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("13 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "13 ") == true then
+if PlyHasPerk(LocalPlayer(), "13 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark13:SetSize(0, 0)
 else
 	Checkmark13:SetSize(90, 90)
@@ -389,7 +394,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("14 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "14 ") == true then
+if PlyHasPerk(LocalPlayer(), "14 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark14:SetSize(0, 0)
 else
 	Checkmark14:SetSize(90, 90)
@@ -414,7 +419,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("15 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "15 ") == true then
+if PlyHasPerk(LocalPlayer(), "15 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark15:SetSize(0, 0)
 else
 	Checkmark15:SetSize(90, 90)
@@ -439,7 +444,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("16 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "16 ") == true then
+if PlyHasPerk(LocalPlayer(), "16 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark16:SetSize(0, 0)
 else
 	Checkmark16:SetSize(90, 90)
@@ -464,7 +469,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("17 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "17 ") == true then
+if PlyHasPerk(LocalPlayer(), "17 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark17:SetSize(0, 0)
 else
 	Checkmark17:SetSize(90, 90)
@@ -489,7 +494,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("18 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "18 ") == true then
+if PlyHasPerk(LocalPlayer(), "18 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark18:SetSize(0, 0)
 else
 	Checkmark18:SetSize(90, 90)
@@ -514,7 +519,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("19 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "19 ") == true then
+if PlyHasPerk(LocalPlayer(), "19 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark19:SetSize(0, 0)
 else
 	Checkmark19:SetSize(90, 90)
@@ -539,7 +544,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("20 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "20 ") == true then
+if PlyHasPerk(LocalPlayer(), "20 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark20:SetSize(0, 0)
 else
 	Checkmark20:SetSize(90, 90)
@@ -564,7 +569,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("21 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "21 ") == true then
+if PlyHasPerk(LocalPlayer(), "21 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark21:SetSize(0, 0)
 else
 	Checkmark21:SetSize(90, 90)
@@ -589,7 +594,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("22 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "22 ") == true then
+if PlyHasPerk(LocalPlayer(), "22 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark22:SetSize(0, 0)
 else
 	Checkmark22:SetSize(90, 90)
@@ -615,7 +620,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("23 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "23 ") == true then
+if PlyHasPerk(LocalPlayer(), "23 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark23:SetSize(0, 0)
 else
 	Checkmark23:SetSize(90, 90)
@@ -641,7 +646,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("24 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "24 ") == true then
+if PlyHasPerk(LocalPlayer(), "24 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark24:SetSize(0, 0)
 else
 	Checkmark24:SetSize(90, 90)
@@ -666,7 +671,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("25 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "25 ") == true then
+if PlyHasPerk(LocalPlayer(), "25 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark25:SetSize(0, 0)
 else
 	Checkmark25:SetSize(90, 90)
@@ -691,7 +696,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("26 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "26 ") == true then
+if PlyHasPerk(LocalPlayer(), "26 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark26:SetSize(0, 0)
 else
 	Checkmark26:SetSize(90, 90)
@@ -716,7 +721,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("27 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "27 ") == true then
+if PlyHasPerk(LocalPlayer(), "27 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark27:SetSize(0, 0)
 else
 	Checkmark27:SetSize(90, 90)
@@ -741,7 +746,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("28 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "28 ") == true then
+if PlyHasPerk(LocalPlayer(), "28 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark28:SetSize(0, 0)
 else
 	Checkmark28:SetSize(90, 90)
@@ -766,7 +771,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("29 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "29 ") == true then
+if PlyHasPerk(LocalPlayer(), "29 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark29:SetSize(0, 0)
 else
 	Checkmark29:SetSize(90, 90)
@@ -791,7 +796,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("30 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "30 ") == true then
+if PlyHasPerk(LocalPlayer(), "30 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark30:SetSize(0, 0)
 else
 	Checkmark30:SetSize(90, 90)
@@ -816,7 +821,7 @@ net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
 net.WriteString("31 ")
 net.SendToServer()
-if PlyHasPerk(LocalPlayer(), "31 ") == true then
+if PlyHasPerk(LocalPlayer(), "31 ") == true or (!PerkLimit and GetConVar("FalloutMaxPerks"):GetInt() > 0) then
 	Checkmark31:SetSize(0, 0)
 else
 	Checkmark31:SetSize(90, 90)

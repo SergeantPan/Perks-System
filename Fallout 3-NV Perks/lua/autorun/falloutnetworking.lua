@@ -3,11 +3,14 @@ P = net.ReadEntity()
 Perk = net.ReadString()
 
 local FindPerk = string.find(P:GetNWString("Fallout Perk"), Perk)
+local PerkLimit = P:GetNWInt("FalloutPerks", 0) < GetConVar("FalloutMaxPerks"):GetInt()
 
 if FindPerk then
 	P:SetNWString("Fallout Perk", string.Replace(P:GetNWString("Fallout Perk"), Perk, ""))
-else
+	P:SetNWInt("FalloutPerks", P:GetNWInt("FalloutPerks", 0) - 1)
+elseif !FindPerk and (PerkLimit or GetConVar("FalloutMaxPerks"):GetInt() == 0) then
 	P:SetNWString("Fallout Perk", P:GetNWString("Fallout Perk") .. Perk)
+	P:SetNWInt("FalloutPerks", P:GetNWInt("FalloutPerks", 0) + 1)
 end
 
 end)
