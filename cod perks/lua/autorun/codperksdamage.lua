@@ -172,7 +172,7 @@ if target:Alive() and target:GetNWString("Tier 3 Perk") == "Stalker" and target:
 	dmginfo:SetDamage(dmginfo:GetDamage() * 0.25)
 	target:SetNWInt("StalkerHits", 0)
 end
-if !target:Alive() or target:GetNWString("Tier 3 Perk") != "Stalker" or !target:Crouching() then
+if target:GetNWInt("StalkerHits", 0) != 0 and (!target:Alive() or target:GetNWString("Tier 3 Perk") != "Stalker" or !target:Crouching()) then
 	target:SetNWInt("StalkerHits", 0)
 end
 if target:GetNWInt("QFHealth", 0) > 0 and target:Alive() then
@@ -202,11 +202,9 @@ end
 
 if target:IsPlayer() and target:Alive() and target:GetNWString("Tier 2 Perk") == "Survivalist" then
 	target:SetNWInt("SurvRegen", CurTime() + 5)
-else
-	target:SetNWInt("SurvRegen", 0)
 end
 
-if target:GetNWString("Tier 3 Perk") == "Tactical Mask" then
+if target:GetNWString("Tier 2 Perk") == "Tactical Mask" then
 if dmginfo:IsDamageType(DMG_NERVEGAS + DMG_POISON + DMG_ACID) then
 dmginfo:SetDamage(dmginfo:GetDamage() * 0.1)
 end
@@ -227,25 +225,6 @@ if Atk:IsPlayer() and Atk:Alive() and Atk:GetNWString("Tier 1 Perk") == "Recon" 
 if (target:IsNPC() and target:Disposition(Atk) == D_HT) or (target:IsPlayer() and target:Team() != Atk:Team() and target:Alive() and target:GetNWString("Tier 3 Perk") != "Ninja") then
 	target:SetNWInt("ReconTimer", CurTime() + 8)
 	target:SetNWInt("ReconTeam", Atk:Team())
-end
-end
-
-if Atk:IsPlayer() and Atk:GetPos():Distance(target:GetPos()) < 250 then
-
-if IsValid(Atk) and (target:IsNPC() and IsValid(target) and target:Disposition(Atk) == D_HT) or (target:IsPlayer() and target:Alive() and Atk:Team() != target:Team()) then
-	AtkVec = (Atk:GetPos() - target:GetPos()):GetNormalized():Angle().y
-	AtkAng = target:EyeAngles().y
-	Result = AtkVec - AtkAng
-if Result > 360 then
-	Result = Result - 360
-elseif Result < 0 then
-	Result = Result + 360
-end
-
-if Result >= 100 and Result <= 260 then
-	dmginfo:SetDamage(dmginfo:GetDamage() * 1.2)
-end
-
 end
 end
 
