@@ -1,4 +1,5 @@
 local MechClass = {"npc_manhack", "npc_turret_floor", "npc_cscanner", "npc_combine_camera", "npc_turret_ceiling", "npc_rollermine"}
+local DefaultArmor = 100
 
 if SERVER then
 
@@ -75,6 +76,17 @@ end
 end
 
 for _,ply in pairs(player.GetAll()) do
+
+if IsValid(ply) then
+if ply.DefaultArmor == nil then
+	ply.DefaultArmor = ply:GetMaxArmor()
+end
+if ply:GetNWString("Tier 1 Perk") == "Armorer" and ply:GetMaxArmor() != (ply.DefaultArmor + 25) and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 2) then
+	ply:SetMaxArmor(ply.DefaultArmor + 25)
+elseif (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1 or ply:GetNWString("Tier 1 Perk") != "Armorer") and ply:GetMaxArmor() != ply.DefaultArmor then
+	ply:SetMaxArmor(ply.DefaultArmor)
+end
+end
 
 if IsValid(ply) and (ply:GetNWString("Tier 2 Perk") != "High Alert" or !ply:Alive()) then
 	ply:SetNWInt("LeftAlpha", 0)
