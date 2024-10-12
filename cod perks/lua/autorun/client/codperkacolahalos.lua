@@ -1,6 +1,12 @@
 local NoHalo = {"weapon_physgun", "gmod_toolgun", "gmod_camera"}
 local color_orange = Color( 255, 128, 0 )
 
+CreateConVar("CODPerksDeathPerSpotStyle", 2, 128, "Select the style of the Death Perception perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\n Default is 2")
+CreateConVar("CODPerksDeathPerStencilVisibility", 0, 128, "When should the Death Perception perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\n Default is 0")
+
+CreateConVar("CODPerksVultureAidSpotStyle", 3, 128, "Select the style of the Vulture Aid perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\n Default is 3")
+CreateConVar("CODPerksVultureAidStencilVisibility", 0, 128, "When should the Vulture Aid perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\n Default is 0")
+
 hook.Add("HUDPaint", "VultureIcon", function()
 
 local VultureIcon = Material("Vulureaid.png")
@@ -21,8 +27,8 @@ end)
 
 hook.Add( "PreDrawHalos", "PerkAColaHalos", function()
 
-local WeaponHalos = {}
 local ItemHalos = {}
+local WeaponHalos = {}
 local DeathHalos = {}
 
 for _,Wep in pairs(ents.GetAll()) do
@@ -68,14 +74,19 @@ end
 for _,Death in pairs(ents.FindByClass("npc_*")) do
 if LocalPlayer():GetNWString("Perk8") == "Death Perception" and Death:GetNWBool("DeathPer", false) == true and Death:GetPos():Distance(LocalPlayer():GetPos()) <= 256 then
 	DeathHalos[ #DeathHalos + 1 ] = Death
-elseif LocalPlayer():GetNWString("Perk8") != "Death Perception" or Death:GetNWBool("DeathPer", false) == false or Death:GetPos():Distance(LocalPlayer():GetPos()) > 256 then
+elseif Death:GetNWBool("DeathPer", false) == true and (LocalPlayer():GetNWString("Perk8") != "Death Perception" or Death:GetPos():Distance(LocalPlayer():GetPos()) > 256) then
 	table.RemoveByValue(DeathHalos, Death)
 end
 end
 
 if GetConVar("CODPerksHaloSystem"):GetInt() == 1 or GetConVar("CODPerksHaloSystem"):GetInt() == 3 then
-halo.Add(DeathHalos, color_orange, 2, 2, 1, true, true)
-halo.Add(WeaponHalos, color_orange, 2, 2, 1, true, true)
-halo.Add(ItemHalos, color_orange, 2, 2, 1, true, true)
+if GetConVar("CODPerksDeathPerSpotStyle"):GetInt() == 1 or GetConVar("CODPerksDeathPerSpotStyle"):GetInt() == 3 then
+	halo.Add(DeathHalos, color_orange, 2, 2, 1, true, true)
 end
+if GetConVar("CODPerksVultureAidSpotStyle"):GetInt() == 1 or GetConVar("CODPerksVultureAidSpotStyle"):GetInt() == 3 then
+	halo.Add(ItemHalos, color_orange, 2, 2, 1, true, true)
+	halo.Add(WeaponHalos, color_orange, 2, 2, 1, true, true)
+end
+end
+
 end)

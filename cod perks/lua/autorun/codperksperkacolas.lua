@@ -131,7 +131,7 @@ end
 end
 
 if ply:GetNWString("Perk5") != "Electric Cherry" or (ReloadStarted == true and wep:Clip1() >= ply:GetActiveWeapon():GetMaxClip1()) then
-ReloadStarted = false
+	ReloadStarted = false
 end
 
 if ply:GetNWString("Perk5") == "Electric Cherry" and IsValid(wep) and ply:KeyPressed(IN_RELOAD) and ReloadStarted == false then
@@ -170,17 +170,17 @@ end
 end
 
 if ply:GetNWString("Perk1") == "Juggernog" and JugSet == false then
-ply:SetMaxHealth(250)
-ply:SetHealth(math.Clamp(ply:Health() + (ply:GetMaxHealth() - ply:Health()), 0, ply:GetMaxHealth()))
-JugSet = true
+	ply:SetMaxHealth(250)
+	ply:SetHealth(math.Clamp(ply:Health() + (ply:GetMaxHealth() - ply:Health()), 0, ply:GetMaxHealth()))
+	JugSet = true
 elseif ply:GetNWString("Perk1") != "Juggernog" and JugSet != false then
-ply:SetHealth(math.Clamp(ply:Health(), 0, 100))
-ply:SetMaxHealth(100)
-JugSet = false
+	ply:SetHealth(math.Clamp(ply:Health(), 0, 100))
+	ply:SetMaxHealth(100)
+	JugSet = false
 end
 
 for _,BoolNPC in pairs(ents.FindByClass("npc_*")) do
-if BoolNPC:IsNPC() and BoolNPC:Disposition(ply) == D_HT then
+if ply:GetNWString("Perk8") == "Death Perception" and BoolNPC:GetPos():Distance(ply:GetPos()) <= 256 and BoolNPC:IsNPC() and BoolNPC:Disposition(ply) == D_HT then
 	BoolNPC:SetNWBool("DeathPer", true)
 else
 	BoolNPC:SetNWBool("DeathPer", false)
@@ -196,8 +196,8 @@ hook.Add("EntityTakeDamage", "DTPhDF", function( target, dmginfo )
 local Atk = dmginfo:GetAttacker()
 
 if dmginfo:IsBulletDamage() and Atk:GetNWString("Perk9") == "Elemental Pop" then
-ElementChance = 20 < math.random(0, 100)
-RandomElement = math.random(1, 4)
+	ElementChance = 20 < math.random(0, 100)
+	RandomElement = math.random(1, 4)
 if ElementChance then
 if RandomElement == 1 and !dmginfo:IsDamageType(8) then
 	dmginfo:SetDamageType(dmginfo:GetDamageType() + 8)
@@ -270,13 +270,6 @@ end)
 
 hook.Add( "Move", "PerkAColasMovement", function( ply, mv )
 
-if RunSpeed == nil then
-RunSpeed = ply:GetRunSpeed()
-end
-if WalkSpeed == nil then
-WalkSpeed = ply:GetWalkSpeed()
-end
-
 if ply:IsSuitEquipped() and GetConVar("gmod_suit"):GetBool() then
 if ply:GetNWString("Perk2") == "Stamin-Up" and ply:IsSprinting() and ply:GetVelocity():LengthSqr() > 0 and ply.SprintStarted != true then
 ply:SetSuitPower(ply:GetSuitPower() * 2)
@@ -290,19 +283,19 @@ end
 end
 
 if ply:GetNWString("Perk2") == "Stamin-Up" and !GetConVar("gmod_suit"):GetBool() and StaminUpSet == false then
-ply:SetRunSpeed(RunSpeed * 1.1)
-StaminUpSet = true
+	ply:SetRunSpeed(ply:GetRunSpeed() * 1.2)
+	StaminUpSet = true
 elseif (ply:GetNWString("Perk2") != "Stamin-Up" or GetConVar("gmod_suit"):GetBool()) and StaminUpSet != false then
-ply:SetRunSpeed(RunSpeed)
-StaminUpSet = false
+	ply:SetRunSpeed(ply:GetRunSpeed())
+	StaminUpSet = false
 end
 
 if ply:GetNWString("Perk2") == "Stamin-Up" and StaminUpWalk == false then
-ply:SetWalkSpeed(WalkSpeed * 1.07)
-StaminUpWalk = true
+	ply:SetWalkSpeed(ply:GetWalkSpeed() * 1.07)
+	StaminUpWalk = true
 elseif ply:GetNWString("Perk2") != "Stamin-Up" and StaminUpWalk != false then 
-ply:SetWalkSpeed(WalkSpeed)
-StaminUpWalk = false
+	ply:SetWalkSpeed(ply:GetWalkSpeed())
+	StaminUpWalk = false
 end
 
 end)

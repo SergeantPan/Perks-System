@@ -14,7 +14,7 @@ if SERVER then
 hook.Add("OnEntityCreated", "SetHP", function(ent)
 
 if IsValid(ent) and ent:GetClass() == "npc_combinegunship" and GetConVar("CODPerksGunshipBalance"):GetBool() then
-	timer.Simple(0.25, function() if IsValid(ent) then ent:SetHealth(GetConVar("CODPerksGunshipBalanceHP"):GetInt()) ent:SetMaxHealth(GetConVar("CODPerksGunshipBalanceHP"):GetInt()) end end)
+	timer.Simple(0.25, function() if IsValid(ent) then 	ent:SetHealth(GetConVar("CODPerksGunshipBalanceHP"):GetInt()) 	ent:SetMaxHealth(GetConVar("CODPerksGunshipBalanceHP"):GetInt()) end end)
 end
 
 end)
@@ -79,10 +79,13 @@ end
 
 end)
 
+local DefaultColGroup = nil
+local ClosestMine = nil
+local RandomZap = {"ambient/energy/zap1.wav", "ambient/energy/zap2.wav", "ambient/energy/zap3.wav"}
+
 hook.Add("Think", "SurvThink", function()
 
 for _,QFPly in pairs(player.GetAll()) do
-
 if QFPly:IsPlayer() and QFPly:Alive() then
 
 if QFPly:GetNWString("Tier 2 Perk", "None") == "Survivalist" then
@@ -113,8 +116,67 @@ if QFPly:GetNWInt("QFHealth", 0) > 0 then
 end
 end
 
+if QFPly:GetNWString("Tier 3 Perk", "None") == "Stalker" then
+
+StalkerImmunity = util.JSONToTable(file.Read( "codperks/stalkerlist.txt", "DATA" ))
+
+if QFPly.MineTable == nil then
+	QFPly.MineTable = {}
 end
 
+if QFPly:Alive() and QFPly.DefaultColGroup == nil then
+	QFPly.DefaultColGroup = QFPly:GetCollisionGroup()
+end
+
+if table.HasValue(QFPly.MineTable, NULL) then // Delete NULLs that clog up the table
+	table.RemoveByValue(QFPly.MineTable, NULL)
+end
+
+for _,Slam in ents.Iterator() do
+if table.HasValue(StalkerImmunity, Slam:GetClass()) and QFPly:WorldSpaceCenter():Distance(Slam:WorldSpaceCenter()) <= 300 then
+
+local Shock = EffectData()
+Shock:SetOrigin(Slam:WorldSpaceCenter())
+Shock:SetMagnitude(1)
+Shock:SetScale(1)
+Shock:SetRadius(2)
+
+if !table.HasValue(QFPly.MineTable, Slam) and (Slam.SparkDelay == nil or Slam.SparkDelay < CurTime()) then
+	table.insert(QFPly.MineTable, Slam)
+	util.Effect( "Sparks", Shock)
+	Slam:EmitSound(RandomZap[math.random(1, #RandomZap)], SNDLVL_90dB)
+	Slam.SparkDelay = CurTime() + 3
+end
+
+if Slam.SparkDelay == nil or Slam.SparkDelay < CurTime() then
+	util.Effect( "Sparks", Shock)
+	Slam:EmitSound(RandomZap[math.random(1, #RandomZap)], SNDLVL_90dB)
+	Slam.SparkDelay = CurTime() + 5
+end
+
+if QFPly:GetCollisionGroup() != 10 and !table.IsEmpty(QFPly.MineTable) then
+	QFPly.DefaultColGroup = QFPly:GetCollisionGroup()
+	QFPly:SetCollisionGroup(10)
+end
+
+end
+
+if table.HasValue(QFPly.MineTable, Slam) and (QFPly:WorldSpaceCenter():Distance(Slam:GetPos()) > 300 or !table.HasValue(StalkerImmunity, Slam:GetClass())) then
+	table.RemoveByValue(QFPly.MineTable, Slam)
+end
+
+end
+end
+
+if QFPly:GetCollisionGroup() == 10 and (QFPly:GetNWString("Tier 3 Perk", "None") != "Stalker" or table.IsEmpty(QFPly.MineTable)) then
+if QFPly.DefaultColGroup != nil then
+	QFPly:SetCollisionGroup(QFPly.DefaultColGroup)
+else
+	QFPly:SetCollisionGroup(5)
+end
+end
+
+end
 end
 
 end)
@@ -165,16 +227,6 @@ if table.HasValue(LightTargets, target:GetClass()) and Atk:GetNWString("Tier 2 P
 end
 
 if target:IsPlayer() then
-if target:Alive() and target:GetNWString("Tier 3 Perk") == "Stalker" and target:Crouching() and target:GetNWInt("StalkerHits", 0) < 5 and dmginfo:IsBulletDamage() then
-	target:SetNWInt("StalkerHits", target:GetNWInt("StalkerHits", 0) + 1)
-end
-if target:Alive() and target:GetNWString("Tier 3 Perk") == "Stalker" and target:Crouching() and target:GetNWInt("StalkerHits", 0) == 5 and dmginfo:IsBulletDamage() then
-	dmginfo:SetDamage(dmginfo:GetDamage() * 0.25)
-	target:SetNWInt("StalkerHits", 0)
-end
-if target:GetNWInt("StalkerHits", 0) != 0 and (!target:Alive() or target:GetNWString("Tier 3 Perk") != "Stalker" or !target:Crouching()) then
-	target:SetNWInt("StalkerHits", 0)
-end
 if target:GetNWInt("QFHealth", 0) > 0 and target:Alive() then
 	target:SetNWInt("QFHealth", math.Clamp(target:GetNWInt("QFHealth") - dmginfo:GetDamage(), 0, target:GetMaxHealth() + 20))
 end

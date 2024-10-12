@@ -14,3 +14,8 @@ end
 if CLIENT then
 	include("CODPerksShared.lua")
 end
+
+if !file.Exists("codperks", "DATA") then
+	file.CreateDir("codperks")
+	file.Write("codperks/stalkerlist.txt", '["npc_tripmine","seal6-claymore-ent","seal6-claymore-bo2-ent"]')
+end

@@ -6,6 +6,24 @@ local MechClass = {"npc_manhack", "npc_turret_floor", "npc_cscanner", "npc_combi
 local IconXPos = GetConVar("CODPerksIconXPos"):GetFloat()
 local IconYPos = GetConVar("CODPerksIconYPos"):GetFloat()
 
+CreateConVar("CODPerksReconSpotStyle", 3, 128, "Select the style of the Recon perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\n Default is 3")
+CreateConVar("CODPerksReconStencilVisibility", 2, 128, "When should the Recon perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\n Default is 2")
+
+CreateConVar("CODPerksScroungerSpotStyle", 3, 128, "Select the style of the Scrounger perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\n Default is 3")
+CreateConVar("CODPerksScroungerStencilVisibility", 0, 128, "When should the Scrounger perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\n Default is 0")
+
+CreateConVar("CODPerksHackerSpotStyle", 2, 128, "Select the style of the Hacker perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\n Default is 2")
+CreateConVar("CODPerksHackerStencilVisibility", 2, 128, "When should the Hacker perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\n Default is 2")
+
+CreateConVar("CODPerksEngineerSpotStyle", 2, 128, "Select the style of the Engineer perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\n Default is 2")
+CreateConVar("CODPerksEngineerStencilVisibility", 2, 128, "When should the Engineer perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\n Default is 2")
+
+CreateConVar("CODPerksSitRepSpotStyle", 2, 128, "Select the style of the SitRep perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\n Default is 2")
+CreateConVar("CODPerksSitRepStencilVisibility", 0, 128, "When should the SitRep perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always")
+
+CreateConVar("CODPerksPulsarSpotStyle", 2, 128, "Select the style of the Pulsar perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\n Default is 2")
+CreateConVar("CODPerksPulsarStencilVisibility", 2, 128, "When should the Pulsar perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\n Default is 2")
+
 hook.Add("HUDPaint", "PerkIcons", function()
 
 local ScavMat = Material("scavenger.png")
@@ -89,7 +107,7 @@ local recontargets = {}
 
 for _,ReconNPC in pairs(ents.FindByClass("npc_*")) do
 
-if ReconNPC:GetNWInt("ReconTimer", 0) > CurTime() and ReconNPC:GetNWBool("HackerSpotted", false) != true and ReconNPC:GetNWBool("PerkSpotted", false) != true and ReconNPC:GetNWInt("ReconTeam", 0) == LocalPlayer():Team() then
+if ReconNPC:GetNWInt("ReconTimer", 0) > CurTime() and ReconNPC:GetNWBool("HackerSpotted", false) != true and ReconNPC:GetNWInt("ReconTeam", 0) == LocalPlayer():Team() then
 	recontargets[ #recontargets + 1 ] = ReconNPC
 	ReconNPC:SetNWBool("ReconSpotted", true)
 elseif ReconNPC:GetNWInt("ReconTimer", math.huge) < CurTime() and ReconNPC:GetNWBool("ReconSpotted", false) == true then
@@ -101,7 +119,7 @@ end
 
 for _,ReconPly in pairs(player.GetAll()) do
 
-if ReconPly:GetNWInt("ReconTimer", 0) > CurTime() and ReconPly:GetNWBool("HackerSpotted", false) != true and ReconPly:GetNWBool("PerkSpotted", false) != true and ReconPly:GetNWInt("ReconTeam", 0) == LocalPlayer():Team() and ReconPly:Alive() then
+if ReconPly:GetNWInt("ReconTimer", 0) > CurTime() and ReconPly:GetNWBool("HackerSpotted", false) != true and ReconPly:GetNWInt("ReconTeam", 0) == LocalPlayer():Team() and ReconPly:Alive() then
 	recontargets[ #recontargets + 1 ] = ReconPly
 	ReconPly:SetNWBool("ReconSpotted", true)
 elseif (ReconPly:GetNWInt("ReconTimer", math.huge) < CurTime() or !ReconPly:Alive()) and ReconPly:GetNWBool("ReconSpotted", false) == true then
@@ -113,7 +131,7 @@ end
 
 for _,PulsarNPC in pairs(ents.FindByClass("npc_*")) do
 
-if PulsarNPC:GetNWInt("PulsarTimer", 0) > CurTime() and PulsarNPC:GetNWBool("HackerSpotted", false) != true and PulsarNPC:GetNWBool("PerkSpotted", false) != true then
+if PulsarNPC:GetNWInt("PulsarTimer", 0) > CurTime() and PulsarNPC:GetNWBool("HackerSpotted", false) != true and PulsarNPC:GetNWBool("ReconSpotted", false) != true then
 	pulsartargets[ #pulsartargets + 1 ] = PulsarNPC
 	PulsarNPC:SetNWBool("PulsarSpotted", true)
 elseif PulsarNPC:GetNWInt("PulsarTimer", math.huge) < CurTime() and PulsarNPC:GetNWBool("PulsarSpotted", false) == true then
@@ -124,7 +142,7 @@ end
 
 for _,PulsarPly in pairs(player.GetAll()) do
 
-if PulsarPly:GetNWInt("PulsarTimer", 0) > CurTime() and PulsarPly:GetNWBool("HackerSpotted", false) != true and PulsarPly:GetNWBool("PerkSpotted", false) != true then
+if PulsarPly:GetNWInt("PulsarTimer", 0) > CurTime() and PulsarPly:GetNWBool("HackerSpotted", false) != true and PulsarPly:GetNWBool("ReconSpotted", false) != true then
 	pulsartargets[ #pulsartargets + 1 ] = PulsarPly
 	PulsarPly:SetNWBool("PulsarSpotted", true)
 elseif PulsarPly:GetNWInt("PulsarTimer", math.huge) < CurTime() and PulsarPly:GetNWBool("PulsarSpotted", false) == true then
@@ -158,16 +176,21 @@ end
 end
 
 if GetConVar("CODPerksHaloSystem"):GetInt() == 1 or GetConVar("CODPerksHaloSystem"):GetInt() == 3 then
-halo.Add(hackedtargets, color_red, 2, 2, 1, true, true)
-halo.Add(pulsartargets, color_red, 2, 2, 1, true, true)
-halo.Add(recontargets, color_red, 2, 2, 1, true, true)
+if GetConVar("CODPerksHackerSpotStyle"):GetInt() == 1 or GetConVar("CODPerksHackerSpotStyle"):GetInt() == 3 then
+	halo.Add(hackedtargets, color_red, 2, 2, 1, true, true)
+end
+if GetConVar("CODPerksPulsarSpotStyle"):GetInt() == 1 or GetConVar("CODPerksPulsarSpotStyle"):GetInt() == 3 then
+	halo.Add(pulsartargets, color_red, 2, 2, 1, true, true)
+end
+if GetConVar("CODPerksReconSpotStyle"):GetInt() == 1 or GetConVar("CODPerksReconSpotStyle"):GetInt() == 3 then
+	halo.Add(recontargets, color_red, 2, 2, 1, true, true)
+end
 end
 
 end)
 
 hook.Add( "PreDrawHalos", "ItemHalos", function()
 
-local targets = {}
 local mechs = {}
 local friendlymechs = {}
 local explosives = {}
@@ -195,7 +218,7 @@ end
 
 for _,Mech in pairs(ents.FindByClass("npc_*")) do
 
-if Mech:GetClass() != "npc_turret_floor" or (Mech:GetClass() == "npc_turret_floor" and LocalPlayer():Team() != Mech:GetNWInt("HackedTeam", -1)) then
+if (Mech:GetClass() != "npc_turret_floor" and table.HasValue(MechClass, Mech:GetClass())) or (Mech:GetClass() == "npc_turret_floor" and LocalPlayer():Team() != Mech:GetNWInt("HackedTeam", -1)) then
 if LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" and Mech:GetPos():Distance(LocalPlayer():GetPos()) <= 300 then
 	Mech:SetNWBool("MechSpotted", true)
 	table.RemoveByValue(friendlymechs, Mech)
@@ -220,10 +243,10 @@ end
 
 for _,Grens in pairs(ents.FindByClass("npc_grenade_frag")) do
 
-if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" and Grens:GetPos():Distance(LocalPlayer():GetPos()) <= 300 then
+if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" then
 	Grens:SetNWBool("ExplosiveSpotted", true)
 	explosives[ #explosives + 1 ] = Grens
-elseif Grens:GetNWBool("ExplosiveSpotted", false) == true and (LocalPlayer():GetNWString("Tier 3 Perk") != "SitRep" or Grens:GetPos():Distance(LocalPlayer():GetPos()) > 300) then
+elseif Grens:GetNWBool("ExplosiveSpotted", false) == true and LocalPlayer():GetNWString("Tier 3 Perk") != "SitRep" then
 	table.RemoveByValue(explosives, Grens)
 	Grens:SetNWBool("ExplosiveSpotted", false)
 end
@@ -231,10 +254,10 @@ end
 
 for _,Slams in pairs(ents.FindByClass("npc_satchel")) do
 
-if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" and Slams:GetPos():Distance(LocalPlayer():GetPos()) <= 300 then
+if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" then
 	Slams:SetNWBool("ExplosiveSpotted", true)
 	explosives[ #explosives + 1 ] = Slams
-elseif Slams:GetNWBool("ExplosiveSpotted", false) == true and (LocalPlayer():GetNWString("Tier 3 Perk") != "SitRep" or Slams:GetPos():Distance(LocalPlayer():GetPos()) > 300) then
+elseif Slams:GetNWBool("ExplosiveSpotted", false) == true and LocalPlayer():GetNWString("Tier 3 Perk") != "SitRep" then
 	table.RemoveByValue(explosives, Slams)
 	Slams:SetNWBool("ExplosiveSpotted", false)
 end
@@ -242,21 +265,26 @@ end
 
 for _,Slams2 in pairs(ents.FindByClass("npc_tripmine")) do
 
-if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" and Slams2:GetPos():Distance(LocalPlayer():GetPos()) <= 300 then
+if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" then
 	Slams2:SetNWBool("ExplosiveSpotted", true)
 	explosives[ #explosives + 1 ] = Slams2
-elseif Slams2:GetNWBool("ExplosiveSpotted", false) == true and (LocalPlayer():GetNWString("Tier 3 Perk") != "SitRep" or Slams2:GetPos():Distance(LocalPlayer():GetPos()) > 300) then
+elseif Slams2:GetNWBool("ExplosiveSpotted", false) == true and LocalPlayer():GetNWString("Tier 3 Perk") != "SitRep" then
 	table.RemoveByValue(explosives, Slams2)
 	Slams2:SetNWBool("ExplosiveSpotted", false)
 end
 end
 
 if GetConVar("CODPerksHaloSystem"):GetInt() == 1 or GetConVar("CODPerksHaloSystem"):GetInt() == 3 then
-halo.Add(ammo, color_yellow, 2, 2, 1, true, true)
-halo.Add(mechs, color_red, 2, 2, 1, true, true)
-halo.Add(friendlymechs, color_green, 2, 2, 1, true, true)
-halo.Add(explosives, color_red, 2, 2, 1, true, true)
-halo.Add(targets, color_red, 2, 2, 1, true, true)
+if GetConVar("CODPerksScroungerSpotStyle"):GetInt() == 1 or GetConVar("CODPerksScroungerSpotStyle"):GetInt() == 3 then
+	halo.Add(ammo, color_yellow, 2, 2, 1, true, true)
+end
+if GetConVar("CODPerksEngineerSpotStyle"):GetInt() == 1 or GetConVar("CODPerksEngineerSpotStyle"):GetInt() == 3 then
+	halo.Add(mechs, color_red, 2, 2, 1, true, true)
+	halo.Add(friendlymechs, color_green, 2, 2, 1, true, true)
+end
+if GetConVar("CODPerksSitRepSpotStyle"):GetInt() == 1 or GetConVar("CODPerksSitRepSpotStyle"):GetInt() == 3 then
+	halo.Add(explosives, color_red, 2, 2, 1, true, true)
+end
 end
 
 end )

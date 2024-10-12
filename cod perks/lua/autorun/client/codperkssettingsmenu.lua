@@ -44,6 +44,74 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "PerksSettings", "CoD Se
 	panel:Help("Adjust the horizontal position of the T3 Perk (Yellow)")
 	panel:NumSlider("T3 Perk Y Pos", "CODPerksT3Y", -100, 100, 2)
 	panel:Help("Adjust the vertical position of the T3 Perk (Yellow)")
+
+	panel:ControlHelp("\nStalker immunity list:")
+	panel:Help("Entities on this list will be affected by the Stalker perk, meaning they will not be triggered when the player walks past them. Only works on entities that depend on traces (e.g. the HL2 SLAM) to detect other entities.")
+
+	local Text = vgui.Create("DTextEntry", frame)
+	Text:SetPlaceholderText("Entity Class here (e.g. npc_tripmine)")
+
+	local StalkerList = vgui.Create("DListView", frame)
+	StalkerList:AddColumn("Entity")
+	StalkerList:SetTall(300)
+	StalkerList:SetMultiSelect(false)
+	StalkerList:SetSortable(false)
+
+	if file.Exists("codperks/stalkerlist.txt", "DATA") then
+		Table = util.JSONToTable(file.Read( "codperks/stalkerlist.txt", "DATA" ))
+		for _,Item in pairs(Table) do
+			if Item != "" then
+			StalkerList:AddLine(tostring(Item))
+			end
+		end
+	end
+
+	function StalkerList:DoDoubleClick( lineID, line )
+		Table = util.JSONToTable(file.Read( "codperks/stalkerlist.txt", "DATA" ))
+		table.remove(Table, lineID)
+		file.Write(File, util.TableToJSON(Table))
+		StalkerList:RemoveLine(lineID)
+		for num,_ in pairs(StalkerList:GetLines()) do
+			StalkerList:RemoveLine(num)
+		end
+		for _,Item in pairs(Table) do
+			if Item != "" then
+			StalkerList:AddLine(tostring(Item))
+			end
+		end
+		if table.IsEmpty(Table) and file.Exists(File, "DATA") then
+			file.Delete(File, "DATA")
+		end
+	end
+
+	local Button = vgui.Create("DButton", frame)
+	Button:SetText("Add entity to list")
+	Button.DoClick = function()
+
+		File = "codperks/stalkerlist.txt"
+
+		if file.Exists(File, "DATA") then
+			Table = util.JSONToTable(file.Read( File, "DATA" ))
+		else
+			Table = {}
+		end
+
+		if !table.HasValue(Table, Text:GetText()) then
+			table.insert( Table, Text:GetText() )
+			StalkerList:AddLine(Text:GetText())
+			file.Write(File, util.TableToJSON(Table))
+		end
+	end
+
+	local Text2 = vgui.Create("DLabel", frame)
+	Text2:SetText("Double click an entity on the list to remove it\n")
+	Text2:SetTextColor( Color(0, 0, 0) )
+
+	panel:AddItem(Text3)
+	panel:AddItem(Text)
+	panel:AddItem(Button)
+	panel:AddItem(StalkerList)
+	panel:AddItem(Text2)
 end)
 
 spawnmenu.AddToolMenuOption( "Options", "Player Perks", "Misc", "CoD Misc", "", "", function( panel )
@@ -143,6 +211,51 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "ColaSpawnDefaults", "Pe
 	panel:CheckBox("Spawn with Vulture Aid", "CODPerkColaVA")
 	panel:CheckBox("Spawn with Death Perception", "CODPerkColaDP")
 	panel:CheckBox("Spawn with Elemental Pop", "CODPerkColaEP")
+
+end)
+
+spawnmenu.AddToolMenuOption( "Options", "Player Perks", "CodPerksStencilSettings", "CoD Spotting Settings", "", "", function( panel )
+	panel:ClearControls()
+
+	panel:NumSlider("Recon Spotting style", "CODPerksReconSpotStyle", 0, 3, 0)
+	panel:Help("Select the style of the Recon perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\nDefault is 3")
+	panel:NumSlider("Spot overlay visiblity", "CODPerksReconStencilVisibility", 0, 2, 0)
+	panel:Help("When should the Recon perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\nDefault is 2")
+
+	panel:NumSlider("Scrounger Spotting style", "CODPerksScroungerSpotStyle", 0, 3, 0)
+	panel:Help("Select the style of the Scrounger perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\nDefault is 3")
+	panel:NumSlider("Spot overlay visiblity", "CODPerksScroungerStencilVisibility", 0, 2, 0)
+	panel:Help("When should the Scrounger perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\nDefault is 0")
+
+	panel:NumSlider("Hacker Spotting style", "CODPerksHackerSpotStyle", 0, 3, 0)
+	panel:Help("Select the style of the Hacker perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\nDefault is 2")
+	panel:NumSlider("Spot overlay visiblity", "CODPerksHackerStencilVisibility", 0, 2, 0)
+	panel:Help("When should the Hacker perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\nDefault is 2")
+
+	panel:NumSlider("Engineer Spotting style", "CODPerksEngineerSpotStyle", 0, 3, 0)
+	panel:Help("Select the style of the Engineer perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\nDefault is 2")
+	panel:NumSlider("Spot overlay visiblity", "CODPerksEngineerStencilVisibility", 0, 2, 0)
+	panel:Help("When should the Engineer perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\nDefault is 2")
+
+	panel:NumSlider("SitRep Spotting style", "CODPerksSitRepSpotStyle", 0, 3, 0)
+	panel:Help("Select the style of the SitRep perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\nDefault is 2")
+	panel:NumSlider("Spot overlay visiblity", "CODPerksSitRepStencilVisibility", 0, 2, 0)
+	panel:Help("When should the SitRep perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\nDefault is 0")
+
+	panel:NumSlider("Pulsar Spotting style", "CODPerksPulsarSpotStyle", 0, 3, 0)
+	panel:Help("Select the style of the Pulsar perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\nDefault is 2")
+	panel:NumSlider("Spot overlay visiblity", "CODPerksPulsarStencilVisibility", 0, 2, 0)
+	panel:Help("When should the Pulsar perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\nDefault is 2")
+
+	panel:NumSlider("Death Perception Spotting style", "CODPerksDeathPerSpotStyle", 0, 3, 0)
+	panel:Help("Select the style of the Death Perception perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\nDefault is 2")
+	panel:NumSlider("Spot overlay visiblity", "CODPerksDeathPerStencilVisibility", 0, 2, 0)
+	panel:Help("When should the Death Perception perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\nDefault is 0")
+
+	panel:NumSlider("Vulture Aid Spotting style", "CODPerksVultureAidSpotStyle", 0, 3, 0)
+	panel:Help("Select the style of the Vulture Aid perk spotting highlight.\n0 - None\n1 - Halo only\n2 - Overlay only\n3 - Halo + Overlay\nDefault is 3")
+	panel:NumSlider("Spot overlay visiblity", "CODPerksVultureAidStencilVisibility", 0, 2, 0)
+	panel:Help("When should the Vulture Aid perk Overlay highlight be visible.\n0 - Only when obstructed\n1 - Only when unobstructed\n2 - Always\nDefault is 0\n")
 
 end)
 
