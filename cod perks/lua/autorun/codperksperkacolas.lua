@@ -29,7 +29,7 @@ if IsValid(ply) and ply:Alive() then
 local wep = ply:GetActiveWeapon()
 
 if event != 3 and event != 4 then
-ReloadStarted = false
+	ReloadStarted = false
 end
 
 if ply:GetNWString("Perk5") == "Electric Cherry" and IsValid(wep) and ply:KeyPressed(IN_RELOAD) then
@@ -271,14 +271,8 @@ end)
 hook.Add( "Move", "PerkAColasMovement", function( ply, mv )
 
 if ply:IsSuitEquipped() and GetConVar("gmod_suit"):GetBool() then
-if ply:GetNWString("Perk2") == "Stamin-Up" and ply:IsSprinting() and ply:GetVelocity():LengthSqr() > 0 and ply.SprintStarted != true then
-ply:SetSuitPower(ply:GetSuitPower() * 2)
-ply.SprintStarted = true
-end
-
-if (ply:GetNWString("Perk2") != "Stamin-Up" or !ply:IsSprinting() or ply:GetVelocity():LengthSqr() <= 0 or ply:WaterLevel() == 3) and ply.SprintStarted == true then
-ply.SprintStarted = false
-ply:SetSuitPower(ply:GetSuitPower() / 2)
+if ply:GetNWString("Perk2") == "Stamin-Up" and ply:IsSprinting() and ply:GetVelocity():LengthSqr() > 0 then
+	ply:SetSuitPower(ply:GetSuitPower() + 0.09375)
 end
 end
 

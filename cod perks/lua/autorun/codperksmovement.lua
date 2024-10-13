@@ -34,14 +34,8 @@ elseif Ply:GetNWString("Tier 3 Perk") != "Stalker" and StalkerSet == true then
 end
 
 if Ply:IsSuitEquipped() and GetConVar("gmod_suit"):GetBool() then
-if Ply:GetNWString("Tier 1 Perk") == "Marathon" and Ply:IsSprinting() and Ply:GetVelocity():LengthSqr() > 0 and Ply.SprintStarted != true then
-	Ply:SetSuitPower(Ply:GetSuitPower() * 2)
-	Ply.SprintStarted = true
-end
-
-if (Ply:GetNWString("Tier 1 Perk") != "Marathon" or !Ply:IsSprinting() or Ply:GetVelocity():LengthSqr() <= 0 or Ply:WaterLevel() == 3) and Ply.SprintStarted == true then
-	Ply.SprintStarted = false
-	Ply:SetSuitPower(Ply:GetSuitPower() / 2)
+if Ply:GetNWString("Tier 1 Perk") == "Marathon" and Ply:IsSprinting() and Ply:GetVelocity():LengthSqr() > 0 then
+	Ply:SetSuitPower(Ply:GetSuitPower() + 0.09375)
 end
 end
 
