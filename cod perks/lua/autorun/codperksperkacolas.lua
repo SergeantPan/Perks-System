@@ -11,6 +11,14 @@ local BrainRotImmune = {"npc_antlionguard", "npc_strider", "npc_helicopter", "np
 
 if SERVER then
 
+hook.Add("AllowPlayerPickup", "PreventVulturePickup", function(ply, ent)
+
+if ent:GetName() == "Vulture's Aid" then
+	return false
+end
+
+end)
+
 hook.Add("ScalePlayerDamage", "DeadshotPly", function(ply,hitgroup,dmginfo)
 if dmginfo:GetAttacker():GetNWString("Perk4") == "Deadshot Daquiri" and hitgroup == HITGROUP_HEAD then
 	dmginfo:SetDamage(dmginfo:GetDamage() * 2)
@@ -122,8 +130,13 @@ end
 end
 
 for _,VultAid in pairs(ents.FindByClass("prop_physics*")) do
-if VultAid:GetName() == "Vulture's Aid" and ply:GetPos():Distance(VultAid:GetPos()) < 64 then
-if IsValid(wep) and table.HasValue(AcceptedAmmo, wep:GetPrimaryAmmoType()) then
+if VultAid:GetName() == "Vulture's Aid" then
+if ply:GetNWString("Perk7") == "Vulture Aid" and VultAid:GetNoDraw() == true then
+	VultAid:SetNoDraw(false)
+elseif ply:GetNWString("Perk7") != "Vulture Aid" and VultAid:GetNoDraw() == false then
+	VultAid:SetNoDraw(true)
+end
+if ply:GetNWString("Perk7") == "Vulture Aid" and IsValid(wep) and table.HasValue(AcceptedAmmo, wep:GetPrimaryAmmoType()) and ply:GetPos():Distance(VultAid:GetPos()) < 64 then
 	VultAid:Remove()
 	ply:GiveAmmo(math.Clamp(wep:GetMaxClip1() * 0.1, 1, math.huge), wep:GetPrimaryAmmoType())
 end
@@ -296,11 +309,23 @@ end)
 
 hook.Add( "OnNPCKilled", "VultureAidAmmo", function( npc, attacker )
 
-if attacker:IsPlayer() and attacker:GetNWString("Perk7") == "Vulture Aid" and npc:IsNPC() and npc:Disposition(attacker) == D_HT then
+VultureList = 0
+
+if !game.SinglePlayer() then
+for _,PlyPerk in pairs(player.GetAll()) do
+if PlyPerk:GetNWString("Perk7") == "Vulture Aid" then
+	VultureList = VultureList + 1
+end
+end
+end
+
+if (game.SinglePlayer() and Entity(1):IsPlayer() and Entity(1):GetNWString("Perk7") == "Vulture Aid") or (!game.SinglePlayer() and VultureList >= 1) then
 local VultureAidDrop = ents.Create("prop_physics")
 VultureAidDrop:SetPos(npc:WorldSpaceCenter())
 VultureAidDrop:SetCollisionGroup(2)
-VultureAidDrop:SetOwner(attacker)
+if IsValid(attacker) and (attacker:IsNPC() or attacker:IsPlayer()) then
+	VultureAidDrop:SetOwner(attacker)
+end
 VultureAidDrop:SetName("Vulture's Aid")
 VultureAidDrop:SetModel("models/Items/BoxMRounds.mdl")
 VultureAidDrop:Spawn()
