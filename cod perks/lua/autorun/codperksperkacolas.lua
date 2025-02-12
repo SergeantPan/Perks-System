@@ -105,7 +105,7 @@ end
 if BrainRot:GetNWInt("BrainRotTeam", -1) == ply:Team() and BrainRot:GetNWBool("BrainRot", false) == true and BrainRot:GetNWInt("BrainRotTimer", 0) > CurTime() then
 
 for _,Targets in pairs(ents.FindByClass("npc_*")) do
-if Targets:IsNPC() and Targets:Disposition(BrainRot) != D_HT and Targets:Disposition(ply) == D_HT and Targets:Disposition(BrainRot) != D_HT then
+if Targets != BrainRot and Targets:IsNPC() and Targets:Disposition(BrainRot) != D_HT and Targets:Disposition(ply) == D_HT and Targets:Disposition(BrainRot) != D_HT then
 	Targets:AddEntityRelationship(BrainRot, D_HT, 0)
 	BrainRot:AddEntityRelationship(Targets, D_HT, 0)
 end
@@ -117,14 +117,13 @@ end
 end
 
 if BrainRot:GetNWInt("BrainRotTeam", -1) != ply:Team() and BrainRot:GetNWBool("BrainRot", false) == true and BrainRot:GetNWInt("BrainRotTimer", 0) > CurTime() then
-
 if BrainRot:Disposition(ply) != D_HT then
 	BrainRot:AddEntityRelationship(ply, D_HT, 1)
 end
-if ply:Team() == BrainRot:GetNWInt("BrainRotTeam", -1) and BrainRot:Disposition(ply) != D_LI then
-	BrainRot:AddEntityRelationship(ply, D_LI, 1)
 end
 
+if ply:Team() == BrainRot:GetNWInt("BrainRotTeam", -1) and BrainRot:Disposition(ply) != D_LI then
+	BrainRot:AddEntityRelationship(ply, D_LI, 1)
 end
 
 end
