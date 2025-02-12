@@ -100,6 +100,7 @@ RotExplosion:SetOwner(BrainRot)
 RotExplosion:SetName("Rot Explosion")
 RotExplosion:Spawn()
 RotExplosion:Fire( "Explode", 0, 0 )
+BrainRot:SetNWBool("BrainRot", false)
 end
 
 if BrainRot:GetNWInt("BrainRotTeam", -1) == ply:Team() and BrainRot:GetNWBool("BrainRot", false) == true and BrainRot:GetNWInt("BrainRotTimer", 0) > CurTime() then
