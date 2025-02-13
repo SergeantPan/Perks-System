@@ -146,7 +146,7 @@ net.SendToServer()
 end
 
 local PerkImage = vgui.Create("DImageButton", panel)
-PerkImage:SetPos(185, 250)
+PerkImage:SetPos(190, 250)
 PerkImage:SetSize(70,80)
 PerkImage:SetImage("hijacker.png")
 PerkImage:SetToolTip("Hacker\n- Killing an enemy pings nearby enemies.\n- Ping radius is 5 meters.\n- Highlights last for 3 seconds.\n- Can only trigger every 5 seconds.\n- Highlights are shared among teammates.")

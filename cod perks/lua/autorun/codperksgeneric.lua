@@ -27,6 +27,18 @@ end
 end
 end)
 
+hook.Add("KeyPress", "ThisIsRidiculous", function(ply, key)
+
+// Apparently having a "PlayerUse" function completely bricks the ability to exit the airboat
+// So now I have to include this ridiculous fucking hook just to fix the fucking thing
+// Why the fuck is this even a problem???
+
+if ply:InVehicle() and ply:GetVehicle():GetClass() == "prop_vehicle_airboat" and key == IN_USE then
+	ply:ExitVehicle()
+end
+
+end)
+
 local DoorStop = {"doors/default_stop.wav", "doors/door_chainlink_close1.wav", "doors/door_chainlink_close2.wav", "doors/door_metal_large_chamber_close1.wav", "doors/door_metal_large_close2.wav", "doors/door_metal_large_open1.wav", "doors/door_metal_medium_close1.wav", "doors/door_metal_medium_open1.wav", "doors/door_metal_thin_close2.wav", "doors/door_metal_thin_open1.wav", "doors/door_wood_close1.wav", "doors/door1_stop.wav", "doors/wood_stop1.wav", "doors/door_metal_medium_open1.wav", "doors/door_metal_medium_close1.wav", "doors/metal_stop1.wav", "doors/heavy_metal_stop1.wav"}
 
 hook.Add("EntityEmitSound", "MuteDoorsDeadSilence", function(data)
@@ -39,20 +51,20 @@ if data.Entity:GetClass() == "prop_door_rotating" and data.Entity:GetNWBool("Mut
 end
 end)
 
-hook.Add("Think", "ColdBloodedSrv", function()
+hook.Add("Think", "CODPerksGenericThink", function()
 
-if ArcticMedShots_ApplyEffect == nil then return end
+local AllowedAmmo = {1, 3, 4, 5, 6, 7, 13, 14, 23, 24, 25, 26}
+local Snds = {"zipper1.wav", "zipper2.wav", "zipper3.wav", "zipper4.wav"}
+local RndSnd = Snds[ math.random( #Snds ) ]
 
 for _,ply in pairs(player.GetAll()) do
 
 if ply:GetNWInt("Tier 2 Perk") == "Cold Blooded" then
+if ArcticMedShots_ApplyEffect != nil then
 	ArcticMedShots_ApplyEffect(ply, "coldblooded", 1)
 end
 end
-
-end)
-
-hook.Add("Think", "CODPerksGenericThink", function()
+end
 
 for _,npc in pairs(ents.FindByClass("npc_*")) do // Blind Eye
 
@@ -78,6 +90,50 @@ end
 for _,ply in pairs(player.GetAll()) do
 
 if IsValid(ply) then
+
+for _,ScavItem in pairs(ents.FindByClass("prop_physics")) do
+if ScavItem:GetName() == "Scavenger Box" then
+if Ply:GetNWString("Tier 1 Perk") == "Scavenger" and ScavItem:GetNoDraw() == true then
+	ScavItem:SetNoDraw(false)
+elseif Ply:GetNWString("Tier 1 Perk") != "Scavenger" and ScavItem:GetNoDraw() == false then
+	ScavItem:SetNoDraw(true)
+end
+if Ply:GetNWString("Tier 1 Perk") == "Scavenger" and Ply:GetPos():Distance(ScavItem:GetPos()) < 64 and Ply:Alive() then
+	ScavItem:Remove()
+	Ply:EmitSound(RndSnd)
+
+for _,Weps in pairs(Ply:GetWeapons()) do
+
+if Weps:GetMaxClip1() > 0 and table.HasValue(AllowedAmmo, Weps:GetPrimaryAmmoType()) then
+	Ply:GiveAmmo(math.Clamp(math.Round(Weps:GetMaxClip1() * 0.5), 1, math.huge), Weps:GetPrimaryAmmoType())
+elseif Weps:GetMaxClip1() <= 0 and table.HasValue(AllowedAmmo, Weps:GetPrimaryAmmoType()) then
+	Ply:GiveAmmo(math.Clamp(math.Round(Weps:GetMaxClip1() * 0.5), 1, math.huge), Weps:GetPrimaryAmmoType())
+end
+
+Ply:SetNWInt("LootTimer", CurTime() + 3)
+
+end
+end
+end
+
+if ScavItem:GetName() == "Armorer Boost" and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1) then
+if Ply:GetNWString("Tier 1 Perk") == "Armorer" and ScavItem:GetNoDraw() == true then
+	ScavItem:SetNoDraw(false)
+elseif Ply:GetNWString("Tier 1 Perk")!= "Armorer" and ScavItem:GetNoDraw() == false then
+	ScavItem:SetNoDraw(true)
+end
+if Ply:GetNWString("Tier 1 Perk") == "Armorer" and Ply:Armor() < Ply:GetMaxArmor() and Ply:GetPos():Distance(ScavItem:GetPos()) < 64 and Ply:Alive() then
+	ScavItem:Remove()
+	Ply:EmitSound(RndSnd)
+
+Ply:SetArmor(math.Clamp(Ply:Armor() + 5, 0, Ply:GetMaxArmor()))
+
+Ply:SetNWInt("LootTimer", CurTime() + 3)
+
+end
+end
+end
+
 if ply.DefaultArmor == nil then
 	ply.DefaultArmor = ply:GetMaxArmor()
 end
@@ -135,7 +191,7 @@ end
 
 for _,NPC in pairs(ents.FindByClass("npc_*")) do
 
-if NPC:IsNPC() and NPC:GetPos():Distance(ply:GetPos()) < 256 and NPC:Visible(ply) then
+if NPC:IsNPC() and NPC:GetPos():Distance(ply:GetPos()) < 256 and NPC:IsInViewCone(ply) then
 
 if IsValid(NPC) and NPC:Disposition(ply) == D_HT then
 	NPCVec = (NPC:GetPos() - ply:GetPos()):GetNormalized():Angle().y
@@ -202,65 +258,6 @@ if oldCount < newCount then
 	ply:GiveAmmo(AmmoGained * 0.2, ammoID)
 end
 	CanTriggerNew = true
-end
-
-end)
-
-hook.Add("Think", "ScavengerThink", function()
-
-AllowedAmmo = {1, 3, 4, 5, 6, 7, 13, 14, 23, 24, 25, 26}
-
-for _,Ply in pairs(player.GetAll()) do
-
-if MaxArmor == nil then
-	MaxArmor = Ply:GetMaxArmor()
-end
-
-local Snds = {"zipper1.wav", "zipper2.wav", "zipper3.wav", "zipper4.wav"}
-local RndSnd = Snds[ math.random( #Snds ) ]
-
-for _,ScavItem in pairs(ents.FindByClass("prop_physics")) do
-if ScavItem:GetName() == "Scavenger Box" then
-if Ply:GetNWString("Tier 1 Perk") == "Scavenger" and ScavItem:GetNoDraw() == true then
-	ScavItem:SetNoDraw(false)
-elseif Ply:GetNWString("Tier 1 Perk") != "Scavenger" and ScavItem:GetNoDraw() == false then
-	ScavItem:SetNoDraw(true)
-end
-if Ply:GetNWString("Tier 1 Perk") == "Scavenger" and Ply:GetPos():Distance(ScavItem:GetPos()) < 64 and Ply:Alive() then
-	ScavItem:Remove()
-	Ply:EmitSound(RndSnd)
-
-for _,Weps in pairs(Ply:GetWeapons()) do
-
-if Weps:GetMaxClip1() > 0 and table.HasValue(AllowedAmmo, Weps:GetPrimaryAmmoType()) then
-	Ply:GiveAmmo(math.Clamp(math.Round(Weps:GetMaxClip1() * 0.5), 1, math.huge), Weps:GetPrimaryAmmoType())
-elseif Weps:GetMaxClip1() <= 0 and table.HasValue(AllowedAmmo, Weps:GetPrimaryAmmoType()) then
-	Ply:GiveAmmo(math.Clamp(math.Round(Weps:GetMaxClip1() * 0.5), 1, math.huge), Weps:GetPrimaryAmmoType())
-end
-
-Ply:SetNWInt("LootTimer", CurTime() + 3)
-
-end
-end
-end
-
-if ScavItem:GetName() == "Armorer Boost" and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1) then
-if Ply:GetNWString("Tier 1 Perk") == "Armorer" and ScavItem:GetNoDraw() == true then
-	ScavItem:SetNoDraw(false)
-elseif Ply:GetNWString("Tier 1 Perk")!= "Armorer" and ScavItem:GetNoDraw() == false then
-	ScavItem:SetNoDraw(true)
-end
-if Ply:GetNWString("Tier 1 Perk") == "Armorer" and Ply:Armor() < Ply:GetMaxArmor() and Ply:GetPos():Distance(ScavItem:GetPos()) < 64 and Ply:Alive() then
-	ScavItem:Remove()
-	Ply:EmitSound(RndSnd)
-
-Ply:SetArmor(math.Clamp(Ply:Armor() + 5, 0, Ply:GetMaxArmor()))
-
-Ply:SetNWInt("LootTimer", CurTime() + 3)
-
-end
-end
-end
 end
 
 end)

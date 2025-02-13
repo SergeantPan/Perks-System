@@ -73,7 +73,7 @@ end)
 net.Receive("TurretRemove", function()
 	P = net.ReadEntity()
 	Name = P:Nick() .. "'s Turret"
-	EyeTrace = P:GetEyeTrace()
+	EyeTrace = P:GetEyeTraceNoCursor()
 
 if P:GetNWBool("HasTurret", false) == true then
 

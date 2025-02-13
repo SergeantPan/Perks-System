@@ -1,6 +1,3 @@
-local UnkillableArmorClass = {"npc_turret_floor", "npc_rollermine"}
-local Targets = {"npc_helicopter", "npc_combinegunship", "npc_combinedropship", "prop_vehicle_apc"}
-
 function ResTimers(atk, type)
 
 net.Start("ResTimers")
@@ -79,6 +76,25 @@ end
 
 end)
 
+hook.Add("PlayerCanPickupItem", "QuickFixHeal", function(ply, item)
+
+FailState = ply:Health() - ply:GetNWInt("QFHealth", 0) == 100
+MaxHP = ply:GetMaxHealth() + 20
+
+if ply:GetNWInt("QFHealth", 0) > 0 and ply:Health() >= ply:GetMaxHealth() and !FailState then
+if item:GetClass() == "item_healthkit" or item:GetClass() == "item_healthvial" then
+	ply:SetHealth(ply:Health() - ply:GetNWInt("QFHealth", 0))
+end
+timer.Simple(0.01, function()
+if ply:Health() + ply:GetNWInt("QFHealth", 0) >= MaxHP then
+	ply:SetNWInt("QFHealth", MaxHP - ply:Health())
+end
+	ply:SetHealth(math.Clamp(ply:Health() + ply:GetNWInt("QFHealth", 0), 0, MaxHP))
+end)
+end
+
+end)
+
 local DefaultColGroup = nil
 local ClosestMine = nil
 local RandomZap = {"ambient/energy/zap1.wav", "ambient/energy/zap2.wav", "ambient/energy/zap3.wav"}
@@ -89,22 +105,22 @@ for _,QFPly in pairs(player.GetAll()) do
 if QFPly:IsPlayer() and QFPly:Alive() then
 
 if QFPly:GetNWString("Tier 2 Perk", "None") == "Survivalist" then
-HealthSeg1 = QFPly:Health() < 80 and QFPly:Health() > 60
-HealthSeg2 = QFPly:Health() < 60 and QFPly:Health() > 40
-HealthSeg3 = QFPly:Health() < 40 and QFPly:Health() > 20
-HealthSeg4 = QFPly:Health() < 20 and QFPly:Health() >= 1
+HealthSeg1 = (QFPly:Health() - QFPly:GetNWInt("QFHealth", 0)) < 80 and (QFPly:Health() - QFPly:GetNWInt("QFHealth", 0)) > 60
+HealthSeg2 = (QFPly:Health() - QFPly:GetNWInt("QFHealth", 0)) < 60 and (QFPly:Health() - QFPly:GetNWInt("QFHealth", 0)) > 40
+HealthSeg3 = (QFPly:Health() - QFPly:GetNWInt("QFHealth", 0)) < 40 and (QFPly:Health() - QFPly:GetNWInt("QFHealth", 0)) > 20
+HealthSeg4 = (QFPly:Health() - QFPly:GetNWInt("QFHealth", 0)) < 20 and (QFPly:Health() - QFPly:GetNWInt("QFHealth", 0)) >= 1
 LastHit = QFPly:GetNWInt("SurvRegen", 0) < CurTime()
 if HealthSeg1 and LastHit then
-	QFPly:SetHealth(math.Clamp(QFPly:Health() + 1, 0, QFPly:GetMaxHealth() * 0.8))
+	QFPly:SetHealth(QFPly:Health() + 1)
 	QFPly:SetNWInt("SurvRegen", CurTime() + 3)
 elseif HealthSeg2 and LastHit then
-	QFPly:SetHealth(math.Clamp(QFPly:Health() + 1, 0, QFPly:GetMaxHealth() * 0.6))
+	QFPly:SetHealth(QFPly:Health() + 1)
 	QFPly:SetNWInt("SurvRegen", CurTime() + 3)
 elseif HealthSeg3 and LastHit then
-	QFPly:SetHealth(math.Clamp(QFPly:Health() + 1, 0, QFPly:GetMaxHealth() * 0.4))
+	QFPly:SetHealth(QFPly:Health() + 1)
 	QFPly:SetNWInt("SurvRegen", CurTime() + 3)
 elseif HealthSeg4 and LastHit then
-	QFPly:SetHealth(math.Clamp(QFPly:Health() + 1, 0, QFPly:GetMaxHealth() * 0.2))
+	QFPly:SetHealth(QFPly:Health() + 1)
 	QFPly:SetNWInt("SurvRegen", CurTime() + 3)
 end
 end
@@ -181,32 +197,97 @@ end
 
 end)
 
+local GunshipDelay = 0
+local HardenedTargets = {"npc_strider", "npc_combinegunship", "npc_combinedropship", "npc_helicopter", "prop_vehicle_apc"}
+local UnkillableArmorClass = {"npc_turret_floor", "npc_rollermine"}
 local HL2WorkAround = {"weapon_pistol", "weapon_357", "weapon_smg1", "weapon_ar2", "weapon_shotgun", "weapon_crossbow"}
 
-hook.Add("EntityFireBullets", "HardenedAntiArmor", function(entity, data) // This allows HL2 weapons to damage armored targets
+hook.Add("EntityFireBullets", "HardenedAntiArmorHL2", function(entity, data) // This allows HL2 weapons to damage armored targets
 
 if entity:IsPlayer() and entity:GetNWString("Tier 2 Perk") == "Hardened" and entity:GetActiveWeapon():IsWeapon() and table.HasValue(HL2WorkAround, entity:GetActiveWeapon():GetClass()) then
 
 function data.Callback(attacker, tr, dmginfo)
 
-	if table.HasValue(Targets, tr.Entity:GetClass()) then
+	if table.HasValue(HardenedTargets, tr.Entity:GetClass()) and tr.Entity:GetClass() != "npc_strider" then
 	if !dmginfo:IsDamageType(DMG_BLAST + DMG_AIRBOAT) and dmginfo:IsDamageType(DMG_BULLET) then
-		dmginfo:SetDamageType(DMG_AIRBOAT)
+		dmginfo:SetDamageType(DMG_GENERIC + DMG_AIRBOAT)
 		dmginfo:SetDamage(dmginfo:GetDamage() * 0.25)
+	if tr.Entity:GetClass() == "npc_combinegunship" then
+		ActualDMG = EntityHit:Health() - dmginfo:GetDamage()
+		if GunshipDelay < CurTime() then
+			tr.Entity:TakeDamage(0, attacker, attacker:GetActiveWeapon())
+			GunshipDelay = CurTime() + 1
+		end
+		tr.Entity:SetHealth(ActualDMG)
+	end
 	end
 	end
 
 	if tr.Entity:GetClass() == "npc_strider" then
 	if !dmginfo:IsDamageType(DMG_BLAST) and dmginfo:IsDamageType(DMG_BULLET) then
-		dmginfo:SetDamageType(DMG_BLAST)
+		dmginfo:SetDamageType(DMG_GENERIC)
 		dmginfo:SetDamage(dmginfo:GetDamage() * 0.25)
 	end
 	end
 
-return true
+	if table.HasValue(UnkillableArmorClass, tr.Entity:GetClass()) then
+		tr.Entity:SetHealth(tr.Entity:Health() - (dmginfo:GetDamage() * 0.25))
+	if tr.Entity:Health() <= 1 then
+		tr.Entity:SetHealth(1)
+	end
+	if tr.Entity:GetClass() == "npc_turret_floor" and tr.Entity:Health() == 1 then
+		tr.Entity:Fire("selfdestruct","",0.1)
+	end
+	if tr.Entity:GetClass() == "npc_rollermine" and tr.Entity:Health() == 1 then
+		dmginfo:SetDamageType(DMG_BLAST)
+	end
+	end
 
 end
+end
 
+end)
+
+hook.Add("PostEntityFireBullets", "HardenedAntiArmor", function(entity, data)
+
+EntityHit = data["Trace"]["Entity"]
+Atk = data["Attacker"]
+
+if Atk:GetNWString("Tier 2 Perk") == "Hardened" and IsValid(EntityHit) and !table.HasValue(HL2WorkAround, entity:GetActiveWeapon():GetClass()) and Atk:GetActiveWeapon():IsWeapon() then
+
+if table.HasValue(HardenedTargets, EntityHit:GetClass()) then
+	if baseclass.Get(Atk:GetActiveWeapon():GetClass())["Damage"] != nil then
+		DMG = baseclass.Get(Atk:GetActiveWeapon():GetClass())["Damage"] * 0.25
+	if EntityHit:GetClass() == "npc_strider" then
+		EntityHit:TakeDamage(DMG, Atk, Atk:GetActiveWeapon())
+	end
+	if EntityHit:GetClass() == "npc_combinegunship" then
+		ActualDMG = EntityHit:Health() - DMG
+		if GunshipDelay < CurTime() then
+			EntityHit:TakeDamage(0, Atk, Atk:GetActiveWeapon())
+			GunshipDelay = CurTime() + 1
+		end
+		EntityHit:SetHealth(ActualDMG)
+	end
+	end
+end
+
+if table.HasValue(UnkillableArmorClass, EntityHit:GetClass()) then
+	EntityHit:SetHealth(EntityHit:Health() - DMG)
+	if EntityHit:Health() <= 1 then
+		EntityHit:SetHealth(1)
+	end
+	if EntityHit:GetClass() == "npc_turret_floor" and EntityHit:Health() == 1 then
+		EntityHit:Fire("selfdestruct","",0.1)
+	end
+	if EntityHit:GetClass() == "npc_rollermine" and EntityHit:Health() == 1 then
+		RollerDMG = DamageInfo()
+		RollerDMG:SetDamage(5)
+		RollerDMG:SetAttacker(Atk)
+		RollerDMG:SetDamageType(DMG_BLAST)
+		EntityHit:TakeDamageInfo(RollerDMG)
+	end
+	end
 end
 
 end)
@@ -214,14 +295,8 @@ end)
 hook.Add("EntityTakeDamage", "CodPerksDMGHooks", function( target, dmginfo )
 
 local Atk = dmginfo:GetAttacker()
-local AllowDMG = {1, 3, 4, 5, 6, 7, 13, 14}
-local HardenedTargets = {"npc_strider", "npc_combinegunship", "npc_combinedropship", "npc_helicopter", "prop_vehicle_apc"}
 local LightTargets = {"npc_combine_camera", "npc_turret_ceiling", "npc_cscanner", "npc_hunter", "npc_manhack", "npc_clawscanner", "npc_antlionguard", "npc_antlionguardian"}
 
-if table.HasValue(HardenedTargets, target:GetClass()) and Atk:GetNWString("Tier 2 Perk") == "Hardened" and Atk:GetActiveWeapon():IsWeapon() and !table.HasValue(HL2WorkAround, Atk:GetActiveWeapon():GetClass()) and dmginfo:IsBulletDamage() then
-	dmginfo:SetDamage(dmginfo:GetDamage() * 0.25)
-	target:SetHealth(target:Health() - dmginfo:GetDamage())
-end
 if table.HasValue(LightTargets, target:GetClass()) and Atk:GetNWString("Tier 2 Perk") == "Hardened" and Atk:GetActiveWeapon():IsWeapon() and dmginfo:IsBulletDamage() then
 	dmginfo:SetDamage(dmginfo:GetDamage() * 1.25)
 end
@@ -281,15 +356,6 @@ end
 end
 
 if Atk:IsPlayer() and Atk:GetNWString("Tier 2 Perk") == "Hardened" then
-if target:IsNPC() and table.HasValue(UnkillableArmorClass, target:GetClass()) and dmginfo:IsBulletDamage() then
-	target:SetHealth(math.Clamp(target:Health() - (dmginfo:GetDamage() * 0.25), 1, target:GetMaxHealth()))
-end
-if target:GetClass() == "npc_turret_floor" and target:Health() == 1 then
-	target:Fire("selfdestruct","",0.1)
-end
-if target:GetClass() == "npc_rollermine" and target:Health() <= 1 then
-	dmginfo:SetDamageType(DMG_BLAST)
-end
 if target:IsPlayer() and target:Armor() > 0 and dmginfo:IsBulletDamage() then
 	dmginfo:SetDamage(dmginfo:GetDamage() * 1.25)
 end
