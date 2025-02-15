@@ -93,42 +93,42 @@ if IsValid(ply) then
 
 for _,ScavItem in pairs(ents.FindByClass("prop_physics")) do
 if ScavItem:GetName() == "Scavenger Box" then
-if Ply:GetNWString("Tier 1 Perk") == "Scavenger" and ScavItem:GetNoDraw() == true then
+if ply:GetNWString("Tier 1 Perk") == "Scavenger" and ScavItem:GetNoDraw() == true then
 	ScavItem:SetNoDraw(false)
-elseif Ply:GetNWString("Tier 1 Perk") != "Scavenger" and ScavItem:GetNoDraw() == false then
+elseif ply:GetNWString("Tier 1 Perk") != "Scavenger" and ScavItem:GetNoDraw() == false then
 	ScavItem:SetNoDraw(true)
 end
-if Ply:GetNWString("Tier 1 Perk") == "Scavenger" and Ply:GetPos():Distance(ScavItem:GetPos()) < 64 and Ply:Alive() then
+if ply:GetNWString("Tier 1 Perk") == "Scavenger" and ply:GetPos():Distance(ScavItem:GetPos()) < 64 and ply:Alive() then
 	ScavItem:Remove()
-	Ply:EmitSound(RndSnd)
+	ply:EmitSound(RndSnd)
 
-for _,Weps in pairs(Ply:GetWeapons()) do
+for _,Weps in pairs(ply:GetWeapons()) do
 
 if Weps:GetMaxClip1() > 0 and table.HasValue(AllowedAmmo, Weps:GetPrimaryAmmoType()) then
-	Ply:GiveAmmo(math.Clamp(math.Round(Weps:GetMaxClip1() * 0.5), 1, math.huge), Weps:GetPrimaryAmmoType())
+	ply:GiveAmmo(math.Clamp(math.Round(Weps:GetMaxClip1() * 0.5), 1, math.huge), Weps:GetPrimaryAmmoType())
 elseif Weps:GetMaxClip1() <= 0 and table.HasValue(AllowedAmmo, Weps:GetPrimaryAmmoType()) then
-	Ply:GiveAmmo(math.Clamp(math.Round(Weps:GetMaxClip1() * 0.5), 1, math.huge), Weps:GetPrimaryAmmoType())
+	ply:GiveAmmo(math.Clamp(math.Round(Weps:GetMaxClip1() * 0.5), 1, math.huge), Weps:GetPrimaryAmmoType())
 end
 
-Ply:SetNWInt("LootTimer", CurTime() + 3)
+ply:SetNWInt("LootTimer", CurTime() + 3)
 
 end
 end
 end
 
 if ScavItem:GetName() == "Armorer Boost" and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1) then
-if Ply:GetNWString("Tier 1 Perk") == "Armorer" and ScavItem:GetNoDraw() == true then
+if ply:GetNWString("Tier 1 Perk") == "Armorer" and ScavItem:GetNoDraw() == true then
 	ScavItem:SetNoDraw(false)
-elseif Ply:GetNWString("Tier 1 Perk")!= "Armorer" and ScavItem:GetNoDraw() == false then
+elseif ply:GetNWString("Tier 1 Perk")!= "Armorer" and ScavItem:GetNoDraw() == false then
 	ScavItem:SetNoDraw(true)
 end
-if Ply:GetNWString("Tier 1 Perk") == "Armorer" and Ply:Armor() < Ply:GetMaxArmor() and Ply:GetPos():Distance(ScavItem:GetPos()) < 64 and Ply:Alive() then
+if ply:GetNWString("Tier 1 Perk") == "Armorer" and ply:Armor() < ply:GetMaxArmor() and ply:GetPos():Distance(ScavItem:GetPos()) < 64 and ply:Alive() then
 	ScavItem:Remove()
-	Ply:EmitSound(RndSnd)
+	ply:EmitSound(RndSnd)
 
-Ply:SetArmor(math.Clamp(Ply:Armor() + 5, 0, Ply:GetMaxArmor()))
+ply:SetArmor(math.Clamp(ply:Armor() + 5, 0, ply:GetMaxArmor()))
 
-Ply:SetNWInt("LootTimer", CurTime() + 3)
+ply:SetNWInt("LootTimer", CurTime() + 3)
 
 end
 end
