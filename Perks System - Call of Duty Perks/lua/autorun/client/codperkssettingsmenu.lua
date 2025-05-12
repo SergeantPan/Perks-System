@@ -2,9 +2,6 @@ hook.Add( "PopulateToolMenu", "MenuForSettings", function()
 spawnmenu.AddToolMenuOption( "Options", "Player Perks", "PerksSettings", "CoD Settings", "", "", function( panel )
 	panel:ClearControls()
 
-	panel:NumSlider("Armorer Mechanic", "CODPerksArmorerAltMechanic", 0, 2, 0)
-	panel:Help("Change how the Armorer perk functions:\n 0 = Killed enemies drop an Armor Boost that grants +5 armor. +25 max armor.\n 1 = Killed enemies drop an Armor Boost that grants +5 armor. Spawn with 50 armor.\n 2 = +25 max armor. Spawn with 50 armor.")
-
 	panel:NumSlider("Halo/Overlay System", "CODPerksHaloSystem", 0, 3, 0)
 	panel:Help("Change how the overlays of spotting-based perks work:\n 0 = Disabled\n 1 = Halo only\n 2 = Overlay only\n 3 = Halo + Overlay")
 
