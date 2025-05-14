@@ -11,6 +11,21 @@ local BrainRotImmune = {"npc_antlionguard", "npc_strider", "npc_helicopter", "np
 
 if SERVER then
 
+hook.Add("EntityFireBullets", "TestingDoubleTap", function(entity, data)
+
+if entity:IsPlayer() and entity:GetNWString("Perk3") == "Double Tap" then
+	Val1 = entity:GetActiveWeapon():GetNextPrimaryFire() - CurTime()
+	Val2 = Val1 * 0.2
+	Val3 = entity:GetActiveWeapon():GetNextPrimaryFire() - Val2
+if Val3 > CurTime() then
+	entity:GetActiveWeapon():SetNextPrimaryFire(Val3)
+else
+	entity:GetActiveWeapon():SetNextPrimaryFire(CurTime() + 0.05)
+end
+end
+
+end)
+
 hook.Add("AllowPlayerPickup", "PreventVulturePickup", function(ply, ent)
 
 if ent:GetName() == "Vulture's Aid" then
@@ -257,7 +272,7 @@ end
 end
 
 if dmginfo:IsBulletDamage() and Atk:GetNWString("Perk3") == "Double Tap" then
-dmginfo:SetDamage(dmginfo:GetDamage() * 2)
+	dmginfo:SetDamage(dmginfo:GetDamage() * 2)
 end
 
 if dmginfo:IsExplosionDamage() and target:GetNWString("Perk6") == "PhD Flopper" then
