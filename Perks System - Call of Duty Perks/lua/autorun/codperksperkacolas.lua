@@ -13,7 +13,7 @@ if SERVER then
 
 hook.Add("EntityFireBullets", "TestingDoubleTap", function(entity, data)
 
-if entity:IsPlayer() and entity:GetNWString("Perk3") == "Double Tap" then
+if IsValid(entity) and entity:IsPlayer() and entity:GetNWString("Perk3") == "Double Tap" then
 	Val1 = entity:GetActiveWeapon():GetNextPrimaryFire() - CurTime()
 	Val2 = Val1 * 0.2
 	Val3 = entity:GetActiveWeapon():GetNextPrimaryFire() - Val2
