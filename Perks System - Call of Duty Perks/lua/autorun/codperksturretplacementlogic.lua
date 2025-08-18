@@ -117,8 +117,6 @@ Red = Color(255, 0, 0)
 
 hook.Add("Think", "TurretGarbageCollect", function()
 
-Target = LocalPlayer():GetEyeTrace().Entity
-
 if LocalPlayer():GetNWInt("TurretPlace", 0) != 1 and TurretRend != nil and IsValid(TurretRend) then
 	TurretRend:Remove()
 	TurretRend = nil

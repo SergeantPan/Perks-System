@@ -24,11 +24,7 @@ TurretBack:SetName(ply:Nick() .. "'s Turret")
 TurretBack:AddEFlags(16)
 TurretBack:SetMoveType(MOVETYPE_NONE)
 TurretBack:Spawn()
-if Hacker:LookupBone("ValveBiped.Bip01_Spine4") == 4 then
-	TurretBack:FollowBone(Hacker, 4)
-else
-	TurretBack:FollowBone(Hacker, 12)
-end
+TurretBack:FollowBone(Hacker, Hacker:LookupBone("ValveBiped.Bip01_Spine4"))
 TurretBack:SetPos(TurretPos)
 TurretBack:SetAngles(Hacker:GetAngles() + Angle(90, -15, 0))
 end
@@ -90,11 +86,7 @@ TurretBack:SetName(Hacker:Nick() .. "'s Turret")
 TurretBack:AddEFlags(16)
 TurretBack:SetMoveType(MOVETYPE_NONE)
 TurretBack:Spawn()
-if Hacker:LookupBone("ValveBiped.Bip01_Spine4") == 4 then
-	TurretBack:FollowBone(Hacker, 4)
-else
-	TurretBack:FollowBone(Hacker, 12)
-end
+TurretBack:FollowBone(Hacker, Hacker:LookupBone("ValveBiped.Bip01_Spine4"))
 TurretBack:SetPos(TurretPos)
 TurretBack:SetAngles(Hacker:GetAngles() + Angle(90, -15, 0))
 Hacker:EmitSound("npc/turret_floor/retract.wav")
@@ -107,12 +99,8 @@ for _,EngiPly in pairs(player.GetAll()) do
 if EngiPly:GetNWBool("HasTurret", false) == true then
 for _,Tur in pairs(ents.FindByClass("prop_dynamic")) do
 if Tur:GetName() == EngiPly:Nick() .. "'s Turret" then
-if EngiPly:LookupBone("ValveBiped.Bip01_Spine4") == 4 and Tur:GetParentAttachment() != 4 then
-	Tur:FollowBone(EngiPly, 4)
-	Tur:SetPos(TurretPos)
-	Tur:SetAngles(EngiPly:GetAngles() + Angle(90, -15, 0))
-elseif EngiPly:LookupBone("ValveBiped.Bip01_Spine4") != 4 and Tur:GetParentAttachment() != 12 then
-	Tur:FollowBone(EngiPly, 12)
+if Tur:GetParentAttachment() != Hacker:LookupBone("ValveBiped.Bip01_Spine4") then
+	Tur:FollowBone(Hacker, Hacker:LookupBone("ValveBiped.Bip01_Spine4"))
 	Tur:SetPos(TurretPos)
 	Tur:SetAngles(EngiPly:GetAngles() + Angle(90, -15, 0))
 end

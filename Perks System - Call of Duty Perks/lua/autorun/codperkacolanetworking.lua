@@ -7,14 +7,14 @@ if Player:GetNWString("Perk1", "None") != "Juggernog" and Perk == "Juggernog" th
 elseif Player:GetNWString("Perk1", "None") == "Juggernog" and Perk == "Juggernog" then
 	Player:SetNWString("Perk1", "None")
 end
-if Player:GetNWString("Perk2", "None") != "Stamin-Up" and Perk == "Stamin-Up" then
-	Player:SetNWString("Perk2", "Stamin-Up")
-elseif Player:GetNWString("Perk2", "None") == "Stamin-Up" and Perk == "Stamin-Up" then
+if Player:GetNWString("Perk2", "None") != "Double Tap" and Perk == "Double Tap" then
+	Player:SetNWString("Perk2", "Double Tap")
+elseif Player:GetNWString("Perk2", "None") == "Double Tap" and Perk == "Double Tap" then
 	Player:SetNWString("Perk2", "None")
 end
-if Player:GetNWString("Perk3", "None") != "Double Tap" and Perk == "Double Tap" then
-	Player:SetNWString("Perk3", "Double Tap")
-elseif Player:GetNWString("Perk3", "None") == "Double Tap" and Perk == "Double Tap" then
+if Player:GetNWString("Perk3", "None") != "Stamin-Up" and Perk == "Stamin-Up" then
+	Player:SetNWString("Perk3", "Stamin-Up")
+elseif Player:GetNWString("Perk3", "None") == "Stamin-Up" and Perk == "Stamin-Up" then
 	Player:SetNWString("Perk3", "None")
 end
 if Player:GetNWString("Perk4", "None") != "Deadshot Daquiri" and Perk == "Deadshot Daquiri" then
@@ -22,14 +22,14 @@ if Player:GetNWString("Perk4", "None") != "Deadshot Daquiri" and Perk == "Deadsh
 elseif Player:GetNWString("Perk4", "None") == "Deadshot Daquiri" and Perk == "Deadshot Daquiri" then
 	Player:SetNWString("Perk4", "None")
 end
-if Player:GetNWString("Perk5", "None") != "Electric Cherry" and Perk == "Electric Cherry" then
-	Player:SetNWString("Perk5", "Electric Cherry")
-elseif Player:GetNWString("Perk5", "None") == "Electric Cherry" and Perk == "Electric Cherry" then
+if Player:GetNWString("Perk5", "None") != "PhD Flopper" and Perk == "PhD Flopper" then
+	Player:SetNWString("Perk5", "PhD Flopper")
+elseif Player:GetNWString("Perk5", "None") == "PhD Flopper" and Perk == "PhD Flopper" then
 	Player:SetNWString("Perk5", "None")
 end
-if Player:GetNWString("Perk6", "None") != "PhD Flopper" and Perk == "PhD Flopper" then
-	Player:SetNWString("Perk6", "PhD Flopper")
-elseif Player:GetNWString("Perk6", "None") == "PhD Flopper" and Perk == "PhD Flopper" then
+if Player:GetNWString("Perk6", "None") != "Electric Cherry" and Perk == "Electric Cherry" then
+	Player:SetNWString("Perk6", "Electric Cherry")
+elseif Player:GetNWString("Perk6", "None") == "Electric Cherry" and Perk == "Electric Cherry" then
 	Player:SetNWString("Perk6", "None")
 end
 if Player:GetNWString("Perk7", "None") != "Vulture Aid" and Perk == "Vulture Aid" then

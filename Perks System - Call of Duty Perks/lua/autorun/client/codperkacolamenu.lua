@@ -30,24 +30,24 @@ end
 local PerkImage = vgui.Create("DImageButton", panel)
 PerkImage:SetPos(185, 50)
 PerkImage:SetSize(80,80)
-PerkImage:SetImage("deadshotdaquiri.png")
-PerkImage:SetToolTip("Deadshot Daquiri\n- Headshots deal double damage.")
-PerkImage.DoClick = function()
-net.Start("PerkACola")
-net.WriteEntity(LocalPlayer())
-net.WriteString("Deadshot Daquiri")
-net.SendToServer()
-end
-
-local PerkImage = vgui.Create("DImageButton", panel)
-PerkImage:SetPos(15, 150)
-PerkImage:SetSize(80,80)
 PerkImage:SetImage("staminup.png")
 PerkImage:SetToolTip("Stamin-Up\n- Move 7% faster\n- With suit Power: Double sprint power.\n- Without suit Power: Sprint 20% faster.")
 PerkImage.DoClick = function()
 net.Start("PerkACola")
 net.WriteEntity(LocalPlayer())
 net.WriteString("Stamin-Up")
+net.SendToServer()
+end
+
+local PerkImage = vgui.Create("DImageButton", panel)
+PerkImage:SetPos(15, 150)
+PerkImage:SetSize(80,80)
+PerkImage:SetImage("deadshotdaquiri.png")
+PerkImage:SetToolTip("Deadshot Daquiri\n- Headshots deal double damage.")
+PerkImage.DoClick = function()
+net.Start("PerkACola")
+net.WriteEntity(LocalPlayer())
+net.WriteString("Deadshot Daquiri")
 net.SendToServer()
 end
 

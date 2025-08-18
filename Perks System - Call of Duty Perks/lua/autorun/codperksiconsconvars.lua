@@ -213,19 +213,19 @@ if LocalPlayer():GetNWString("Tier 2 Perk") == "Blast Shield" then
 elseif LocalPlayer():GetNWString("Tier 2 Perk") == "Mobility" then
 	surface.SetMaterial(Mobility)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT2 - 8, HorT2 - 9, PerkSize + 18, PerkSize + 18 )
+	surface.DrawTexturedRect( VertT2 - 7, HorT2 + 2, PerkSize + 12, PerkSize - 3 )
 elseif LocalPlayer():GetNWString("Tier 2 Perk") == "Stopping Power" then
 	surface.SetMaterial(Power)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT2 - 4.2, HorT2 - 6, PerkSize + 11, PerkSize + 12 )
+	surface.DrawTexturedRect( VertT2 - 7, HorT2 + 2, PerkSize + 12, PerkSize - 3 )
 elseif LocalPlayer():GetNWString("Tier 2 Perk") == "Danger Close" then
 	surface.SetMaterial(DangerClose)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT2 - 8, HorT2 - 9, PerkSize + 18, PerkSize + 18 )
+	surface.DrawTexturedRect( VertT2 - 7, HorT2 + 2, PerkSize + 12, PerkSize - 3 )
 elseif LocalPlayer():GetNWString("Tier 2 Perk") == "Cold Blooded" then
 	surface.SetMaterial(ColdBlooded)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT2 - 8, HorT2 - 9, PerkSize + 18, PerkSize + 18 )
+	surface.DrawTexturedRect( VertT2 - 7, HorT2 + 2, PerkSize + 12, PerkSize - 3 )
 elseif LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" then
 	surface.SetMaterial(Engineer)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
@@ -240,11 +240,11 @@ end
 elseif LocalPlayer():GetNWString("Tier 2 Perk") == "Hardened" then
 	surface.SetMaterial(Hardened)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT2 - 9, HorT2 - 4, PerkSize + 12, PerkSize + 12 )
+	surface.DrawTexturedRect( VertT2 - 8, HorT2 - 4, PerkSize + 12, PerkSize + 12 )
 elseif LocalPlayer():GetNWString("Tier 2 Perk") == "Juggernaut" then
 	surface.SetMaterial(Juggernaut)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT2 - 3, HorT2, PerkSize + 8, PerkSize - 1 )
+	surface.DrawTexturedRect( VertT2 - 8, HorT2 + 2, PerkSize + 12, PerkSize - 3 )
 elseif LocalPlayer():GetNWString("Tier 2 Perk") == "High Alert" then
 	surface.SetMaterial(Awareness)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
@@ -271,7 +271,7 @@ if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" then
 elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Commando" then
 	surface.SetMaterial(Commando)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT3 + 5, HorT3 - 7, PerkSize + 13, PerkSize + 13 )
+	surface.DrawTexturedRect( VertT3 + 1, HorT3 + 2, PerkSize + 12, PerkSize - 3 )
 elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Dead Silence" then
 	surface.SetMaterial(DeadSilence)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
@@ -287,19 +287,19 @@ elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Stalker" then
 elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Pulsar" then
 	surface.SetMaterial(Scrambler)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT3 + 5, HorT3 - 7, PerkSize + 13, PerkSize + 13 )
+	surface.DrawTexturedRect( VertT3 + 1, HorT3 + 2, PerkSize + 12, PerkSize - 3 )
 elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Martyrdom" then
 	surface.SetMaterial(Martyrdom)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT3 + 5, HorT3, PerkSize + 14, PerkSize )
+	surface.DrawTexturedRect( VertT3 + 1, HorT3 + 2, PerkSize + 14, PerkSize - 1 )
 elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Executioner" then
 	surface.SetMaterial(Executioner)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT3 + 5, HorT3 - 7, PerkSize + 13, PerkSize + 13 )
+	surface.DrawTexturedRect( VertT3 + 1, HorT3 + 2, PerkSize + 12, PerkSize - 3 )
 elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Ninja" then
 	surface.SetMaterial(Assassin)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT3 + 5, HorT3 - 7, PerkSize + 13, PerkSize + 13 )
+	surface.DrawTexturedRect( VertT3 + 1, HorT3 + 2, PerkSize + 12, PerkSize - 3 )
 end
 end
 
@@ -401,13 +401,13 @@ if LocalPlayer():GetNWString("Perk1", "None") == "Juggernog" then
 	surface.SetDrawColor( 255, 255, 255, Alpha )
 	surface.DrawTexturedRect( ScrW() * 0.1, Height, Size, Size )
 end
-if LocalPlayer():GetNWString("Perk2", "None") == "Stamin-Up" then
-	surface.SetMaterial(Stamin)
+if LocalPlayer():GetNWString("Perk2", "None") == "Double Tap" then
+	surface.SetMaterial(Double)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
 	surface.DrawTexturedRect( ScrW() * Spot2, Height, Size, Size )
 end
-if LocalPlayer():GetNWString("Perk3", "None") == "Double Tap" then
-	surface.SetMaterial(Double)
+if LocalPlayer():GetNWString("Perk3", "None") == "Stamin-Up" then
+	surface.SetMaterial(Stamin)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
 	surface.DrawTexturedRect( ScrW() * Spot3, Height, Size, Size )
 end
@@ -416,13 +416,13 @@ if LocalPlayer():GetNWString("Perk4", "None") == "Deadshot Daquiri" then
 	surface.SetDrawColor( 255, 255, 255, Alpha )
 	surface.DrawTexturedRect( ScrW() * Spot4, Height, Size, Size )
 end
-if LocalPlayer():GetNWString("Perk5", "None") == "Electric Cherry" then
-	surface.SetMaterial(EC)
+if LocalPlayer():GetNWString("Perk5", "None") == "PhD Flopper" then
+	surface.SetMaterial(PHD)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
 	surface.DrawTexturedRect( ScrW() * Spot5, Height, Size, Size )
 end
-if LocalPlayer():GetNWString("Perk6", "None") == "PhD Flopper" then
-	surface.SetMaterial(PHD)
+if LocalPlayer():GetNWString("Perk6", "None") == "Electric Cherry" then
+	surface.SetMaterial(EC)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
 	surface.DrawTexturedRect( ScrW() * Spot6, Height, Size, Size )
 end
