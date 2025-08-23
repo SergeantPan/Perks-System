@@ -239,6 +239,12 @@ if LocalPlayer():GetNWInt("TurretPlace", 0) == 0 and CODAlphaClr2 != 0 then
 	TextAlpha = 0
 end
 
+if isnumber(GetConVar("CODPerksInteract"):GetInt()) and GetConVar("CODPerksInteract"):GetInt() > 0 and GetConVar("CODPerksInteract"):GetInt() <= 171 then
+	BindKey = string.upper(input.GetKeyName(GetConVar("CODPerksInteract"):GetInt()))
+else
+	BindKey = "UNBOUND"
+end
+
 if LocalPlayer():Alive() and LocalPlayer():GetNWInt("TurretPlace", 0) == 1 then
 if TextAlpha != 255 or CODAlphaClr2 != 225 or RectAlpha != 100 then
 	TextAlpha = math.Clamp(TextAlpha + 3, 0, 255)
@@ -253,7 +259,7 @@ end
 		draw.DrawText(ErrorReason, Text, ScrW() * 0.32, ScrH() * 0.53, RedText)
 	end
 	draw.DrawText(input.LookupBinding("+attack2") .. " - Rotate Turret", Text, ScrW() * 0.32, ScrH() * 0.56, Color(255, 255, 255, TextAlpha))
-	draw.DrawText(string.upper(input.GetKeyName(GetConVar("CODPerksInteract"):GetInt())) .. " - Cancel", Text, ScrW() * 0.32, ScrH() * 0.59, Color(255, 255, 255, TextAlpha))
+	draw.DrawText(BindKey .. " - Cancel", Text, ScrW() * 0.32, ScrH() * 0.59, Color(255, 255, 255, TextAlpha))
 end
 
 end)

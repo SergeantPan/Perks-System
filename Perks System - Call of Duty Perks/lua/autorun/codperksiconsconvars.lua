@@ -231,10 +231,15 @@ elseif LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" then
 	surface.SetDrawColor( 255, 255, 255, Alpha )
 	surface.DrawTexturedRect( VertT2 - 6, HorT2 - 6, PerkSize + 12, PerkSize + 12 )
 if LocalPlayer():GetNWBool("HasTurret", false) == true then
-if !Orientation then
-	draw.DrawText(string.upper(input.GetKeyName(GetConVar("CODPerksInteract"):GetInt())), Text, VertT2 + 75, HorT2 + 15, Color(255, 255, 255, Alpha))
+if isnumber(GetConVar("CODPerksInteract"):GetInt()) and GetConVar("CODPerksInteract"):GetInt() > 0 and GetConVar("CODPerksInteract"):GetInt() <= 171 then
+	BindKey = string.upper(input.GetKeyName(GetConVar("CODPerksInteract"):GetInt()))
 else
-	draw.DrawText(string.upper(input.GetKeyName(GetConVar("CODPerksInteract"):GetInt())), Text, VertT2 + 19, HorT2 - 35, Color(255, 255, 255, Alpha))
+	BindKey = "UNBOUND"
+end
+if !Orientation then
+	draw.DrawText(BindKey, Text, VertT2 + 75, HorT2 + 14, Color(255, 255, 255, Alpha), TEXT_ALIGN_LEFT)
+else
+	draw.DrawText(BindKey, Text, VertT2 + 28, HorT2 - 35, Color(255, 255, 255, Alpha), TEXT_ALIGN_CENTER)
 end
 end
 elseif LocalPlayer():GetNWString("Tier 2 Perk") == "Hardened" then

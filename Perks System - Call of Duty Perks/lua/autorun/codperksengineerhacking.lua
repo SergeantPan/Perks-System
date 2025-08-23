@@ -158,7 +158,11 @@ hook.Add("Think", "EngineerHackingHud", function()
 if !ConVarExists("CODPerksInteract") then
 	BindButton = 18
 else
+if isnumber(GetConVar("CODPerksInteract"):GetInt()) and GetConVar("CODPerksInteract"):GetInt() > 0 and GetConVar("CODPerksInteract"):GetInt() <= 171 then
 	BindButton = GetConVar("CODPerksInteract"):GetInt()
+else
+	BindButton = -1
+end
 end
 
 if LocalPlayer():Alive() then
@@ -227,6 +231,12 @@ if !LocalPlayer():Alive() and TextAlpha1 != 0 then
 	BoxHeight = 0
 end
 
+if isnumber(GetConVar("CODPerksInteract"):GetInt()) and GetConVar("CODPerksInteract"):GetInt() > 0 and GetConVar("CODPerksInteract"):GetInt() <= 171 then
+	BindKey = string.upper(input.GetKeyName(GetConVar("CODPerksInteract"):GetInt()))
+else
+	BindKey = "UNBOUND"
+end
+
 if LocalPlayer():Alive() then
 
 if (!IsValid(Target) or Target:GetClass() != "npc_turret_floor" or Target:GetPos():Distance(LocalPlayer():GetPos()) > 60) and (TextAlpha1 != 0 or CODAlphaClr1 != 0 or BoxHeight != 0) then
@@ -246,11 +256,11 @@ end
 end
 
 if IsValid(Target) and Target:GetClass() == "npc_turret_floor" and Hacking == 0 and Target:GetNWInt("HackedTeam", -1) != LocalPlayer():Team() then
-	Output1 = "Hold " .. string.upper(input.GetKeyName(GetConVar("CODPerksInteract"):GetInt())) .. " To Hack The Turret"
+	Output1 = "Hold " .. BindKey .. " To Hack The Turret"
 	Output2 = ""
 	BoxHeightMax = 40
-	BoxWidth = 320
-	BoxSide = ScrW() * 0.417
+	BoxWidth = string.len(Output1) * 13.5
+	BoxSide = ScrW() * (0.5 - (string.len(Output1) * 0.0035))
 	BoxHigh = ScrH() * 0.4975
 elseif Hacking >= 1 then
 	Output1 = "Hacking..."
@@ -263,19 +273,21 @@ end
 
 if IsValid(Target) and Target:GetOwner() == LocalPlayer() then
 	Output1 = "Turret Hacked By You"
-	BoxSide = ScrW() * 0.4141
+	BoxSide = ScrW() * (0.5 - (string.len(Output2) * 0.0035))
 	BoxHigh = ScrH() * 0.5
-	BoxWidth = 330
+	BoxWidth = string.len(Output2) * 13.5
 if LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" then
 	BoxHeightMax = 70
 if LocalPlayer():GetNWBool("HasTurret", false) == false then
-	Output2 = "Hold " .. string.upper(input.GetKeyName(GetConVar("CODPerksInteract"):GetInt())) .. " To Pickup The Turret"
+	Output2 = "Hold " .. BindKey .. " To Pickup The Turret"
 else
 	Output2 = "Already carrying a Turret"
 end
 elseif Target:GetOwner() != LocalPlayer() and Target:GetOwner():IsPlayer() then
 	Output1 = "Turret Hacked By " .. Entity(Target:GetOwner():EntIndex()):Nick()
 	Output2 = ""
+	BoxSide = ScrW() * 0.4141
+	BoxWidth = 330
 end
 end
 
