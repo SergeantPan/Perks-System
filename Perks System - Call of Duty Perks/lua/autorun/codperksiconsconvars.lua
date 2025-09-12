@@ -21,7 +21,7 @@ CreateConVar("CODPerksT2Y", 0, 128, "Adjust the vertical position of the T2 Perk
 CreateConVar("CODPerksT3X", 0, 128, "Adjust the horizontal position of the T3 Perk (Yellow)")
 CreateConVar("CODPerksT3Y", 0, 128, "Adjust the vertical position of the T3 Perk (Yellow)")
 
-CreateConVar("CODPerksInteract", "18", 128, "The key used to hack turrets. Use the settings menu to bind this key.")
+CreateConVar("CODPerksInteract", 18, 128, "The key used to hack turrets. Use the settings menu to bind this key.")
 
 CreateConVar("CODPerksDefaultT1", "None", 128, "The default T1 perk you want to spawn with")
 CreateConVar("CODPerksDefaultT2", "None", 128, "The default T2 perk you want to spawn with")
@@ -105,31 +105,31 @@ local T3Y = GetConVar("CODPerksT3Y"):GetFloat()
 local Text = "InteractFont"
 
 if TopBottom then
-T1BonusX = ExtraSize * 3 + 130
-T1BonusY = ExtraSize
-T3BonusX = ExtraSize
-T3BonusY = ExtraSize * 3 + 130
+T1BonusX = ExtraSize * 4 + 130
+T1BonusY = 0
+T3BonusX = 0
+T3BonusY = ExtraSize * 4 + 130
 else
-T1BonusX = ExtraSize
-T1BonusY = ExtraSize * 3 + 130
-T3BonusX = ExtraSize * 3 + 130
-T3BonusY = ExtraSize
+T1BonusX = 0
+T1BonusY = ExtraSize * 4 + 130
+T3BonusX = ExtraSize * 4 + 130
+T3BonusY = 0
 end
 
 if Orientation then
-	VertT1 = (ScrW() * PerkXPos + T1BonusX - 5 + T1X)
-	VertT2 = (ScrW() * PerkXPos + 64 + ExtraSize * 2 + T2X)
-	VertT3 = (ScrW() * PerkXPos + T3BonusX + T3X)
-	HorT1 = (ScrH() * PerkYPos + T1Y)
-	HorT2 = (ScrH() * PerkYPos + T2Y)
-	HorT3 = (ScrH() * PerkYPos + T3Y)
+	VertT1 = ScrW() * PerkXPos + T1BonusX + T1X
+	VertT2 = ScrW() * PerkXPos + 65 + (ExtraSize * 2) + T2X
+	VertT3 = ScrW() * PerkXPos + T3BonusX + T3X
+	HorT1 = ScrH() * PerkYPos + T1Y
+	HorT2 = ScrH() * PerkYPos + T2Y
+	HorT3 = ScrH() * PerkYPos + T3Y
 else
-	VertT1 = (ScrW() * PerkXPos + T1X)
-	VertT2 = (ScrW() * PerkXPos + T2X)
-	VertT3 = (ScrW() * PerkXPos + T3X)
-	HorT1 = (ScrH() * PerkYPos - T1BonusY + T1Y)
-	HorT2 = (ScrH() * PerkYPos - 66 - ExtraSize * 2 + T2Y)
-	HorT3 = (ScrH() * PerkYPos - T3BonusY + T3Y)
+	VertT1 = ScrW() * PerkXPos + T1X
+	VertT2 = ScrW() * PerkXPos + T2X
+	VertT3 = ScrW() * PerkXPos + T3X
+	HorT1 = ScrH() * PerkYPos - T1BonusY - T1Y
+	HorT2 = ScrH() * PerkYPos - 65 - (ExtraSize * 2) - T2Y
+	HorT3 = ScrH() * PerkYPos - T3BonusY - T3Y
 end
 
 if !ConVarExists("CODPerksToggleIcons") then
@@ -317,16 +317,16 @@ PHD = Material("materials/phdflopper.png")
 Vult = Material("materials/vulureaid.png")
 Death = Material("materials/deathperception.png")
 Popper = Material("materials/elementalpop.png")
-Spot2 = 0.135 + GetConVar("CODPerksXPos"):GetInt() + GetConVar("CODPerksGap"):GetInt()
-Spot3 = 0.17 + GetConVar("CODPerksXPos"):GetInt() + GetConVar("CODPerksGap"):GetInt()
-Spot4 = 0.205 + GetConVar("CODPerksXPos"):GetInt() + GetConVar("CODPerksGap"):GetInt()
-Spot5 = 0.24 + GetConVar("CODPerksXPos"):GetInt() + GetConVar("CODPerksGap"):GetInt()
-Spot6 = 0.275 + GetConVar("CODPerksXPos"):GetInt() + GetConVar("CODPerksGap"):GetInt()
-Spot7 = 0.31 + GetConVar("CODPerksXPos"):GetInt() + GetConVar("CODPerksGap"):GetInt()
-Spot8 = 0.345 + GetConVar("CODPerksXPos"):GetInt() + GetConVar("CODPerksGap"):GetInt()
-Spot9 = 0.38 + GetConVar("CODPerksXPos"):GetInt() + GetConVar("CODPerksGap"):GetInt()
-Height = ScrH() * 0.78 + GetConVar("CODPerksYPos"):GetInt()
-Size = GetConVar("CODPerksIconSize"):GetInt()
+Spot1 = 0 + PerkXPos
+Spot2 = 0.035 + PerkXPos + (ExtraSize / 970)
+Spot3 = 0.07 + PerkXPos + ((ExtraSize / 970) * 2)
+Spot4 = 0.105 + PerkXPos + ((ExtraSize / 970) * 3)
+Spot5 = 0.14 + PerkXPos + ((ExtraSize / 970) * 4)
+Spot6 = 0.175 + PerkXPos + ((ExtraSize / 970) * 5)
+Spot7 = 0.21 + PerkXPos + ((ExtraSize / 970) * 6)
+Spot8 = 0.245 + PerkXPos + ((ExtraSize / 970) * 7)
+Spot9 = 0.28 + PerkXPos + ((ExtraSize / 970) * 8)
+Height = ScrH() * (PerkYPos + 0.07)
 
 if LocalPlayer():GetNWString("Perk1", "None") == "None" then
 Spot2 = Spot2 - 0.035
@@ -404,46 +404,46 @@ end
 if LocalPlayer():GetNWString("Perk1", "None") == "Juggernog" then
 	surface.SetMaterial(Jug)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( ScrW() * 0.1, Height, Size, Size )
+	surface.DrawTexturedRect( ScrW() * Spot1, Height, PerkSize, PerkSize )
 end
 if LocalPlayer():GetNWString("Perk2", "None") == "Double Tap" then
 	surface.SetMaterial(Double)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( ScrW() * Spot2, Height, Size, Size )
+	surface.DrawTexturedRect( ScrW() * Spot2, Height, PerkSize, PerkSize )
 end
 if LocalPlayer():GetNWString("Perk3", "None") == "Stamin-Up" then
 	surface.SetMaterial(Stamin)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( ScrW() * Spot3, Height, Size, Size )
+	surface.DrawTexturedRect( ScrW() * Spot3, Height, PerkSize, PerkSize )
 end
 if LocalPlayer():GetNWString("Perk4", "None") == "Deadshot Daquiri" then
 	surface.SetMaterial(Deadshot)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( ScrW() * Spot4, Height, Size, Size )
+	surface.DrawTexturedRect( ScrW() * Spot4, Height, PerkSize, PerkSize )
 end
 if LocalPlayer():GetNWString("Perk5", "None") == "PhD Flopper" then
 	surface.SetMaterial(PHD)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( ScrW() * Spot5, Height, Size, Size )
+	surface.DrawTexturedRect( ScrW() * Spot5, Height, PerkSize, PerkSize )
 end
 if LocalPlayer():GetNWString("Perk6", "None") == "Electric Cherry" then
 	surface.SetMaterial(EC)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( ScrW() * Spot6, Height, Size, Size )
+	surface.DrawTexturedRect( ScrW() * Spot6, Height, PerkSize, PerkSize )
 end
 if LocalPlayer():GetNWString("Perk7", "None") == "Vulture Aid" then
 	surface.SetMaterial(Vult)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( ScrW() * Spot7, Height, Size, Size )
+	surface.DrawTexturedRect( ScrW() * Spot7, Height, PerkSize, PerkSize )
 end
 if LocalPlayer():GetNWString("Perk8", "None") == "Death Perception" then
 	surface.SetMaterial(Death)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( ScrW() * Spot8, Height, Size, Size )
+	surface.DrawTexturedRect( ScrW() * Spot8, Height, PerkSize, PerkSize )
 end
 if LocalPlayer():GetNWString("Perk9", "None") == "Elemental Pop" then
 	surface.SetMaterial(Popper)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( ScrW() * Spot9, Height, Size, Size )
+	surface.DrawTexturedRect( ScrW() * Spot9, Height, PerkSize, PerkSize )
 end
 end)

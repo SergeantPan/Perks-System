@@ -36,7 +36,7 @@ spawnmenu.AddToolMenuOption( "Options", "Player Perks", "PerksSettings", "CoD Se
 	panel:NumSlider("Perk Icons Y Pos", "CODPerksYPos", 0, 1, 2)
 	panel:Help("Change the vertical position of the perk icons. Default is 0.8")
 
-	panel:NumSlider("Perk Icons Gap", "CODPerksGap", 0, 100, 0)
+	panel:NumSlider("Perk Icons Gap", "CODPerksGap", 0, 100, 1)
 	panel:Help("Increase the gap between the perk icons. For use with bigger perk icons. Default is 0")
 	panel:NumSlider("Perk Icons Size", "CODPerksIconSize", 0, 120, 0)
 	panel:Help("Change the size of the perk icons. Default is 60")
