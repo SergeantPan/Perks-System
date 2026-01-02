@@ -5,4 +5,4 @@ CreateConVar("FalloutPromptX", 0.46, 128, "Adjust the horizontal position of the
 CreateConVar("FalloutPromptY", 0.53, 128, "Adjust the vertical position of the Interact prompt for the Cannibal and Robotics Expert perks.")
 CreateConVar("FalloutHealthX", 0.48, 128, "Adjust the horizontal position of the Health text for the Living Anatomy perk.")
 CreateConVar("FalloutHealthY", 0.8, 128, "Adjust the vertical position of the Health text for the Living Anatomy perk.")
-CreateConVar("FalloutMaxPerks", 0, 128, "The maximum number of perks a player can have. 0 = No limit.")
+CreateConVar("FalloutMaxPerks", 31, 128, "The maximum number of perks a player can have.\n0 = No Perks\n31 = All Perks.")

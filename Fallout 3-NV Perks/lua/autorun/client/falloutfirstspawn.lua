@@ -29,11 +29,29 @@ end)
 
 hook.Add("InitPostEntity", "FalloutFirstSpawn", function()
 
+CurNum = ""
+
 if GetConVar("FalloutDefaultPerks"):GetString() != "" then
+for _,num in ipairs(string.ToTable(GetConVar("FalloutDefaultPerks"):GetString())) do
+
+if num != " " then
+if CurNum == "" then
+	CurNum = num
+else
+	CurNum = CurNum .. num
+end
+else
+if num == " " then
+	CurNum = CurNum .. num
+end
 net.Start("FalloutPerk")
 net.WriteEntity(LocalPlayer())
-net.WriteString(GetConVar("FalloutDefaultPerks"):GetString())
+net.WriteString(CurNum)
 net.SendToServer()
+CurNum = ""
+end
+
+end
 end
 
 end)

@@ -113,7 +113,7 @@ if (table.HasValue(MaleTargets, target:GetClass()) or (string.find(target:GetMod
 end
 end
 if PlyHasPerk(Atk, "03 ") == true then
-if dmginfo:IsExplosionDamage() or (dmginfo:IsDamageType(DMG_SLASH + DMG_CLUB) and Wep:GetSlot() == 0) then
+if dmginfo:IsExplosionDamage() or (dmginfo:IsDamageType(DMG_SLASH + DMG_CLUB) and IsValid(Wep) and Wep:GetSlot() == 0) then
 	DMGBuff = DMGBuff + 0.15
 end
 end
@@ -123,7 +123,7 @@ if table.HasValue(Entomology, target:GetClass()) then
 end
 end
 if PlyHasPerk(Atk, "05 ") == true and (target:IsNPC() or target:IsPlayer()) then
-if Wep:GetClass() == "weapon_fists" or (IsValid(Wep:GetHoldType()) and Wep:GetHoldType() == "fist") then
+if IsValid(Wep) and Wep:GetClass() == "weapon_fists" or (IsValid(Wep) and IsValid(Wep:GetHoldType()) and Wep:GetHoldType() == "fist") then
 	DMGBuff = DMGBuff + 0.15
 end
 end
@@ -137,7 +137,7 @@ if StrangerChance <= 10 then
 end
 end
 if PlyHasPerk(Atk, "11 ") == true and Atk:Health() <= Atk:GetMaxHealth() * 0.2 then
-if Wep:GetClass() == "weapon_fists" or (IsValid(Wep:GetHoldType()) and Wep:GetHoldType() == "fist") then
+if IsValid(Wep) and Wep:GetClass() == "weapon_fists" or (IsValid(Wep) and IsValid(Wep:GetHoldType()) and Wep:GetHoldType() == "fist") then
 	DMGBuff = DMGBuff + 0.25
 end
 end
@@ -157,11 +157,11 @@ if PlyHasPerk(Atk, "21 ") == true and (target:GetClass() == "npc_citizen" or tar
 	DMGBuff = DMGBuff + 0.05
 end
 if PlyHasPerk(Atk, "25 ") == true and target:IsNPC() then
-if dmginfo:IsDamageType(DMG_SLASH + DMG_CLUB) and table.HasValue(PurifierTable, target:GetClass()) and ((IsValid(Wep:GetHoldType()) and table.HasValue(MeleeTypes, Wep:GetHoldType())) or Wep:GetSlot() == 0) then
+if dmginfo:IsDamageType(DMG_SLASH + DMG_CLUB) and table.HasValue(PurifierTable, target:GetClass()) and IsValid(Wep) and ((IsValid(Wep:GetHoldType()) and table.HasValue(MeleeTypes, Wep:GetHoldType())) or Wep:GetSlot() == 0) then
 	DMGBuff = DMGBuff + 0.5
 end
 end
-if PlyHasPerk(Atk, "27 ") == true and (((IsValid(Wep:GetHoldType()) and table.HasValue(MeleeTypes, Wep:GetHoldType()))
+if PlyHasPerk(Atk, "27 ") == true and IsValid(Wep) and (((IsValid(Wep:GetHoldType()) and table.HasValue(MeleeTypes, Wep:GetHoldType()))
  or Wep:GetSlot() == 0) or ((dmginfo:GetInflictor():GetClass() == "crossbow_bolt" or dmginfo:GetInflictor():GetClass() == "npc_grenade_frag" or dmginfo:GetInflictor():GetClass() == "rpg_missile") and dmginfo:GetInflictor():GetOwner() == Atk) or table.HasValue(GruntAmmo, dmginfo:GetAmmoType())) then
 	DMGBuff = DMGBuff + 0.25
 end
@@ -195,7 +195,7 @@ end
 if PlyHasPerk(target, "18 ") == true and !dmginfo:IsDamageType(DMG_FALL) and table.HasValue(AdamantiumLimbs, target:LastHitGroup()) then
 	DMGRes = DMGRes - 0.5
 end
-if PlyHasPerk(target, "22 ") == true and dmginfo:IsDamageType(DMG_GENERIC + DMG_SLASH + DMG_CLUB) and ((IsValid(Wep:GetHoldType()) and table.HasValue(MeleeTypes, Wep:GetHoldType())) or Wep:GetSlot() == 0) then
+if PlyHasPerk(target, "22 ") == true and dmginfo:IsDamageType(DMG_GENERIC + DMG_SLASH + DMG_CLUB) and IsValid(Wep) and ((IsValid(Wep:GetHoldType()) and table.HasValue(MeleeTypes, Wep:GetHoldType())) or Wep:GetSlot() == 0) then
 	DMGRes = DMGRes - 0.05
 end
 if PlyHasPerk(target, "24 ") == true and dmginfo:IsExplosionDamage() then
@@ -212,7 +212,7 @@ end
 if PlyHasPerk(Atk, "29 ") == true and dmginfo:GetAmmoType() == 7 then
 	DMGRes = DMGRes + 0.1
 end
-if PlyHasPerk(Atk, "31 ") == true and dmginfo:IsDamageType(DMG_GENERIC + DMG_SLASH + DMG_CLUB) and ((IsValid(Wep:GetHoldType()) and table.HasValue(MeleeTypes, Wep:GetHoldType())) or Wep:GetSlot() == 0) then
+if PlyHasPerk(Atk, "31 ") == true and dmginfo:IsDamageType(DMG_GENERIC + DMG_SLASH + DMG_CLUB) and IsValid(Wep) and ((IsValid(Wep:GetHoldType()) and table.HasValue(MeleeTypes, Wep:GetHoldType())) or Wep:GetSlot() == 0) then
 	DMGRes = DMGRes + 0.15
 end
 	DMGRes = math.Clamp(DMGRes, 0.15, 1)

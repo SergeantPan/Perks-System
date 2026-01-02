@@ -8,7 +8,7 @@ local PerkLimit = P:GetNWInt("FalloutPerks", 0) < GetConVar("FalloutMaxPerks"):G
 if FindPerk then
 	P:SetNWString("Fallout Perk", string.Replace(P:GetNWString("Fallout Perk"), Perk, ""))
 	P:SetNWInt("FalloutPerks", P:GetNWInt("FalloutPerks", 0) - 1)
-elseif !FindPerk and (PerkLimit or GetConVar("FalloutMaxPerks"):GetInt() == 0) then
+elseif !FindPerk and PerkLimit then
 	P:SetNWString("Fallout Perk", P:GetNWString("Fallout Perk") .. Perk)
 	P:SetNWInt("FalloutPerks", P:GetNWInt("FalloutPerks", 0) + 1)
 end

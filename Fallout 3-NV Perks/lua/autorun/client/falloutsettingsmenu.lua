@@ -20,7 +20,7 @@ hook.Add( "PopulateToolMenu", "FalloutSettings", function()
 	panel:Help("The percentage chance for a nearby NPC to react to the player cannibalizing a corpse.")
 
 	panel:NumSlider("Perk Limit", "FalloutMaxPerks", 0, 31, 0)
-	panel:Help("The maximum number of perks a player can have.\n0 = No Limit.")
+	panel:Help("The maximum number of perks a player can have.\n\n0 = No Perks\n31 = Perks.")
 
 	panel:NumSlider("Prompt Horizontal Pos", "FalloutPromptX", 0, 1, 2)
 	panel:Help("Adjust the horizontal position of the Interact prompt for the Cannibal and Robotics Expert perks. Default is 0.46.")
