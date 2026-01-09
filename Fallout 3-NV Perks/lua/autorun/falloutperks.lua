@@ -282,7 +282,7 @@ if old > new then return end
 if ply:IsPlayer() and PlyHasPerk(ply, "30 ") == true then
 if old < new then
 AmmoRand = math.Rand(1, 100)
-Ammo = new - old
+AmmoGained = new - old
 if AmmoRand >= 25 then
 	ply:GiveAmmo(math.ceil(AmmoGained * 0.5), ammo)
 end
