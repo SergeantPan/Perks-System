@@ -253,7 +253,7 @@ else
 	StrangerModel = "models/Humans/Group03/male_07.mdl"
 end
 end
-if IsValid(Target) and Target:Health() <= GetConVar("FalloutStrangerHPLimit"):GetInt() and Target:Disposition(Ply) == D_HT and StrangerExists == false and (!Target:VisibleVec(Spot) or QTrace.StartSolid == true or !QTrace.HitWorld) then
+if IsValid(Target) and Target:Health() <= GetConVar("FalloutStrangerHPLimit"):GetInt() and Target:IsNPC() and Target:Disposition(Ply) == D_HT and StrangerExists == false and (!Target:VisibleVec(Spot) or QTrace.StartSolid == true or !QTrace.HitWorld) then
 	timer.Simple(0.1, function() CreateStranger(Target, Ply) end)
 end
 if IsValid(Target) and Target:OnGround() and !table.HasValue(StrangerNoTarget, Target:GetClass()) and Target:Health() <= GetConVar("FalloutStrangerHPLimit"):GetInt() and Target:VisibleVec(Spot) and Target:Disposition(Ply) == D_HT and StrangerExists == false then
@@ -282,7 +282,7 @@ if old > new then return end
 if ply:IsPlayer() and PlyHasPerk(ply, "30 ") == true then
 if old < new then
 AmmoRand = math.Rand(1, 100)
-AmmoGained = new - old
+Ammo = new - old
 if AmmoRand >= 25 then
 	ply:GiveAmmo(math.ceil(AmmoGained * 0.5), ammo)
 end
@@ -448,7 +448,7 @@ end
 end
 
 for _,Antlion in pairs(ents.FindByClass("npc_antlion*")) do
-if Antlion:GetSequenceName(Antlion:GetSequence()) != "" and Antlion.DP == nil then
+if Antlion:IsNPC() and Antlion:GetSequenceName(Antlion:GetSequence()) != "" and Antlion.DP == nil then
 	Antlion.DP = Antlion:Disposition(ply)
 end
 
