@@ -63,7 +63,7 @@ if ent:IsNPC() or ent:GetClass() == "item_item_crate" then
 	DroppedItem:Spawn()
 	DroppedItem:GetPhysicsObject():SetVelocity(Vector(math.Rand(-25,25),math.Rand(-25,25),25))
 	Rand = math.random(1, 100)
-	if Rand <= 15 then
+	if util.IsValidModel("models/nirrti/tablet/tab_02.mdl") and Rand <= 15 then
 		DroppedItem:SetModel("models/nirrti/tablet/tab_02.mdl")
 		DroppedItem:SetSkin(3)
 	end
