@@ -51,7 +51,7 @@ end
 
 TurretBack = ents.Create("npc_turret_floor")
 TurretBack:SetOwner(P)
-TurretBack:SetName(P:Nick() .. "'s Turret")
+TurretBack:SetName(Name)
 TurretBack:SetNWInt("HackedTeam", P:Team())
 TurretBack:Spawn()
 TurretBack:SetPos(Pos)

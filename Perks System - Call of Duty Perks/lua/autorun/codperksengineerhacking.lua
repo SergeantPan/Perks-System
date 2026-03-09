@@ -222,7 +222,7 @@ Output2 = ""
 
 hook.Add("HUDPaint", "HackingText", function()
 
-Text = "InteractFont"
+surface.SetFont("InteractFont")
 Target = LocalPlayer():GetEyeTrace().Entity
 
 if !LocalPlayer():Alive() and TextAlpha1 != 0 then
@@ -242,7 +242,6 @@ if LocalPlayer():Alive() then
 if (!IsValid(Target) or Target:GetClass() != "npc_turret_floor" or Target:GetPos():Distance(LocalPlayer():GetPos()) > 60) and (TextAlpha1 != 0 or CODAlphaClr1 != 0 or BoxHeight != 0) then
 	CODAlphaClr1 = math.Clamp(CODAlphaClr1 - 5, 0, 225)
 	TextAlpha1 = math.Clamp(TextAlpha1 - 5, 0, 255)
-	BoxHeight = math.Clamp(BoxHeight - 2, 0, BoxHeightMax)
 end
 
 if IsValid(Target) and Target:GetClass() == "npc_turret_floor" and Target:GetPos():Distance(LocalPlayer():GetPos()) <= 60 then
@@ -250,7 +249,6 @@ if (LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" and Target:GetNWInt("
 if TextAlpha1 != 255 or CODAlphaClr1 != 225 or BoxHeight != BoxHeightMax then
 	TextAlpha1 = math.Clamp(TextAlpha1 + 5, 0, 255)
 	CODAlphaClr1 = math.Clamp(CODAlphaClr1 + 5, 0, 225)
-	BoxHeight = math.Clamp(BoxHeight + 2, 0, BoxHeightMax)
 end
 end
 end
@@ -258,24 +256,26 @@ end
 if IsValid(Target) and Target:GetClass() == "npc_turret_floor" and Hacking == 0 and Target:GetNWInt("HackedTeam", -1) != LocalPlayer():Team() then
 	Output1 = "Hold " .. BindKey .. " To Hack The Turret"
 	Output2 = ""
-	BoxHeightMax = 40
-	BoxWidth = string.len(Output1) * 13.5
-	BoxSide = ScrW() * (0.5 - (string.len(Output1) * 0.0035))
-	BoxHigh = ScrH() * 0.4975
+	width1, height1 = surface.GetTextSize(Output1)
+	width2, height2 = surface.GetTextSize(Output2)
+	BoxHeight = 40
+	BoxWidth = width1 + 20
+	BoxSide = (ScrW() * 0.495) - (width1 / 2)
+	BoxHigh = (ScrH() * 0.53) - (height1 / 2)
 elseif Hacking >= 1 then
 	Output1 = "Hacking..."
 	Output2 = math.Round(Hacking, 0) .. "%"
 	BoxHeightMax = 70
 	BoxWidth = 115
-	BoxSide = ScrW() * 0.47
-	BoxHigh = ScrH() * 0.5
+	BoxSide = (ScrW() * 0.5485) - (width1 / 2)
+	BoxHigh = (ScrH() * 0.535) - (height1 / 2)
 end
 
 if IsValid(Target) and Target:GetOwner() == LocalPlayer() then
+	width1, height1 = surface.GetTextSize(Output1)
+	width2, height2 = surface.GetTextSize(Output2)
 	Output1 = "Turret Hacked By You"
-	BoxSide = ScrW() * (0.5 - (string.len(Output2) * 0.0035))
-	BoxHigh = ScrH() * 0.5
-	BoxWidth = string.len(Output2) * 13.5
+	BoxHigh = (ScrH() * 0.5325) - (height1 / 2)
 if LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" then
 	BoxHeightMax = 70
 if LocalPlayer():GetNWBool("HasTurret", false) == false then
@@ -283,19 +283,24 @@ if LocalPlayer():GetNWBool("HasTurret", false) == false then
 else
 	Output2 = "Already carrying a Turret"
 end
-elseif Target:GetOwner() != LocalPlayer() and Target:GetOwner():IsPlayer() then
+	BoxSide = (ScrW() * 0.495) - (width2 / 2)
+	BoxWidth = width2 + 20
+end
+elseif IsValid(Target) and Target:GetOwner() != LocalPlayer() and Target:GetOwner():IsPlayer() then
 	Output1 = "Turret Hacked By " .. Entity(Target:GetOwner():EntIndex()):Nick()
 	Output2 = ""
-	BoxSide = ScrW() * 0.4141
-	BoxWidth = 330
-end
+	width1, height1 = surface.GetTextSize(Output1)
+	BoxSide = (ScrW() * 0.498) - (width1 / 2)
+	BoxHigh = (ScrH() * 0.532) - (height1 / 2)
+	BoxHeight = 40
+	BoxWidth = width1 + 10
 end
 
 if TextAlpha1 > 1 then
 	surface.SetDrawColor(5, 5, 5, CODAlphaClr1)
 	surface.DrawRect(BoxSide, BoxHigh, BoxWidth, BoxHeight)
-	draw.DrawText(Output1, Text, ScrW() * 0.5, ScrH() * 0.5, Color(255, 255, 255, TextAlpha1), TEXT_ALIGN_CENTER)
-	draw.DrawText(Output2, Text, ScrW() * 0.5, ScrH() * 0.53, Color(255, 255, 255, TextAlpha1), TEXT_ALIGN_CENTER)
+	draw.DrawText(Output1, Text, ScrW() * 0.5, ScrH() * 0.52, Color(255, 255, 255, TextAlpha1), TEXT_ALIGN_CENTER)
+	draw.DrawText(Output2, Text, ScrW() * 0.5, ScrH() * 0.55, Color(255, 255, 255, TextAlpha1), TEXT_ALIGN_CENTER)
 end
 
 end

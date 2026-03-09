@@ -1,19 +1,30 @@
+// Armorer
 CreateConVar("CODPerksArmorerAltMechanic", 0, 128, "Change the mechanics of the Armorer perk:\n 0 = Loot bodies for +5 armor. +25 max armor.\n 1 = Loot bodies for +5 armor. Spawn with 50 armor.\n 2 = +25 max armor. Spawn with 50 armor.")
 
+// Scav/Armorer settings
+CreateConVar("CODPerksEnableScavIcons", 1, 128, "Enable/Disable the icons for Scavenger Packs/Armorer Boosts.")
+CreateConVar("CODPerksScavAltModel", 0, 128, "Enable/Disable alternate model for Scavenger Pack pickups.")
+CreateConVar("CODPerksScavAltModelPath", "", 128, "Model path for custom Scavenger Pack pickups.")
+CreateConVar("CODPerksArmorerAltModel", 0, 128, "Enable/Disable alternate model for Armorer armor pickups.")
+CreateConVar("CODPerksArmorerAltModelPath", "", 128, "Model path for custom Armorer armor pickups.")
+
+// Popup icon offset
 CreateConVar("CODPerksIconXPos", 0.45, 128, "Change the horizontal position of the Scavenger/Blast Shield/Juggernaut icon. Default is 0.45")
 CreateConVar("CODPerksIconYPos", 0.5, 128, "Change the vertical position of the Scavenger/Blast Shield/Juggernaut icon. Default is 0.5")
 CreateConVar("CODPerksPopupIconSize", 64, 128, "Change the size of the Scavenger/Blast Shield/Juggernaut icon. Default is 60")
-CreateConVar("CODPerksEnableScavIcons", 1, 128, "Enable/Disable the icons for Scavenger Packs/Armorer Boosts.")
 
+// Perk Icon offset
 CreateConVar("CODPerksXPos", 0.1, 128, "Change the horizontal position of the perk icons. Default is 0.1")
 CreateConVar("CODPerksYPos", 0.8, 128, "Change the vertical position of the perk icons. Default is 0.8")
 
 CreateConVar("CODPerksVerticalHorizontal", 0, 128, "Change the orientation of the perk icons.\n0 = Vertical\n1 = Horizontal")
 CreateConVar("CODPerksTierPosition", 0, 128, "Change the order of the perks from top to bottom.\n0 = Tier 1, Tier 2, Tier 3\n1 = Tier 3, Tier 2, Tier 1")
 
+// Perk Icon gap + size
 CreateConVar("CODPerksGap", 0, 128, "Increase the gap between the perk icons. For use with bigger perk icons. Default is 0")
 CreateConVar("CODPerksIconSize", 60, 128, "Change the size of the perk icons. Default is 60")
 
+// Perk Icon positioning
 CreateConVar("CODPerksT1X", 0, 128, "Adjust the horizontal position of the T1 Perk (Blue)")
 CreateConVar("CODPerksT1Y", 0, 128, "Adjust the vertical position of the T1 Perk (Blue)")
 CreateConVar("CODPerksT2X", 0, 128, "Adjust the horizontal position of the T2 Perk (Red)")
@@ -21,26 +32,53 @@ CreateConVar("CODPerksT2Y", 0, 128, "Adjust the vertical position of the T2 Perk
 CreateConVar("CODPerksT3X", 0, 128, "Adjust the horizontal position of the T3 Perk (Yellow)")
 CreateConVar("CODPerksT3Y", 0, 128, "Adjust the vertical position of the T3 Perk (Yellow)")
 
+// Perk keybinds
 CreateConVar("CODPerksInteract", 18, 128, "The key used to hack turrets. Use the settings menu to bind this key.")
+CreateConVar("CODPerksToggleIcons", "y", 128, "Key that will toggle icon visibility.")
 
+// Perk default spawn
 CreateConVar("CODPerksDefaultT1", "None", 128, "The default T1 perk you want to spawn with")
 CreateConVar("CODPerksDefaultT2", "None", 128, "The default T2 perk you want to spawn with")
 CreateConVar("CODPerksDefaultT3", "None", 128, "The default T3 perk you want to spawn with")
+
+// Perk hiding + halo
 CreateConVar("CODPerksHideIcons", 0, 128, "Perk icons hide themselves automatically.")
-CreateConVar("CODPerksToggleIcons", "y", 128, "Key that will toggle icon visibility.")
 CreateConVar("CODPerksHaloSystem", 3, 128, "Determine which functions Spotting Perks use for highlighting enemies\n0 = Disabled\n1 = Halo Only\n2 = Overlay only\n3 = Both")
 
+// Engineer turret offset
 CreateConVar("CODPerksEngineerTurretPosX", 0, 128, "If the turret on a players back is not in the proper position, use this to adjust the sideways position.")
 CreateConVar("CODPerksEngineerTurretPosY", 0, 128, "If the turret on a players back is not in the proper position, use this to adjust the vertical position.")
 CreateConVar("CODPerksEngineerTurretPosZ", 0, 128, "If the turret on a players back is not in the proper position, use this to adjust the forwards/backwards position.")
+
+// Engineer turret settings
 CreateConVar("CODPerksEngineerSpawnTurret", 0, 128, "When the Engineer perk is selected, spawn in with a free hacked turret.")
 CreateConVar("CODPerksEngineerSpawnTurretInitial", 1, 128, "Only allow Engineer turret spawn on first spawn.")
 CreateConVar("CODPerksEngineerHackingSpeed", 0.6, 128, "The speed at which the Engineer Perk can hack turrets. Default is 0.6")
 CreateConVar("CODPerksEngineerUnevenLimit", 8, 128, "How much empty space below the front/back legs of the turret is allowed before placement becomes invalid. Default is 8")
 
+// Hardened perk Gunship balance
 CreateConVar("CODPerksGunshipBalance", 1, 128, "Enable the Combine Gunship balance mechanic")
 CreateConVar("CODPerksGunshipBalanceHP", 300, 128, "How much HP the Combine Gunship receive. By default it has 100 HP")
 
+// Drop perk player settings
+CreateConVar("CODPerksDropPerk", 31, 128, "The key used for dropping perks. Use the settings menu to bind this key.")
+CreateConVar("CODPerksDropOnDeath", 0, 128, "Enable/Disable players dropping perks as pickups on death.")
+CreateConVar("CODPerksRemoveOnDeath", 0, 128, "Enable/Disable removing perks from player on death. Requires CODPerksDropOnDeath to be enabled.")
+CreateConVar("CODPerksAutoPickup", 1, 128, "Enable/Disable automatically picking up perks if the player doesn't already have one.")
+CreateConVar("CODPerksPickupIconDist", 512, 128, "The distance at which the perk pickup icon is visible. Default is 512.")
+
+// Drop Perk NPC settings
+CreateConVar("CODPerksNPCDropPerks", 1, 128, "Enable/Disable hostile NPCs dropping random perks on death.")
+CreateConVar("CODPerksNPCDropPerksChance", 7, 128, "Percentage chance for NPCs to drop a perk on death. Default is 7.")
+CreateConVar("CODPerksNPCDropPerksCombine", 1, 128, "Allow Combine Soldiers and Metropolice to drop Perk Drops.")
+CreateConVar("CODPerksNPCDropPerksHunter", 1, 128, "Allow Hunters to drop Perk Drops.")
+CreateConVar("CODPerksNPCDropPerksZombies", 0, 128, "Allow Zombies and variants to drop Perk Drops.")
+
+// Drop Perk Crate settings
+CreateConVar("CODPerksCrateDropPerks", 1, 128, "Enable/Disable ammo crates dropping random perks when broken.")
+CreateConVar("CODPerksCrateDropPerksChance", 7, 128, "Percentage chance for ammo crates to drop a perk when broken. Default is 7.")
+
+// Perk-A-Cola spawn settings
 CreateConVar("CODPerkColaJG", 0, 128, "Spawn in with the Juggernog Perk-A-Cola.")
 CreateConVar("CODPerkColaDT", 0, 128, "Spawn in with the Double Tap Perk-A-Cola.")
 CreateConVar("CODPerkColaDD", 0, 128, "Spawn in with the Deadshot Daquiri Perk-A-Cola.")
@@ -182,7 +220,19 @@ elseif LocalPlayer():GetNWString("Tier 1 Perk") == "Scavenger" then
 elseif LocalPlayer():GetNWString("Tier 1 Perk") == "Lightweight" then
 	surface.SetMaterial(Lightweight)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT1 - 12, HorT1 - 7, PerkSize + 15, PerkSize + 15 )
+	if Orientation then
+		Bonus = -12
+		Bonus2 = -7
+	else
+	if TopBottom then
+		Bonus = -8
+		Bonus2 = -5
+	else
+		Bonus = -8
+		Bonus2 = -12
+	end
+	end
+	surface.DrawTexturedRect( VertT1 + Bonus, HorT1 + Bonus2, PerkSize + 13, PerkSize + 13 )
 elseif LocalPlayer():GetNWString("Tier 1 Perk") == "Marathon" then
 	surface.SetMaterial(Marathon)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
@@ -190,11 +240,40 @@ elseif LocalPlayer():GetNWString("Tier 1 Perk") == "Marathon" then
 elseif LocalPlayer():GetNWString("Tier 1 Perk") == "Hacker" then
 	surface.SetMaterial(Hacker)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT1, HorT1 - 6, PerkSize, PerkSize + 10 )
+	if Orientation then
+		Bonus2 = 0
+		Bonus3 = 0
+	else
+		Bonus2 = -3
+		Bonus3 = -3
+	if TopBottom then
+		Bonus2 = 0
+	else
+		Bonus3 = -4
+	end
+	end
+	surface.DrawTexturedRect( VertT1 + Bonus + Bonus3, HorT1 - 4 + Bonus2, PerkSize, PerkSize + 10 )
 elseif LocalPlayer():GetNWString("Tier 1 Perk") == "Armorer" then
 	surface.SetMaterial(BonusArmor)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT1 - 12, HorT1 - 7, PerkSize + 15, PerkSize + 15 )
+	if TopBottom then
+		Bonus = 2
+	else
+		Bonus = -10
+	end
+	if Orientation then
+		Bonus2 = 0
+		Bonus3 = 0
+	else
+	if TopBottom then
+		Bonus2 = -8
+		Bonus3 = 1
+	else
+		Bonus2 = 5
+		Bonus3 = -3
+	end
+	end
+	surface.DrawTexturedRect( VertT1 + Bonus + Bonus2, HorT1 - 2 + Bonus3, PerkSize + 8, PerkSize + 8 )
 elseif LocalPlayer():GetNWString("Tier 1 Perk") == "Scrounger" then
 	surface.SetMaterial(Scrounger)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
@@ -202,7 +281,24 @@ elseif LocalPlayer():GetNWString("Tier 1 Perk") == "Scrounger" then
 elseif LocalPlayer():GetNWString("Tier 1 Perk") == "Quick-Fix" then
 	surface.SetMaterial(QuickFix)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT1 - 12, HorT1 - 7, PerkSize + 15, PerkSize + 15 )
+	if TopBottom then
+		Bonus = 0
+	else
+		Bonus = -14
+	end
+	if Orientation then
+		Bonus2 = 0
+		Bonus3 = 0
+	else
+	if TopBottom then
+		Bonus2 = -8
+		Bonus3 = 3
+	else
+		Bonus2 = 7
+		Bonus3 = -3
+	end
+	end
+	surface.DrawTexturedRect( VertT1 + Bonus + Bonus2, HorT1 - 7 + Bonus3, PerkSize + 15, PerkSize + 15 )
 end
 end
 if LocalPlayer():GetNWString("Tier 2 Perk", "None") != "None" then
@@ -276,7 +372,16 @@ if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" then
 elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Commando" then
 	surface.SetMaterial(Commando)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT3 + 1, HorT3 + 2, PerkSize + 12, PerkSize - 3 )
+	if Orientation then
+	if TopBottom then
+		Bonus = -14
+	else
+		Bonus = 0
+	end
+	else
+		Bonus = -5
+	end
+	surface.DrawTexturedRect( VertT3 + Bonus, HorT3 + 2, PerkSize + 12, PerkSize - 3 )
 elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Dead Silence" then
 	surface.SetMaterial(DeadSilence)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
@@ -292,19 +397,55 @@ elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Stalker" then
 elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Pulsar" then
 	surface.SetMaterial(Scrambler)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT3 + 1, HorT3 + 2, PerkSize + 12, PerkSize - 3 )
+	if Orientation then
+	if TopBottom then
+		Bonus = -16
+	else
+		Bonus = 1
+	end
+	else
+		Bonus = -6
+	end
+	surface.DrawTexturedRect( VertT3 + Bonus, HorT3 + 2, PerkSize + 12, PerkSize - 3 )
 elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Martyrdom" then
 	surface.SetMaterial(Martyrdom)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT3 + 1, HorT3 + 2, PerkSize + 14, PerkSize - 1 )
+	if Orientation then
+	if TopBottom then
+		Bonus = -18
+	else
+		Bonus = 1
+	end
+	else
+		Bonus = -7
+	end
+	surface.DrawTexturedRect( VertT3 + Bonus, HorT3 + 1, PerkSize + 15, PerkSize )
 elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Executioner" then
 	surface.SetMaterial(Executioner)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT3 + 1, HorT3 + 2, PerkSize + 12, PerkSize - 3 )
+	if Orientation then
+	if TopBottom then
+		Bonus = -16
+	else
+		Bonus = 1
+	end
+	else
+		Bonus = -6
+	end
+	surface.DrawTexturedRect( VertT3 + Bonus, HorT3 + 2, PerkSize + 12, PerkSize - 3 )
 elseif LocalPlayer():GetNWString("Tier 3 Perk") == "Ninja" then
 	surface.SetMaterial(Assassin)
 	surface.SetDrawColor( 255, 255, 255, Alpha )
-	surface.DrawTexturedRect( VertT3 + 1, HorT3 + 2, PerkSize + 12, PerkSize - 3 )
+	if Orientation then
+	if TopBottom then
+		Bonus = -16
+	else
+		Bonus = 1
+	end
+	else
+		Bonus = -6
+	end
+	surface.DrawTexturedRect( VertT3 + Bonus, HorT3 + 2, PerkSize + 12, PerkSize - 3 )
 end
 end
 

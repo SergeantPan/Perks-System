@@ -311,7 +311,11 @@ ScavItem = ents.Create("prop_physics")
 ArmorerItem = ents.Create("prop_physics")
 if (game.SinglePlayer() and Entity(1):IsPlayer() and Entity(1):GetNWString("Tier 1 Perk") == "Scavenger") or (!game.SinglePlayer() and ScavengerList >= 1) then
 	ScavItem:SetPos(npc:WorldSpaceCenter())
+	if GetConVar("CODPerksScavAltModel"):GetBool() and util.IsValidModel(GetConVar("CODPerksScavAltModelPath"):GetString()) then
+	ScavItem:SetModel(GetConVar("CODPerksScavAltModelPath"):GetString())
+else
 	ScavItem:SetModel("models/items/boxmrounds.mdl")
+end
 	ScavItem:SetName("Scavenger Box")
 	ScavItem:Spawn()
 	ScavItem:SetCollisionGroup(2)
@@ -320,7 +324,11 @@ end
 
 if (game.SinglePlayer() and Entity(1):IsPlayer() and Entity(1):GetNWString("Tier 1 Perk") == "Armorer" and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1)) or (!game.SinglePlayer() and ArmorerList >= 1) then
 	ArmorerItem:SetPos(npc:WorldSpaceCenter())
+	if GetConVar("CODPerksArmorerAltModel"):GetBool() and util.IsValidModel(GetConVar("CODPerksArmorerAltModelPath"):GetString()) then
+	ArmorerItem:SetModel(GetConVar("CODPerksArmorerAltModelPath"):GetString())
+else
 	ArmorerItem:SetModel("models/items/battery.mdl")
+end
 	ArmorerItem:SetName("Armorer Boost")
 	ArmorerItem:Spawn()
 	ArmorerItem:SetCollisionGroup(2)
