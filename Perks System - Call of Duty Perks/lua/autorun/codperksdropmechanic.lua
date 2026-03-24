@@ -115,7 +115,7 @@ ZombieNPC = {"npc_fastzombie", "npc_fastzombie_torso", "npc_poisonzombie", "npc_
 
 if GetConVar("CODPerksNPCDropPerks"):GetBool() and !npc:IsNextBot() then
 
-if (table.HasValue(CombineNPC, npc:GetClass()) and GetConVar("CODPerksNPCDropPerksCombine"):GetBool()) or (table.HasValue(ZombieNPC, npc:GetClass()) and GetConVar("CODPerksNPCDropPerksZombie"):GetBool()) or (npc:GetClass() == "npc_hunter" and GetConVar("CODPerksNPCDropPerksHunter"):GetBool()) then
+if (table.HasValue(CombineNPC, npc:GetClass()) and GetConVar("CODPerksNPCDropPerksCombine"):GetBool()) or (table.HasValue(ZombieNPC, npc:GetClass()) and GetConVar("CODPerksNPCDropPerksZombies"):GetBool()) or (npc:GetClass() == "npc_hunter" and GetConVar("CODPerksNPCDropPerksHunter"):GetBool()) then
 	Rand = math.random(1, 100)
 	Chance = GetConVar("CODPerksNPCDropPerksChance"):GetInt()
 if npc:GetClass() == "npc_hunter" then
