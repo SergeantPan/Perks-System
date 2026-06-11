@@ -52,29 +52,29 @@ end
 end
 
 for _,Ammo in pairs(ents.FindByClass("*ammo*")) do
-if Ammo:GetClass() != "item_ammo_crate" and LocalPlayer():GetNWString("Perk7") == "Vulture Aid" and Ammo:GetPos():Distance(LocalPlayer():GetPos()) <= 256 then
+if Ammo:GetClass() != "item_ammo_crate" and LocalPlayer():GetNWString("Perk7") == "Vulture Aid" and Ammo:GetPos():Distance(LocalPlayer():GetPos()) <= 256 and !table.HasValue(ItemHalos, Ammo) then
 	ItemHalos[ #ItemHalos + 1 ] = Ammo
 	Ammo:SetNWBool("VultureAid", true)
-elseif Ammo:GetNWBool("VultureAid", false) == true and (LocalPlayer():GetNWString("Perk7") != "Vulture Aid" or LocalPlayer():GetPos():Distance(Ammo:GetPos()) > 256) then
+elseif Ammo:GetNWBool("VultureAid", false) == true and (LocalPlayer():GetNWString("Perk7") != "Vulture Aid" or LocalPlayer():GetPos():Distance(Ammo:GetPos()) > 256) and table.HasValue(ItemHalos, Ammo) then
 	table.RemoveByValue(ItemHalos, Ammo)
 	Ammo:SetNWBool("VultureAid", false)
 end
 end
 
 for _,Buck in pairs(ents.FindByClass("*box_buckshot")) do // Buckshot ammo is dumb, so we have to do this
-if LocalPlayer():GetNWString("Perk7") == "Vulture Aid" and Buck:GetPos():Distance(LocalPlayer():GetPos()) <= 256 then
+if LocalPlayer():GetNWString("Perk7") == "Vulture Aid" and Buck:GetPos():Distance(LocalPlayer():GetPos()) <= 256 and !table.HasValue(ItemHalos, Buck) then
 	ItemHalos[ #ItemHalos + 1 ] = Buck
 	Buck:SetNWBool("VultureAid", true)
-elseif Buck:GetNWBool("VultureAid", false) == true and (LocalPlayer():GetNWString("Perk7") != "Vulture Aid" or LocalPlayer():GetPos():Distance(Buck:GetPos()) > 256) then
+elseif Buck:GetNWBool("VultureAid", false) == true and (LocalPlayer():GetNWString("Perk7") != "Vulture Aid" or LocalPlayer():GetPos():Distance(Buck:GetPos()) > 256) and table.HasValue(ItemHalos, Buck) then
 	table.RemoveByValue(ItemHalos, Buck)
 	Buck:SetNWBool("VultureAid", false)
 end
 end
 
 for _,Death in pairs(ents.FindByClass("npc_*")) do
-if Death:GetNWBool("DeathPerception", false) == true then
+if Death:GetNWBool("DeathPerception", false) == true and !table.HasValue(DeathHalos, Death) then
 	DeathHalos[ #DeathHalos + 1 ] = Death
-else
+elseif Death:GetNWBool("DeathPerception", false) == false and table.HasValue(DeathHalos, Death)
 	table.RemoveByValue(DeathHalos, Death)
 end
 end

@@ -107,10 +107,10 @@ hook.Add( "PreDrawHalos", "PlayerNPCHalos", function()
 
 for _,ReconNPC in pairs(ents.FindByClass("npc_*")) do
 
-if ReconNPC:GetNWInt("ReconTimer", 0) > CurTime() and ReconNPC:GetNWBool("HackerSpotted", false) != true and ReconNPC:GetNWInt("ReconTeam", 0) == LocalPlayer():Team() then
+if ReconNPC:GetNWInt("ReconTimer", 0) > CurTime() and ReconNPC:GetNWBool("HackerSpotted", false) != true and ReconNPC:GetNWInt("ReconTeam", 0) == LocalPlayer():Team() and !table.HasValue(recontargets, ReconNPC) then
 	recontargets[ #recontargets + 1 ] = ReconNPC
 	ReconNPC:SetNWBool("ReconSpotted", true)
-elseif ReconNPC:GetNWInt("ReconTimer", math.huge) < CurTime() and ReconNPC:GetNWBool("ReconSpotted", false) == true then
+elseif ReconNPC:GetNWInt("ReconTimer", math.huge) < CurTime() and ReconNPC:GetNWBool("ReconSpotted", false) == true and table.HasValue(recontargets, ReconNPC) then
 	table.RemoveByValue(recontargets, ReconNPC)
 	ReconNPC:SetNWBool("ReconSpotted", false)
 	ReconNPC:SetNWInt("ReconTimer", 0)
@@ -119,10 +119,10 @@ end
 
 for _,ReconPly in pairs(player.GetAll()) do
 
-if ReconPly:GetNWInt("ReconTimer", 0) > CurTime() and ReconPly:GetNWBool("HackerSpotted", false) != true and ReconPly:GetNWInt("ReconTeam", 0) == LocalPlayer():Team() and ReconPly:Alive() then
+if ReconPly:GetNWInt("ReconTimer", 0) > CurTime() and ReconPly:GetNWBool("HackerSpotted", false) != true and ReconPly:GetNWInt("ReconTeam", 0) == LocalPlayer():Team() and ReconPly:Alive() and !table.HasValue(recontargets, ReconPly) then
 	recontargets[ #recontargets + 1 ] = ReconPly
 	ReconPly:SetNWBool("ReconSpotted", true)
-elseif (ReconPly:GetNWInt("ReconTimer", math.huge) < CurTime() or !ReconPly:Alive()) and ReconPly:GetNWBool("ReconSpotted", false) == true then
+elseif (ReconPly:GetNWInt("ReconTimer", math.huge) < CurTime() or !ReconPly:Alive()) and ReconPly:GetNWBool("ReconSpotted", false) == true and table.HasValue(recontargets, ReconPly) then
 	table.RemoveByValue(recontargets, ReconPly)
 	ReconPly:SetNWBool("ReconSpotted", false)
 	ReconPly:SetNWInt("ReconTimer", 0)
@@ -131,10 +131,10 @@ end
 
 for _,PulsarNPC in pairs(ents.FindByClass("npc_*")) do
 
-if PulsarNPC:GetNWInt("PulsarTimer", 0) > CurTime() and PulsarNPC:GetNWBool("HackerSpotted", false) != true and PulsarNPC:GetNWBool("ReconSpotted", false) != true then
+if PulsarNPC:GetNWInt("PulsarTimer", 0) > CurTime() and PulsarNPC:GetNWBool("HackerSpotted", false) != true and PulsarNPC:GetNWBool("ReconSpotted", false) != true and !table.HasValue(pulsartargets, PulsarNPC) then
 	pulsartargets[ #pulsartargets + 1 ] = PulsarNPC
 	PulsarNPC:SetNWBool("PulsarSpotted", true)
-elseif PulsarNPC:GetNWInt("PulsarTimer", math.huge) < CurTime() and PulsarNPC:GetNWBool("PulsarSpotted", false) == true then
+elseif PulsarNPC:GetNWInt("PulsarTimer", math.huge) < CurTime() and PulsarNPC:GetNWBool("PulsarSpotted", false) == true and table.HasValue(pulsartargets, PulsarNPC) then
 	table.RemoveByValue(pulsartargets, PulsarNPC)
 	PulsarNPC:SetNWBool("PulsarSpotted", false)
 end
@@ -142,10 +142,10 @@ end
 
 for _,PulsarPly in pairs(player.GetAll()) do
 
-if PulsarPly:GetNWInt("PulsarTimer", 0) > CurTime() and PulsarPly:GetNWBool("HackerSpotted", false) != true and PulsarPly:GetNWBool("ReconSpotted", false) != true then
+if PulsarPly:GetNWInt("PulsarTimer", 0) > CurTime() and PulsarPly:GetNWBool("HackerSpotted", false) != true and PulsarPly:GetNWBool("ReconSpotted", false) != true and !table.HasValue(pulsartargets, PulsarPly) then
 	pulsartargets[ #pulsartargets + 1 ] = PulsarPly
 	PulsarPly:SetNWBool("PulsarSpotted", true)
-elseif PulsarPly:GetNWInt("PulsarTimer", math.huge) < CurTime() and PulsarPly:GetNWBool("PulsarSpotted", false) == true then
+elseif PulsarPly:GetNWInt("PulsarTimer", math.huge) < CurTime() and PulsarPly:GetNWBool("PulsarSpotted", false) == true and table.HasValue(pulsartargets, PulsarPly) then
 	table.RemoveByValue(pulsartargets, PulsarPly)
 	PulsarPly:SetNWBool("PulsarSpotted", false)
 end
@@ -153,10 +153,10 @@ end
 
 for _,HackerNPC in pairs(ents.FindByClass("npc_*")) do
 
-if HackerNPC:GetNWBool("ReconSpotted", false) != true and HackerNPC:GetNWInt("HackerTeam", 0) == LocalPlayer():Team() and HackerNPC:GetNWInt("HackerTimer", 0) > CurTime() then
+if HackerNPC:GetNWBool("ReconSpotted", false) != true and HackerNPC:GetNWInt("HackerTeam", 0) == LocalPlayer():Team() and HackerNPC:GetNWInt("HackerTimer", 0) > CurTime() and !table.HasValue(hackedtargets, HackerNPC) then
 	hackedtargets[ #hackedtargets + 1 ] = HackerNPC
 	HackerNPC:SetNWBool("HackerSpotted", true)
-elseif HackerNPC:GetNWInt("HackerTimer", math.huge) < CurTime() and HackerNPC:GetNWBool("HackerSpotted", false) == true then
+elseif HackerNPC:GetNWInt("HackerTimer", math.huge) < CurTime() and HackerNPC:GetNWBool("HackerSpotted", false) == true and table.HasValue(hackedtargets, HackerNPC) then
 	table.RemoveByValue(hackedtargets, HackerNPC)
 	HackerNPC:SetNWBool("HackerSpotted", false)
 	HackerNPC:SetNWInt("HackerTimer", 0)
@@ -165,10 +165,10 @@ end
 
 for _,HackerPly in pairs(player.GetAll()) do
 
-if HackerPly:GetNWBool("ReconSpotted", false) != true and HackerPly:GetNWInt("HackerTeam", 0) == LocalPlayer():Team() and HackerPly:GetNWInt("HackerTimer", 0) > CurTime() then
+if HackerPly:GetNWBool("ReconSpotted", false) != true and HackerPly:GetNWInt("HackerTeam", 0) == LocalPlayer():Team() and HackerPly:GetNWInt("HackerTimer", 0) > CurTime() and !table.HasValue(hackedtargets, HackerPly) then
 	hackedtargets[ #hackedtargets + 1 ] = HackerPly
 	HackerPly:SetNWBool("HackerSpotted", true)
-elseif HackerPly:GetNWInt("HackerTimer", math.huge) < CurTime() and HackerPly:GetNWBool("HackerSpotted", false) == true then
+elseif HackerPly:GetNWInt("HackerTimer", math.huge) < CurTime() and HackerPly:GetNWBool("HackerSpotted", false) == true and table.HasValue(hackedtargets, HackerPly) then
 	table.RemoveByValue(hackedtargets, HackerPly)
 	HackerPly:SetNWBool("HackerSpotted", false)
 	HackerPly:SetNWInt("HackerTimer", 0)
@@ -197,20 +197,20 @@ local ammo = {}
 hook.Add( "PreDrawHalos", "ItemHalos", function()
 
 for _,AmmoItem in pairs(ents.FindByClass("*ammo*")) do
-if AmmoItem:GetClass() != "item_ammo_crate" and LocalPlayer():GetNWString("Tier 1 Perk") == "Scrounger" and AmmoItem:GetPos():Distance(LocalPlayer():GetPos()) <= 256 then
+if AmmoItem:GetClass() != "item_ammo_crate" and LocalPlayer():GetNWString("Tier 1 Perk") == "Scrounger" and AmmoItem:GetPos():Distance(LocalPlayer():GetPos()) <= 256 and !table.HasValue(ammo, AmmoItem) then
 	ammo[ #ammo + 1 ] = AmmoItem
 	AmmoItem:SetNWBool("ItemSpotted", true)
-elseif AmmoItem:GetNWBool("ItemSpotted", false) == true and (LocalPlayer():GetNWString("Tier 1 Perk") != "Scrounger" or AmmoItem:GetPos():Distance(LocalPlayer():GetPos()) > 256) then
+elseif AmmoItem:GetNWBool("ItemSpotted", false) == true and (LocalPlayer():GetNWString("Tier 1 Perk") != "Scrounger" or AmmoItem:GetPos():Distance(LocalPlayer():GetPos()) > 256) and table.HasValue(ammo, AmmoItem) then
 	table.RemoveByValue(ammo, AmmoItem)
 	AmmoItem:SetNWBool("ItemSpotted", false)
 end
 end
 
 for _,BuckItem in pairs(ents.FindByClass("*box_buckshot")) do // Buckshot ammo is dumb, so we have to do this
-if LocalPlayer():GetNWString("Tier 1 Perk") == "Scrounger" and BuckItem:GetPos():Distance(LocalPlayer():GetPos()) <= 256 then
+if LocalPlayer():GetNWString("Tier 1 Perk") == "Scrounger" and BuckItem:GetPos():Distance(LocalPlayer():GetPos()) <= 256 and !table.HasValue(ammo, BuckItem) then
 	BuckItem:SetNWBool("ItemSpotted", true)
 	ammo[ #ammo + 1 ] = BuckItem
-elseif BuckItem:GetNWBool("ItemSpotted", false) == true and (LocalPlayer():GetNWString("Tier 1 Perk") != "Scrounger" or BuckItem:GetPos():Distance(LocalPlayer():GetPos()) > 256) then
+elseif BuckItem:GetNWBool("ItemSpotted", false) == true and (LocalPlayer():GetNWString("Tier 1 Perk") != "Scrounger" or BuckItem:GetPos():Distance(LocalPlayer():GetPos()) > 256) and !table.HasValue(ammo, BuckItem) then
 	table.RemoveByValue(ammo, BuckItem)
 	BuckItem:SetNWBool("ItemSpotted", false)
 end
@@ -219,23 +219,23 @@ end
 for _,Mech in pairs(ents.FindByClass("npc_*")) do
 
 if (Mech:GetClass() != "npc_turret_floor" and table.HasValue(MechClass, Mech:GetClass())) or (Mech:GetClass() == "npc_turret_floor" and LocalPlayer():Team() != Mech:GetNWInt("HackedTeam", -1)) then
-if LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" and Mech:GetPos():Distance(LocalPlayer():GetPos()) <= 300 then
+if LocalPlayer():GetNWString("Tier 2 Perk") == "Engineer" and Mech:GetPos():Distance(LocalPlayer():GetPos()) <= 300 and !table.HasValue(mechs, Mech) then
 	Mech:SetNWBool("MechSpotted", true)
 	table.RemoveByValue(friendlymechs, Mech)
 	mechs[ #mechs + 1 ] = Mech
 end
 end
 
-if Mech:GetClass() == "npc_turret_floor" and LocalPlayer():Team() == Mech:GetNWInt("HackedTeam", -1) and Mech:GetPos():Distance(LocalPlayer():GetPos()) <= 300 then
+if Mech:GetClass() == "npc_turret_floor" and LocalPlayer():Team() == Mech:GetNWInt("HackedTeam", -1) and Mech:GetPos():Distance(LocalPlayer():GetPos()) <= 300 and !table.HasValue(friendlymechs, Mech) then
 	Mech:SetNWBool("MechSpottedFriendly", true)
 	table.RemoveByValue(mechs, Mech)
 	friendlymechs[ #friendlymechs + 1 ] = Mech
 end
-if Mech:GetNWBool("MechSpotted", false) == true and (LocalPlayer():GetNWString("Tier 2 Perk") != "Engineer" or LocalPlayer():Team() == Mech:GetNWInt("HackedTeam", -1) or Mech:GetPos():Distance(LocalPlayer():GetPos()) > 300) then
+if Mech:GetNWBool("MechSpotted", false) == true and (LocalPlayer():GetNWString("Tier 2 Perk") != "Engineer" or LocalPlayer():Team() == Mech:GetNWInt("HackedTeam", -1) or Mech:GetPos():Distance(LocalPlayer():GetPos()) > 300) and table.HasValue(mechs, Mech) then
 	table.RemoveByValue(mechs, Mech)
 	Mech:SetNWBool("MechSpotted", false)
 end
-if Mech:GetNWBool("MechSpottedFriendly", false) == true and (LocalPlayer():Team() != Mech:GetNWInt("HackedTeam", -1) or Mech:GetPos():Distance(LocalPlayer():GetPos()) > 300) then
+if Mech:GetNWBool("MechSpottedFriendly", false) == true and (LocalPlayer():Team() != Mech:GetNWInt("HackedTeam", -1) or Mech:GetPos():Distance(LocalPlayer():GetPos()) > 300) and table.HasValue(friendlymechs, Mech) then
 	table.RemoveByValue(friendlymechs, Mech)
 	Mech:SetNWBool("MechSpottedFriendly", false)
 end
@@ -243,10 +243,10 @@ end
 
 for _,Grens in pairs(ents.FindByClass("npc_grenade_frag")) do
 
-if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" then
+if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" and !table.HasValue(explosives, Grens) then
 	Grens:SetNWBool("ExplosiveSpotted", true)
 	explosives[ #explosives + 1 ] = Grens
-elseif Grens:GetNWBool("ExplosiveSpotted", false) == true and LocalPlayer():GetNWString("Tier 3 Perk") != "SitRep" then
+elseif Grens:GetNWBool("ExplosiveSpotted", false) == true and LocalPlayer():GetNWString("Tier 3 Perk") != "SitRep" and table.HasValue(explosives, Grens) then
 	table.RemoveByValue(explosives, Grens)
 	Grens:SetNWBool("ExplosiveSpotted", false)
 end
@@ -254,10 +254,10 @@ end
 
 for _,Slams in pairs(ents.FindByClass("npc_satchel")) do
 
-if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" then
+if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" and !table.HasValue(explosives, Slams) then
 	Slams:SetNWBool("ExplosiveSpotted", true)
 	explosives[ #explosives + 1 ] = Slams
-elseif Slams:GetNWBool("ExplosiveSpotted", false) == true and LocalPlayer():GetNWString("Tier 3 Perk") != "SitRep" then
+elseif Slams:GetNWBool("ExplosiveSpotted", false) == true and LocalPlayer():GetNWString("Tier 3 Perk") != "SitRep" and table.HasValue(explosives, Slams) then
 	table.RemoveByValue(explosives, Slams)
 	Slams:SetNWBool("ExplosiveSpotted", false)
 end
@@ -265,10 +265,10 @@ end
 
 for _,Slams2 in pairs(ents.FindByClass("npc_tripmine")) do
 
-if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" then
+if LocalPlayer():GetNWString("Tier 3 Perk") == "SitRep" and !table.HasValue(explosives, Slams2) then
 	Slams2:SetNWBool("ExplosiveSpotted", true)
 	explosives[ #explosives + 1 ] = Slams2
-elseif Slams2:GetNWBool("ExplosiveSpotted", false) == true and LocalPlayer():GetNWString("Tier 3 Perk") != "SitRep" then
+elseif Slams2:GetNWBool("ExplosiveSpotted", false) == true and LocalPlayer():GetNWString("Tier 3 Perk") != "SitRep" and table.HasValue(explosives, Slams2) then
 	table.RemoveByValue(explosives, Slams2)
 	Slams2:SetNWBool("ExplosiveSpotted", false)
 end
