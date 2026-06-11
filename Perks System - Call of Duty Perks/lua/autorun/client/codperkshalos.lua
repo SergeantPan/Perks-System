@@ -99,11 +99,11 @@ if ScavAlpha > 0 then
 end
 end)
 
-hook.Add( "PreDrawHalos", "PlayerNPCHalos", function()
-
 local pulsartargets = {}
 local hackedtargets = {}
 local recontargets = {}
+
+hook.Add( "PreDrawHalos", "PlayerNPCHalos", function()
 
 for _,ReconNPC in pairs(ents.FindByClass("npc_*")) do
 
@@ -189,12 +189,12 @@ end
 
 end)
 
-hook.Add( "PreDrawHalos", "ItemHalos", function()
-
 local mechs = {}
 local friendlymechs = {}
 local explosives = {}
 local ammo = {}
+
+hook.Add( "PreDrawHalos", "ItemHalos", function()
 
 for _,AmmoItem in pairs(ents.FindByClass("*ammo*")) do
 if AmmoItem:GetClass() != "item_ammo_crate" and LocalPlayer():GetNWString("Tier 1 Perk") == "Scrounger" and AmmoItem:GetPos():Distance(LocalPlayer():GetPos()) <= 256 then

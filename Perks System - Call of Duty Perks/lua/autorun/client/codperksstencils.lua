@@ -271,7 +271,7 @@ render.SetStencilEnable(false)
 
 end
 
-if SpottedEnts:GetNWBool("DeathPer", false) == true and (GetConVar("CODPerksDeathPerSpotStyle"):GetInt() == 2 or GetConVar("CODPerksDeathPerSpotStyle"):GetInt() == 3) then
+if SpottedEnts:GetNWBool("DeathPerception", false) == true and (GetConVar("CODPerksDeathPerSpotStyle"):GetInt() == 2 or GetConVar("CODPerksDeathPerSpotStyle"):GetInt() == 3) then
 
 render.ClearStencil()
 render.SetStencilEnable(true)

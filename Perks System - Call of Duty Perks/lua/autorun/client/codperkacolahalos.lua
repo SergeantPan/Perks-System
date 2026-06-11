@@ -25,27 +25,27 @@ end
 
 end)
 
-hook.Add( "PreDrawHalos", "PerkAColaHalos", function()
-
 local ItemHalos = {}
 local WeaponHalos = {}
 local DeathHalos = {}
 
+hook.Add( "PreDrawHalos", "PerkAColaHalos", function()
+
 for _,Wep in pairs(ents.GetAll()) do
-if Wep:IsWeapon() and !Wep:GetOwner():IsPlayer() and !Wep:GetOwner():IsNPC() and LocalPlayer():GetNWString("Perk7") == "Vulture Aid" and LocalPlayer():GetPos():Distance(Wep:GetPos()) <= 256 then
+if Wep:IsWeapon() and !Wep:GetOwner():IsPlayer() and !Wep:GetOwner():IsNPC() and LocalPlayer():GetNWString("Perk7") == "Vulture Aid" and LocalPlayer():GetPos():Distance(Wep:GetPos()) <= 256 and !table.HasValue(WeaponHalos, Wep) then
 	WeaponHalos[ #WeaponHalos + 1 ] = Wep
 	Wep:SetNWBool("VultureAid", true)
-elseif Wep:IsWeapon() and !Wep:GetOwner():IsPlayer() and !Wep:GetOwner():IsNPC() and Wep:GetNWBool("VultureAid", false) == true and (LocalPlayer():GetNWString("Perk7") != "Vulture Aid" or LocalPlayer():GetPos():Distance(Wep:GetPos()) > 256) then
+elseif Wep:IsWeapon() and !Wep:GetOwner():IsPlayer() and !Wep:GetOwner():IsNPC() and Wep:GetNWBool("VultureAid", false) == true and (LocalPlayer():GetNWString("Perk7") != "Vulture Aid" or LocalPlayer():GetPos():Distance(Wep:GetPos()) > 256) and table.HasValue(WeaponHalos, Wep) then
 	table.RemoveByValue(WeaponHalos, Wep)
 	Wep:SetNWBool("VultureAid", false)
 end
 end
 
 for _,Prop in pairs(ents.FindByClass("prop_physics")) do
-if Prop:GetNWBool("VultureDrop", false) == true and LocalPlayer():GetNWString("Perk7") == "Vulture Aid" and LocalPlayer():GetPos():Distance(Prop:GetPos()) <= 256 then
+if Prop:GetNWBool("VultureDrop", false) == true and LocalPlayer():GetNWString("Perk7") == "Vulture Aid" and LocalPlayer():GetPos():Distance(Prop:GetPos()) <= 256 and !table.HasValue(ItemHalos, Prop) then
 	ItemHalos[ #ItemHalos + 1 ] = Prop
 	Prop:SetNWBool("VultureAid", true)
-elseif Prop:GetNWBool("VultureAid", false) == true and (LocalPlayer():GetNWString("Perk7") != "Vulture Aid" or LocalPlayer():GetPos():Distance(Prop:GetPos()) > 256) then
+elseif Prop:GetNWBool("VultureAid", false) == true and (LocalPlayer():GetNWString("Perk7") != "Vulture Aid" or LocalPlayer():GetPos():Distance(Prop:GetPos()) > 256) and table.HasValue(ItemHalos, Prop) then
 	table.RemoveByValue(ItemHalos, Prop)
 	Prop:SetNWBool("VultureAid", false)
 end
@@ -72,9 +72,9 @@ end
 end
 
 for _,Death in pairs(ents.FindByClass("npc_*")) do
-if LocalPlayer():GetNWString("Perk8") == "Death Perception" and Death:GetNWBool("DeathPer", false) == true and Death:GetPos():Distance(LocalPlayer():GetPos()) <= 256 then
+if Death:GetNWBool("DeathPerception", false) == true then
 	DeathHalos[ #DeathHalos + 1 ] = Death
-elseif Death:GetNWBool("DeathPer", false) == true and (LocalPlayer():GetNWString("Perk8") != "Death Perception" or Death:GetPos():Distance(LocalPlayer():GetPos()) > 256) then
+else
 	table.RemoveByValue(DeathHalos, Death)
 end
 end

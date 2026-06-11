@@ -13,7 +13,7 @@ if SERVER then
 
 hook.Add("EntityFireBullets", "TestingDoubleTap", function(entity, data)
 
-if IsValid(entity) and entity:IsPlayer() and entity:GetNWString("Perk3") == "Double Tap" then
+if IsValid(entity) and entity:IsPlayer() and entity:GetNWString("Perk2") == "Double Tap" then
 	Val1 = entity:GetActiveWeapon():GetNextPrimaryFire() - CurTime()
 	Val2 = Val1 * 0.2
 	Val3 = entity:GetActiveWeapon():GetNextPrimaryFire() - Val2
@@ -46,7 +46,7 @@ end
 end)
 
 hook.Add("DoAnimationEvent","CODPerksAnimationEvent",function( ply, event, data )
-	
+
 if IsValid(ply) and ply:Alive() then
 
 local wep = ply:GetActiveWeapon()
@@ -55,7 +55,7 @@ if event != 3 and event != 4 then
 	ReloadStarted = false
 end
 
-if ply:GetNWString("Perk5") == "Electric Cherry" and IsValid(wep) and ply:KeyPressed(IN_RELOAD) then
+if ply:GetNWString("Perk6") == "Electric Cherry" and IsValid(wep) and ply:KeyPressed(IN_RELOAD) then
 
 local mag = ply:GetActiveWeapon():Clip1()
 local maxmag = ply:GetActiveWeapon():GetMaxClip1()
@@ -121,11 +121,11 @@ end
 if BrainRot:GetNWInt("BrainRotTeam", -1) == ply:Team() and BrainRot:GetNWBool("BrainRot", false) == true and BrainRot:GetNWInt("BrainRotTimer", 0) > CurTime() then
 
 for _,Targets in pairs(ents.FindByClass("npc_*")) do
-if Targets != BrainRot and Targets:IsNPC() and Targets:Disposition(BrainRot) != D_HT and Targets:Disposition(ply) == D_HT and Targets:Disposition(BrainRot) != D_HT then
+if Targets != BrainRot and Targets:IsNPC() and Targets:Disposition(BrainRot) != D_HT and Targets:Disposition(ply) == D_HT and Targets:Disposition(BrainRot) != D_HT and Targets:GetSquad() != "BrainRot" then
 	Targets:AddEntityRelationship(BrainRot, D_HT, 0)
 	BrainRot:AddEntityRelationship(Targets, D_HT, 0)
 end
-if Targets:IsNPC() and (Targets:Disposition(BrainRot) == D_HT or Targets:Disposition(BrainRot) == D_FR) and Targets:Disposition(ply) == D_LI and BrainRot:Disposition(Targets) != D_LI and Target:GetSquad() == "BrainRot" then
+if Targets:IsNPC() and (Targets:Disposition(BrainRot) == D_HT or Targets:Disposition(BrainRot) == D_FR) and Targets:Disposition(ply) == D_LI and BrainRot:Disposition(Targets) != D_LI and Targets:GetSquad() == "BrainRot" then
 	BrainRot:AddEntityRelationship(Targets, D_LI, 0)
 	Targets:AddEntityRelationship(BrainRot, D_LI, 0)
 end
@@ -146,11 +146,6 @@ end
 
 for _,VultAid in pairs(ents.FindByClass("prop_physics*")) do
 if VultAid:GetName() == "Vulture's Aid" then
-if ply:GetNWString("Perk7") == "Vulture Aid" and VultAid:GetNoDraw() == true then
-	VultAid:SetNoDraw(false)
-elseif ply:GetNWString("Perk7") != "Vulture Aid" and VultAid:GetNoDraw() == false then
-	VultAid:SetNoDraw(true)
-end
 if ply:GetNWString("Perk7") == "Vulture Aid" and IsValid(wep) and table.HasValue(AcceptedAmmo, wep:GetPrimaryAmmoType()) and ply:GetPos():Distance(VultAid:GetPos()) < 64 then
 	VultAid:Remove()
 	ply:GiveAmmo(math.Clamp(wep:GetMaxClip1() * 0.1, 1, math.huge), wep:GetPrimaryAmmoType())
@@ -179,18 +174,22 @@ if Shocked:IsNPC() and Shocked:Disposition(ply) == D_HT then
 	Shocker:SetAttacker(ply)
 	Shocker:SetDamageType(DMG_SHOCK)
 	Shocked:TakeDamageInfo(Shocker)
-	local Shock = EffectData()
-	Shock:SetEntity(Shocked)
-	Shock:SetMagnitude(15)
-	Shock:SetScale(15)
-	util.Effect( "TeslaHitboxes", Shock)
+	local ShockNPC = EffectData()
+	ShockNPC:SetOrigin(Shocked:WorldSpaceCenter())
+	ShockNPC:SetStart(Shocked:WorldSpaceCenter())
+	ShockNPC:SetEntity(Shocked)
+	ShockNPC:SetMagnitude(15)
+	ShockNPC:SetScale(15)
+	util.Effect( "TeslaHitboxes", ShockNPC)
 end
 end
-	local Shock = EffectData()
-	Shock:SetMagnitude(15)
-	Shock:SetScale(15)
-	Shock:SetEntity(ply)
-	util.Effect( "TeslaHitboxes", Shock)
+	local ShockPly = EffectData()
+	ShockPly:SetMagnitude(15)
+	ShockPly:SetScale(15)
+	ShockPly:SetOrigin(ply:WorldSpaceCenter())
+	ShockPly:SetStart(ply:WorldSpaceCenter())
+	ShockPly:SetEntity(ply)
+	util.Effect( "TeslaHitboxes", ShockPly)
 	ply:EmitSound(Sound)
 	ReloadStarted = true
 end
@@ -207,14 +206,6 @@ elseif ply:GetNWString("Perk1") != "Juggernog" and JugSet != false then
 	JugSet = false
 end
 
-for _,BoolNPC in pairs(ents.FindByClass("npc_*")) do
-if ply:GetNWString("Perk8") == "Death Perception" and BoolNPC:GetPos():Distance(ply:GetPos()) <= 256 and BoolNPC:IsNPC() and BoolNPC:Disposition(ply) == D_HT then
-	BoolNPC:SetNWBool("DeathPer", true)
-else
-	BoolNPC:SetNWBool("DeathPer", false)
-end
-end
-
 end
 
 end)
@@ -224,7 +215,7 @@ hook.Add("EntityTakeDamage", "DTPhDF", function( target, dmginfo )
 local Atk = dmginfo:GetAttacker()
 
 if dmginfo:IsBulletDamage() and Atk:GetNWString("Perk9") == "Elemental Pop" then
-	ElementChance = 20 < math.random(0, 100)
+	ElementChance = 80 <= math.random(0, 100)
 	RandomElement = math.random(1, 4)
 if ElementChance then
 if RandomElement == 1 and !dmginfo:IsDamageType(8) then
@@ -239,18 +230,20 @@ if Shocked:IsNPC() and Shocked:Disposition(Atk) == D_HT then
 	Shocker:SetAttacker(dmginfo:GetAttacker())
 	Shocker:SetDamageType(DMG_SHOCK)
 	Shocked:TakeDamageInfo(Shocker)
-	local Shock = EffectData()
-	Shock:SetEntity(Shocked)
-	Shock:SetMagnitude(15)
-	Shock:SetScale(15)
-	util.Effect( "TeslaHitboxes", Shock)
+	local ShockPop = EffectData()
+	ShockPop:SetOrigin(Shocked:WorldSpaceCenter())
+	ShockPop:SetStart(Shocked:WorldSpaceCenter())
+	ShockPop:SetEntity(Shocked)
+	ShockPop:SetMagnitude(15)
+	ShockPop:SetScale(15)
+	util.Effect( "TeslaHitboxes", ShockPop)
 end
 end
 elseif RandomElement == 3 and !dmginfo:IsDamageType(131072) then
 	dmginfo:SetDamageType(dmginfo:GetDamageType() + 131072)
 if target:IsNPC() and !table.HasValue(BrainRotImmune, target:GetClass()) and target:GetNWBool("BrainRot", false) == false then
 	target:SetNWBool("BrainRot", true)
-	target:SetNWInt("BrainRotTimer", CurTime() + 10)
+	target:SetNWInt("BrainRotTimer", CurTime() + 20)
 	target:SetNWInt("BrainRotTeam", dmginfo:GetAttacker():Team())
 	target:SetColor(Color(76, 153, 0))
 	target:SetSquad("BrainRot")
@@ -271,14 +264,28 @@ end
 end
 end
 
-if dmginfo:IsBulletDamage() and Atk:GetNWString("Perk3") == "Double Tap" then
+if Atk:IsNPC() and Atk:GetNWBool("BrainRot", false) == true then
+BrainRotInstaKill = {"npc_zombie", "npc_zombie_torso", "npc_headcrab", "npc_fastzombie", "npc_fastzombie_torso", "npc_headcrab_fast"}
+BrainRotAtk = {"npc_zombie", "npc_zombie_torso", "npc_fastzombie", "npc_fastzombie_torso"}
+
+if IsValid(target) then
+if table.HasValue(BrainRotAtk, Atk:GetClass()) and table.HasValue(BrainRotInstaKill, target:GetClass()) then
+	dmginfo:SetDamage(target:Health() + 15)
+else
+	dmginfo:SetDamage(dmginfo:GetDamage() * 1.5)
+end
+end
+
+end
+
+if dmginfo:IsBulletDamage() and Atk:GetNWString("Perk2") == "Double Tap" then
 	dmginfo:SetDamage(dmginfo:GetDamage() * 2)
 end
 
-if dmginfo:IsExplosionDamage() and target:GetNWString("Perk6") == "PhD Flopper" then
-dmginfo:SetDamage(0)
+if dmginfo:IsExplosionDamage() and target:GetNWString("Perk5") == "PhD Flopper" then
+	dmginfo:SetDamage(0)
 end
-if dmginfo:IsFallDamage() and target:GetNWString("Perk6") == "PhD Flopper" then
+if dmginfo:IsFallDamage() and target:GetNWString("Perk5") == "PhD Flopper" then
 if dmginfo:GetDamage() > 0 then
 PhDBlowup = ents.Create("env_explosion")
 PhDBlowup:SetPos(target:GetPos())
@@ -299,34 +306,34 @@ end)
 hook.Add( "Move", "PerkAColasMovement", function( ply, mv )
 
 if ply:Alive() then
-if RunSpeed == nil then
-	RunSpeed = ply:GetRunSpeed()
+if ply.RunSpeed == nil then
+	ply.RunSpeed = ply:GetRunSpeed()
 end
-if WalkSpeed == nil then
-	WalkSpeed = ply:GetWalkSpeed()
+if ply.WalkSpeed == nil then
+	ply.WalkSpeed = ply:GetWalkSpeed()
 end
 end
 
 if ply:IsSuitEquipped() and GetConVar("gmod_suit"):GetBool() then
-if ply:GetNWString("Perk2") == "Stamin-Up" and ply:IsSprinting() and ply:GetVelocity():LengthSqr() > 0 then
+if ply:GetNWString("Perk3") == "Stamin-Up" and ply:IsSprinting() and ply:GetVelocity():LengthSqr() > 0 then
 	ply:SetSuitPower(ply:GetSuitPower() + 0.09375)
 end
 end
 
-if ply:GetNWString("Perk2") == "Stamin-Up" and !GetConVar("gmod_suit"):GetBool() and StaminUpSet == false then
+if ply:GetNWString("Perk3") == "Stamin-Up" and !GetConVar("gmod_suit"):GetBool() and ply.StaminUpSet == false then
 	ply:SetRunSpeed(ply:GetRunSpeed() * 1.2)
-	StaminUpSet = true
-elseif (ply:GetNWString("Perk2") != "Stamin-Up" or GetConVar("gmod_suit"):GetBool()) and StaminUpSet != false then
+	ply.StaminUpSet = true
+elseif (ply:GetNWString("Perk3") != "Stamin-Up" or GetConVar("gmod_suit"):GetBool()) and ply.StaminUpSet != false then
 	ply:SetRunSpeed(RunSpeed)
-	StaminUpSet = false
+	ply.StaminUpSet = false
 end
 
-if ply:GetNWString("Perk2") == "Stamin-Up" and StaminUpWalk == false then
+if ply:GetNWString("Perk3") == "Stamin-Up" and ply.StaminUpWalk == false then
 	ply:SetWalkSpeed(ply:GetWalkSpeed() * 1.07)
-	StaminUpWalk = true
-elseif ply:GetNWString("Perk2") != "Stamin-Up" and StaminUpWalk != false then 
+	ply.StaminUpWalk = true
+elseif ply:GetNWString("Perk3") != "Stamin-Up" and ply.StaminUpWalk != false then 
 	ply:SetWalkSpeed(WalkSpeed)
-	StaminUpWalk = false
+	ply.StaminUpWalk = false
 end
 
 end)
@@ -358,6 +365,20 @@ VultureAidDrop:SetNWBool("VultureDrop", true)
 constraint.Keepupright(VultureAidDrop, VultureAidDrop:GetAngles(), 0, 100)
 end
 
+if npc:GetNWBool("BrainRot", false) == true then
+local RotExplosion = ents.Create("env_explosion")
+RotExplosion:SetPos(npc:GetPos())
+RotExplosion:SetKeyValue( "fireballsprite", "effects/fire_cloud2.vmt" )
+RotExplosion:SetKeyValue( "spawnflags", bit.bor(RotExplosion:GetSpawnFlags() + 48) )
+RotExplosion:SetKeyValue( "IMagnitude", 75 )
+RotExplosion:SetKeyValue( "IRadiusOverride", 250 )
+RotExplosion:SetOwner(BrainRot)
+RotExplosion:SetName("Rot Explosion")
+RotExplosion:Spawn()
+RotExplosion:Fire( "Explode", 0, 0 )
+npc:SetNWBool("BrainRot", false)
+end
+
 end)
 
 end
@@ -366,10 +387,20 @@ if CLIENT then
 
 hook.Add("Think", "DeathPerceptionClient", function()
 
+for _,VultAid in pairs(ents.FindByClass("prop_physics*")) do
+if VultAid:GetNWBool("VultureDrop", false) == true then
+if LocalPlayer():GetNWString("Perk7") == "Vulture Aid" and VultAid:GetNoDraw() == true then
+	VultAid:SetNoDraw(false)
+elseif LocalPlayer():GetNWString("Perk7") != "Vulture Aid" and VultAid:GetNoDraw() == false then
+	VultAid:SetNoDraw(true)
+end
+end
+end
+
 for _,DP in pairs(ents.FindByClass("npc*")) do
-if LocalPlayer():GetNWString("Perk8") == "Death Perception" and DP:IsNPC() and DP:GetNWBool("DeathPer", false) == true and DP:GetPos():Distance(LocalPlayer():GetPos()) <= 256 then
+if LocalPlayer():GetNWString("Perk8") == "Death Perception" and DP:IsNPC() and DP:GetPos():Distance(LocalPlayer():GetPos()) <= 256 and DP:GetNWBool("DeathPerception", false) == false then
 	DP:SetNWBool("DeathPerception", true)
-elseif LocalPlayer():GetNWString("Perk8") != "Death Perception" or DP:GetNWBool("DeathPer", false) == false or DP:GetPos():Distance(LocalPlayer():GetPos()) > 256 then
+elseif (LocalPlayer():GetNWString("Perk8") != "Death Perception" or DP:GetPos():Distance(LocalPlayer():GetPos()) > 256) and DP:GetNWBool("DeathPerception", false) == true then
 	DP:SetNWBool("DeathPerception", false)
 end
 end

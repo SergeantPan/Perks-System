@@ -122,11 +122,6 @@ if IsValid(ply) then
 
 for _,ScavItem in pairs(ents.FindByClass("prop_physics")) do
 if ScavItem:GetName() == "Scavenger Box" then
-if ply:GetNWString("Tier 1 Perk") == "Scavenger" and ScavItem:GetNoDraw() == true then
-	ScavItem:SetNoDraw(false)
-elseif ply:GetNWString("Tier 1 Perk") != "Scavenger" and ScavItem:GetNoDraw() == false then
-	ScavItem:SetNoDraw(true)
-end
 if ply:GetNWString("Tier 1 Perk") == "Scavenger" and ply:GetPos():Distance(ScavItem:GetPos()) < 64 and ply:Alive() then
 	ScavItem:Remove()
 	ply:EmitSound(RndSnd)
@@ -146,11 +141,6 @@ end
 end
 
 if ScavItem:GetName() == "Armorer Boost" and (GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 0 or GetConVar("CODPerksArmorerAltMechanic"):GetInt() == 1) then
-if ply:GetNWString("Tier 1 Perk") == "Armorer" and ScavItem:GetNoDraw() == true then
-	ScavItem:SetNoDraw(false)
-elseif ply:GetNWString("Tier 1 Perk")!= "Armorer" and ScavItem:GetNoDraw() == false then
-	ScavItem:SetNoDraw(true)
-end
 if ply:GetNWString("Tier 1 Perk") == "Armorer" and ply:Armor() < ply:GetMaxArmor() and ply:GetPos():Distance(ScavItem:GetPos()) < 64 and ply:Alive() then
 	ScavItem:Remove()
 	ply:EmitSound(RndSnd)
@@ -402,6 +392,25 @@ if CLIENT then
 hook.Add("Think", "PulsarClientThink", function()
 
 local ply = LocalPlayer()
+
+for _,ScavItem in pairs(ents.FindByClass("prop_physics")) do
+
+if ScavItem:GetNWBool("ArmorBoost", false) == true then
+if ply:GetNWString("Tier 1 Perk") == "Armorer" and ScavItem:GetNoDraw() == true then
+	ScavItem:SetNoDraw(false)
+elseif ply:GetNWString("Tier 1 Perk")!= "Armorer" and ScavItem:GetNoDraw() == false then
+	ScavItem:SetNoDraw(true)
+end
+end
+
+if ScavItem:GetNWBool("ScavBox", false) == true then
+if ply:GetNWString("Tier 1 Perk") == "Scavenger" and ScavItem:GetNoDraw() == true then
+	ScavItem:SetNoDraw(false)
+elseif ply:GetNWString("Tier 1 Perk") != "Scavenger" and ScavItem:GetNoDraw() == false then
+	ScavItem:SetNoDraw(true)
+end
+end
+end
 
 if IsValid(ply) and ply:Alive() and ply:GetNWString("Tier 3 Perk") == "Pulsar" and ply:GetNWInt("PulsarDelay", math.huge) < CurTime() then
 for _,Pulse in pairs(ents.FindInSphere(ply:GetPos(), 256)) do
